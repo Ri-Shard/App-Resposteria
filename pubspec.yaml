@@ -1,0 +1,58 @@
+name: appreposteria
+description: A new Flutter project.
+
+publish_to: 'none' 
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  firebase_core: ^1.2.0
+  firebase_auth: ^1.2.0
+  firebase_storage: ^8.0.4
+  cloud_firestore: ^1.0.6
+  flutter_bloc: ^7.0.0
+  equatable: ^2.0.2
+  image_picker: ^0.7.4
+  cached_network_image: ^3.0.0
+  simple_animations: ^3.1.1
+  mdi: ^5.0.0-nullsafety.0
+  feature_discovery: ^0.14.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+
+flutter:
+
+ 
+  uses-material-design: true
+
+  assets:
+    - images/welcome.png
+    - images/login.png
+    - images/admin.png
+    - images/cash.png
+    - images/Autentication.png
+    - images/Add_products.png
+    - images/Add_User.png
+    - images/Apreciation.png
+    - images/Checklist.png
+    - images/Completed.png
+    - images/Confirmed.png
+    - images/Directions.png
+    - images/empty_cart.png
+    - images/Empty_Orders.png
+    - images/male_avatar.png
+    - images/No_data.png
+    - images/On_way.png
+    - images/Order_Confirmed.png
+    - images/Photos.png
+    - images/Shopping_App.png
