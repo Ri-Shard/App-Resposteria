@@ -14,8 +14,13 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login>
 {
+    final _formKey = GlobalKey<FormState>();
     final TextEditingController _emailTextEditingController = TextEditingController();
     final TextEditingController _passwordTextEditingController = TextEditingController();
+
+  String? emptyValidator(String? value) {
+    return (value == null || value.isEmpty) ? 'Campo Requerido' : null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,116 +38,101 @@ class _LoginState extends State<Login>
           icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.black,),
         ),
       ),
-      body: Container(
+      body:  Form(
+                      key:_formKey,
+                    child: Container(
         height: MediaQuery.of(context).size.height,
         width: double.infinity,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Text("Iniciar Sesion", style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold
-                      ),),
-                      SizedBox(height: 20,),
-                      Text("Accede a tu cuenta", style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.grey[700]
-                      ),),
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 40),
-                    child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Column(
                       children: <Widget>[
-                         makeInput(label: "Email",controller:_emailTextEditingController),
-                         makeInput(label: "Contraseña", obscureText: true,controller:_passwordTextEditingController ),
+                        Text("Iniciar Sesion", style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold
+                        ),),
+                        SizedBox(height: 20,),
+                        Text("Accede a tu cuenta", style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey[700]
+                        ),),
                       ],
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 40),
-                    child: Container(
-                      padding: EdgeInsets.only(top: 3, left: 3),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        border: Border(
-                          bottom: BorderSide(color: Colors.black),
-                          top: BorderSide(color: Colors.black),
-                          left: BorderSide(color: Colors.black),
-                          right: BorderSide(color: Colors.black),
-                        )
-                      ),
-                      child: MaterialButton(
-                        minWidth: double.infinity,
-                        height: 60,
-                        onPressed: () {
-                          _emailTextEditingController.text.isNotEmpty
-                          && _passwordTextEditingController.text.isNotEmpty
-                          ?loginUser() 
-                          : showDialog(
-                            context: context,
-                            builder: (c)
-                            {
-                              return ErrorAlertDialog(message: "Por favor revisa los campos");
-                            }
-                            );
-                        },                         color: AppColors.kCategorypinkColor,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50)
-                        ),
-                        child: Text("Iniciar Sesion", style: TextStyle(
-                          fontWeight: FontWeight.w600, 
-                          fontSize: 18
-                        ),),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 40),
+                      child: Column(
+                        children: <Widget>[
+                           makeInput(label: "Email",controller:_emailTextEditingController, validator: emptyValidator),
+                           makeInput(label: "Contraseña", obscureText: true,controller:_passwordTextEditingController, validator: emptyValidator),
+                        ],
                       ),
                     ),
-                  ),
-              FlatButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SignupPage()));
-                      }, 
-                      child :Text("¿No tienes cuenta?"+" Registrate", style: TextStyle(
-                        fontWeight: FontWeight.w600, fontSize: 16
-                         ),),                    
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 40),
+                      child: Container(
+                        padding: EdgeInsets.only(top: 3, left: 3),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          border: Border(
+                            bottom: BorderSide(color: Colors.black),
+                            top: BorderSide(color: Colors.black),
+                            left: BorderSide(color: Colors.black),
+                            right: BorderSide(color: Colors.black),
+                          )
+                        ),
+                        child: MaterialButton(
+                          minWidth: double.infinity,
+                          height: 60,
+                          onPressed: () {loginUser();},                         
+                          color: AppColors.kCategorypinkColor,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50)
+                          ),
+                          child: Text("Iniciar Sesion", style: TextStyle(
+                            fontWeight: FontWeight.w600, 
+                            fontSize: 18
+                          ),),
+                        ),
                       ),
-                ],
+                    ),
+                FlatButton(
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => SignupPage()));
+                        }, 
+                        child :Text("¿No tienes cuenta?"+" Registrate", style: TextStyle(
+                          fontWeight: FontWeight.w600, fontSize: 16
+                           ),),                    
+                        ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height / 3,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('images/login.png'),
-                  fit: BoxFit.cover
-                )
-              ),
-            )
-          ],
+              Container(
+                height: MediaQuery.of(context).size.height / 3,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('images/login.png'),
+                    fit: BoxFit.cover
+                  )
+                ),
+              )
+            ],
         ),
       ),
-    );
-
+         ));
   }
 
-  void loginUser() async
+ loginUser() 
   {
-    showDialog(
-      context: context,
-      builder:(c)
-      {
-        return LoadingAlertDialog(message: "Autenticando, Por Favor espere.....",);
-      }
-    );
+ 
   }
 
-  Widget makeInput({label, obscureText = false,controller}) {
+  Widget makeInput({label, obscureText = false,controller,validator}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -152,7 +142,8 @@ class _LoginState extends State<Login>
           color: Colors.black87
         ),),
         SizedBox(height: 5,),
-        TextField(
+        TextFormField(
+          validator:validator,
           controller: controller,
           obscureText: obscureText,
           decoration: InputDecoration(

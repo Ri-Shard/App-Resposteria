@@ -1,47 +1,16 @@
-import 'package:appreposteria/src/bloc/auth_cubit.dart';
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/other/errorDialog.dart';
 import 'package:appreposteria/src/other/loadingDialog.dart';
 import 'package:appreposteria/src/ui/auth/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SignupPage extends StatelessWidget {
-  
-  static Widget create(BuildContext context) => SignupPage();
-
+class SignupPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        brightness: Brightness.light,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.black,),
-        ),
-      ),
-      body: BlocBuilder<AuthCubit, AuthState>(
-          builder: (_, state){
-            return RegisterBody();
-          },
-      ) ,
-    );
-  }
+  _SignupPageState createState() => _SignupPageState();
 }
 
+class _SignupPageState extends State<SignupPage> {
 
-  class RegisterBody extends StatefulWidget {
-  @override
-  _RegisterBody createState() => _RegisterBody();
-  }
-
-  class _RegisterBody extends State<RegisterBody> {
 
     final TextEditingController _nameTextEditingController = TextEditingController();
     final TextEditingController _emailTextEditingController = TextEditingController();
@@ -61,9 +30,23 @@ class SignupPage extends StatelessWidget {
     return null;
   }
 
-    @override
-   Widget build(BuildContext context) {
-            return Form(
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 0,
+        brightness: Brightness.light,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.black,),
+        ),
+      ),
+      body:  Form(
               key: _formKey,
       child: SingleChildScrollView(
         child: Container(
@@ -108,7 +91,7 @@ class SignupPage extends StatelessWidget {
                   child: MaterialButton(
                     minWidth: double.infinity,
                     height: 60,
-                     onPressed: () {upload();}, 
+                     onPressed: () {uploadToStorage();}, 
                     color: AppColors.kCategorypinkColor,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -133,54 +116,15 @@ class SignupPage extends StatelessWidget {
           ),
         ),
       ),
-            );
-   }
-
-     upload(){
-     _passwordTextEditingController.text == _cPasswordTextEditingController.text
-     ? _emailTextEditingController.text.isNotEmpty && 
-     _passwordTextEditingController.text.isNotEmpty &&
-      _cPasswordTextEditingController.text.isNotEmpty && 
-      _nameTextEditingController.text.isNotEmpty
-
-      ? uploadToStorage()
-      :showDialog(
-        context: context,
-        builder: (c)
-        {
-          return ErrorAlertDialog(message: "Por favor llene completamente los datos");
-        }
-       )
-      :showDialog(
-        context: context,
-        builder: (c)
-        {
-          return ErrorAlertDialog(message: "Las contraseñas no coinciden");
-        }
-       );
-
-   }
-
-   uploadToStorage(){
-    showDialog
-    (
-      context: context,
-      builder: (c)
-      {
-        return LoadingAlertDialog(message: "Registrando, Por Favor espere.....");
-      }
+            )    
+     
     );
-                        
-    if (_formKey.currentState?.validate() == true) {
-      context.read<AuthCubit>().createUserWithEmailAndPassword(
-            _emailTextEditingController.text,
-            _passwordTextEditingController.text,
-          );
-    }
-                        
-   }
-  }  
+  }
 
+   uploadToStorage( ){    
+
+   }
+    
   Widget makeInput({label, obscureText = false, controller, validator}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,4 +152,5 @@ class SignupPage extends StatelessWidget {
         SizedBox(height: 30,),
       ],
     );
+  }
   }

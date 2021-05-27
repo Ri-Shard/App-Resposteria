@@ -17,13 +17,12 @@ dependencies:
   firebase_auth: ^1.2.0
   firebase_storage: ^8.0.4
   cloud_firestore: ^1.0.6
-  flutter_bloc: ^7.0.0
-  equatable: ^2.0.2
   image_picker: ^0.7.4
   cached_network_image: ^3.0.0
   simple_animations: ^3.1.1
   mdi: ^5.0.0-nullsafety.0
   feature_discovery: ^0.14.0
+  get: ^4.1.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -56,3 +55,4 @@ flutter:
     - images/Order_Confirmed.png
     - images/Photos.png
     - images/Shopping_App.png
+    - images/male_avatar.png

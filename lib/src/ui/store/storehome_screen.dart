@@ -1,17 +1,15 @@
-import 'package:appreposteria/src/other/back_layout.dart';
+import 'package:appreposteria/src/model/user_model.dart';
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:mdi/mdi.dart';
 
-class AdventurePage extends StatefulWidget {
-  static const String route = "/AdventurePage";
+class HomePage extends StatefulWidget {
+  static const String route = "/HomePage";
   @override
-  _AdventurePageState createState() => _AdventurePageState();
-    static Widget create(BuildContext context) => AdventurePage();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _AdventurePageState extends State<AdventurePage> {
-  Color _hexColor = AppColors.kCategorypinkColor;
+class _HomePageState extends State<HomePage> {
   late double height, width;
   int _currentIndex = 0;
 
@@ -21,27 +19,65 @@ class _AdventurePageState extends State<AdventurePage> {
       height = constraints.maxHeight;
       width = constraints.maxWidth;
       return Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white10,
+          leading: IconButton(
+            onPressed: () {},//TODO,
+          icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.black,),
+        ),
+
+        ),
         bottomNavigationBar: Container(
           height: kBottomNavigationBarHeight,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildBottomNavItem(0, Mdi.compass),
-              _buildBottomNavItem(1, Mdi.grid),
-              _buildBottomNavItem(2, Mdi.chat),
-              _buildBottomNavItem(3, Mdi.homeAnalytics),
+              _buildBottomNavItem(0, Mdi.home),
+              _buildBottomNavItem(1, Mdi.cart),
+              _buildBottomNavItem(2, Mdi.shoppingOutline),
+              _buildBottomNavItem(3, Mdi.accountSettings),
             ],
           ),
         ),
-        body: _buildBody(),
+        body: _buildBody(constraints),
       );
-    });
+      }
+    );
   }
 
-  _buildBody() {
-    return BackLayout(
-      size: Size(width, height),
-      child: SafeArea(
+  _buildBottomNavItem(int index, IconData icon) {
+    return GestureDetector(
+      onTap: () {
+        this._currentIndex = index;
+        setState(() {});
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: index == _currentIndex ? AppColors.kCategorypinkColor : Colors.white,
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20.0,
+            vertical: 12.0,
+          ),
+          child: Icon(
+            icon,
+            color: index == _currentIndex
+                ? Colors.white
+                : AppColors.kCategorypinkColor.withOpacity(0.6),
+          ),
+        ),
+      ),
+    );
+  }
+
+}
+ _buildBody (constraints){
+      var height = constraints.maxHeight;
+      var width = constraints.maxWidth;
+      return SafeArea(
         child: Stack(
           children: [
             Column(
@@ -56,146 +92,38 @@ class _AdventurePageState extends State<AdventurePage> {
                     child: Row(
                       children: [
                         Text(
-                          "Good Morning",
+                        '',
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
                         Spacer(),
                         CircleAvatar(
-                          backgroundImage: AssetImage("assets/person1.jpg"),
+                          backgroundColor: AppColors.kCategorypinkColor,
+                          backgroundImage: AssetImage("images/male_avatar.png"),                          
                         ),
+                        
                       ],
                     ),
-                  ),
+                  )
                 ),
-                _buildRichText(),
+                 _buildRichText(),
                 Container(
                   height: 0.56 * height,
                   width: width,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      _buildItem(1),
-                      _buildItem(2),
-                      _buildItem(4),
-                      _buildItem(3),
+
                     ],
                   ),
                 ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+              ]
+            )
+          ]
+        )
+       );   
 
-  _buildBottomNavItem(int index, IconData icon) {
-    return GestureDetector(
-      onTap: () {
-        this._currentIndex = index;
-        setState(() {});
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: index == _currentIndex ? _hexColor : Colors.white,
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20.0,
-            vertical: 12.0,
-          ),
-          child: Icon(
-            icon,
-            color: index == _currentIndex
-                ? Colors.white
-                : _hexColor.withOpacity(0.6),
-          ),
-        ),
-      ),
-    );
-  }
-
-  _buildItem(int count) {
-    return Container(
-      margin: EdgeInsets.all(5.0),
-      width: 0.675 * width,
-      child: Stack(
-        children: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15.0),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 8.0,
-                        offset: Offset(6.0, 6.0),
-                        spreadRadius: 5.0),
-                  ],
-                  image: DecorationImage(
-                    image: AssetImage("assets/$count.jpg"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Spacer(),
-                      SizedBox(width: double.infinity),
-                      Text(
-                        "Lagi Di Brenas",
-                        maxLines: 1,
-                        overflow: TextOverflow.fade,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 23,
-                        ),
-                      ),
-                      Text(
-                        "Iceland",
-                        maxLines: 1,
-                        overflow: TextOverflow.fade,
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 18,
-                        ),
-                      ),
-                      SizedBox(height: 20)
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: 0,
-            right: 0.1 * width,
-            child: Container(
-              height: 0.125 * width,
-              width: 0.125 * width,
-              decoration:
-                  BoxDecoration(shape: BoxShape.circle, color: _hexColor),
-              child: Center(
-                child: Text(
-                  "GO",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  _buildRichText() {
+ }
+    _buildRichText() {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: RichText(
@@ -205,14 +133,11 @@ class _AdventurePageState extends State<AdventurePage> {
             ),
             children: [
               TextSpan(
-                  text: "The Best",
+                  text: "Productos",
                   style: TextStyle(
                       fontWeight: FontWeight.w800, color: Colors.black)),
-              TextSpan(
-                  text: "\nadventure trips\nIn the world",
-                  style: TextStyle(color: Colors.black)),
             ]),
       ),
     );
   }
-}
+

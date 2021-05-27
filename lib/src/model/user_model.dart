@@ -1,30 +1,22 @@
   
-import 'package:equatable/equatable.dart';
 
-class MyUser extends Equatable {
-  final String id;
-  final String name;
-  final String lastName;
+class MyUser {
+   String? name;
+   String? email;
+   String? password;
 
-  final String? image;
+  MyUser();
 
-  MyUser(this.id, this.name, this.lastName, {this.image});
-
-  @override
-  List<Object?> get props => [id];
-
-  Map<String, Object?> toFirebaseMap({String? newImage}) {
+  Map<String, Object?> toFirebaseMap() {
     return <String, Object?>{
-      'id': id,
       'name': name,
-      'lastName': lastName,
-      'image': newImage ?? image,
+      'email': email,
+      'password': password,
     };
   }
 
-  MyUser.fromFirebaseMap(Map<String, Object?> data)
-      : id = data['id'] as String,
-        name = data['name'] as String,
-        lastName = data['lastName'] as String,
-        image = data['image'] as String?;
+  MyUser.fromFirebaseMap(Map<String, Object?> data,)
+      : name = data['name'] as String,
+        email = data['email'] as String,
+        password = data['password'] as String;
 }

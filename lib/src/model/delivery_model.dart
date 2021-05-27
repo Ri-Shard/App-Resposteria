@@ -1,14 +1,10 @@
-import 'package:equatable/equatable.dart';
 
-class DeliveryModel extends Equatable {
+class DeliveryModel   {
   final String id;
   final String name;
   final String vehicle;
 
   DeliveryModel(this.id, this.name, this.vehicle,);
-
-  @override
-  List<Object?> get props => [id];
 
   Map<String, Object?> toFirebaseMap({String? newImage}) {
     return <String, Object?>{

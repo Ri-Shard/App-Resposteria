@@ -30,11 +30,11 @@ class Routes {
       case auth:
         return _buildRoute(AuthenticScreen.create);
       case register:
-        return _buildRoute(SignupPage.create);
+        return _buildRoute(() =>SignupPage);
       case logIn:
         return _buildRoute(Login.create);
       case storeHome:
-        return _buildRoute(AdventurePage.create);
+        return _buildRoute(()=>HomePage());
 
       default:
         throw Exception('Route does not exists');

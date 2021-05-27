@@ -1,7 +1,5 @@
   
-import 'package:equatable/equatable.dart';
-
-class ItemModel extends Equatable {
+class ItemModel   {
   final String id;
   final String name;
   final String description;
