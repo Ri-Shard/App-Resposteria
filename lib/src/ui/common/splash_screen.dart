@@ -1,3 +1,4 @@
+import 'package:appreposteria/src/other/colors.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -5,9 +6,8 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Container(
-        color: Color(0xFFFF9494),
+    return Material(child: Container(
+        color: AppColors.kCategorypinkColor,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -15,14 +15,13 @@ class SplashScreen extends StatelessWidget {
               Image.asset("images/welcome.png",height: 250.0, width: 250.0,),
               SizedBox(height:30.0),
               Text(
-                "Aca va el loading... \nSi, el que no me ha pasado \nDuvan ",
+                "Aca va el loading...",
                   style: TextStyle(color: Colors.white, fontSize: 30,fontFamily: "Signatra"),
                 ),
             ],
           ),
         ),
-        ),
-        
-      );
+        ));
   }
+
 }

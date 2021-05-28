@@ -3,6 +3,7 @@ import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/model/user_model.dart';
 import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
 import 'package:appreposteria/src/ui/auth/auth_screen.dart';
+import 'package:appreposteria/src/ui/common/splash_screen.dart';
 import 'package:appreposteria/src/ui/store/storehome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -29,13 +30,17 @@ class AuthController extends GetxController {
     firebaseUser.bindStream(auth.userChanges());
     ever(firebaseUser, _setInitialScreen);
   }
-  _setInitialScreen(User? user){
+  _setInitialScreen(User? user) async {
+
+    await Future.delayed(const Duration(seconds: 3));
+    Get.offAll(() => SplashScreen());
     if(user == null){
       Get.offAll(() => AuthenticScreen());
     }else if (isAdmin == false.obs){
       myuser.bindStream(listenToUser());
       Get.offAll(() =>HomePage());
     }else{
+      isAdmin = true.obs;
       Get.offAll(() => AdminHomePage());
     }
   }
