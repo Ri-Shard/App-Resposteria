@@ -22,6 +22,7 @@ class AuthController extends GetxController {
   TextEditingController password = TextEditingController();
   String usersCollection = "users";
   Rx<MyUser> myuser = MyUser().obs;
+
   
   @override
   void onReady() {
@@ -32,9 +33,9 @@ class AuthController extends GetxController {
   }
   _setInitialScreen(User? user) async {
 
-    await Future.delayed(const Duration(seconds: 3));
-    Get.offAll(() => SplashScreen());
-    if(user == null){
+    if(user == null){  
+    await Future.delayed(const Duration(seconds: 1));
+      Get.offAll(() => SplashScreen());
       Get.offAll(() => AuthenticScreen());
     }else if (isAdmin == false.obs){
       myuser.bindStream(listenToUser());
