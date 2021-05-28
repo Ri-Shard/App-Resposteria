@@ -1,5 +1,6 @@
 import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/controllers/auth_controller.dart';
+import 'package:appreposteria/src/controllers/product_controller.dart';
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/ui/common/splash_screen.dart';
 
@@ -10,6 +11,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initialization.then((value){
   Get.put(AuthController());
+  Get.put(ProducsController());
   });
   runApp(MyApp());
 } 

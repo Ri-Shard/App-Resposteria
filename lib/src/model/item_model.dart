@@ -1,34 +1,28 @@
-  
-class ItemModel   {
-  final String id;
-  final String name;
-  final String description;
-  final String ingredients;
-  final int price;
 
-  final String? image;
+class ProductModel{
+  static const UID = "uid";
+  static const IMAGE = "image";
+  static const NAME = "name";
+  static const DESCRIPTION = "description";
+  static const INGREDIENTS = "ingredients";
+  static const PRICE = "price";
 
-  ItemModel(this.id, this.name, this.description, this.price, this.ingredients, {this.image});
+   String? uid;
+   String? image;
+   String? name;
+   String? description;
+   String? ingredients;
+   double? price;
 
-  @override
-  List<Object?> get props => [id];
+  ProductModel(this.uid,this.description,this.image,this.ingredients,this.name,this.price);
 
-  Map<String, Object?> toFirebaseMap({String? newImage}) {
-    return <String, Object?>{
-      'id': id,
-      'name': name,
-      'description': description,
-      'ingredients': ingredients,
-      'price': price,
-      'image': newImage ?? image,
-    };
+  ProductModel.fromMap(Map<String, dynamic> data){
+    uid = data[UID];
+    image = data[IMAGE];
+    name = data[NAME];
+    description = data[DESCRIPTION];
+    ingredients = data[INGREDIENTS];
+    price = data[PRICE].toDouble();
   }
 
-  ItemModel.fromFirebaseMap(Map<String, Object?> data)
-      : id = data['id'] as String,
-        name = data['name'] as String,
-        description = data['description'] as String,
-        ingredients = data['ingredients'] as String,
-        price = data['price'] as int,
-        image = data['image'] as String?;
 }

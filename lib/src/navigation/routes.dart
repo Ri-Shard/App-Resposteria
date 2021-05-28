@@ -1,3 +1,4 @@
+import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
 import 'package:appreposteria/src/ui/auth/auth_screen.dart';
 import 'package:appreposteria/src/ui/auth/login_screen.dart';
 import 'package:appreposteria/src/ui/auth/register_screen.dart';
@@ -22,7 +23,7 @@ class Routes {
   GetPage(name: '/productPage', page: () => Login()),
   //Admin View
   GetPage(name: '/loadProducts', page: () => AuthenticScreen()),
-  GetPage(name: '/adminHome', page: () => RegisterPage()),
+  GetPage(name: '/adminHome', page: () => AdminHomePage()),
   GetPage(name: '/orders', page: () => Login()),
   ];
 

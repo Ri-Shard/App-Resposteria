@@ -1,6 +1,7 @@
 import 'package:appreposteria/src/constants/app_constants.dart';
 import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/model/user_model.dart';
+import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
 import 'package:appreposteria/src/ui/auth/auth_screen.dart';
 import 'package:appreposteria/src/ui/store/storehome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +15,7 @@ class AuthController extends GetxController {
 
   late Rx<User?> firebaseUser;
   RxBool isLoggedIn = false.obs;
+  RxBool isAdmin = false.obs;
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -30,9 +32,11 @@ class AuthController extends GetxController {
   _setInitialScreen(User? user){
     if(user == null){
       Get.offAll(() => AuthenticScreen());
-    }else{
+    }else if (isAdmin == false.obs){
       myuser.bindStream(listenToUser());
-      Get.offAll(HomePage());
+      Get.offAll(() =>HomePage());
+    }else{
+      Get.offAll(() => AdminHomePage());
     }
   }
 
@@ -41,6 +45,10 @@ class AuthController extends GetxController {
       await auth
       .signInWithEmailAndPassword(email: email.text.trim(), password: password.text.trim())
       .then((result) {
+        if(result.user!.uid == 'JfbPPdFfKlbqdFj4vF4Vy3FdGs93'){
+          isAdmin = true.obs;
+          Get.offAll(() => AdminHomePage());
+        }
         _clearControllers();
       });
     }catch(e){
