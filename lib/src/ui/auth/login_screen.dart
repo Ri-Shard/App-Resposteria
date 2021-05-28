@@ -1,3 +1,4 @@
+import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/other/errorDialog.dart';
 import 'package:appreposteria/src/other/loadingDialog.dart';
@@ -15,8 +16,6 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login>
 {
     final _formKey = GlobalKey<FormState>();
-    final TextEditingController _emailTextEditingController = TextEditingController();
-    final TextEditingController _passwordTextEditingController = TextEditingController();
 
   String? emptyValidator(String? value) {
     return (value == null || value.isEmpty) ? 'Campo Requerido' : null;
@@ -67,8 +66,8 @@ class _LoginState extends State<Login>
                       padding: EdgeInsets.symmetric(horizontal: 40),
                       child: Column(
                         children: <Widget>[
-                           makeInput(label: "Email",controller:_emailTextEditingController, validator: emptyValidator),
-                           makeInput(label: "Contraseña", obscureText: true,controller:_passwordTextEditingController, validator: emptyValidator),
+                           makeInput(label: "Email",controller:authController.email, validator: emptyValidator),
+                           makeInput(label: "Contraseña", obscureText: true,controller:authController.password, validator: emptyValidator),
                         ],
                       ),
                     ),
@@ -88,7 +87,7 @@ class _LoginState extends State<Login>
                         child: MaterialButton(
                           minWidth: double.infinity,
                           height: 60,
-                          onPressed: () {loginUser();},                         
+                          onPressed: () async {loginUser();},                         
                           color: AppColors.kCategorypinkColor,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
@@ -103,7 +102,7 @@ class _LoginState extends State<Login>
                     ),
                 FlatButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => SignupPage()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));
                         }, 
                         child :Text("¿No tienes cuenta?"+" Registrate", style: TextStyle(
                           fontWeight: FontWeight.w600, fontSize: 16
@@ -129,7 +128,9 @@ class _LoginState extends State<Login>
 
  loginUser() 
   {
- 
+    if(_formKey.currentState?.validate() == true){
+    authController.logIn();
+    } 
   }
 
   Widget makeInput({label, obscureText = false,controller,validator}) {

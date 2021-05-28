@@ -4,42 +4,27 @@ import 'package:appreposteria/src/ui/auth/register_screen.dart';
 import 'package:appreposteria/src/ui/common/splash_screen.dart';
 import 'package:appreposteria/src/ui/store/storehome_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Routes {
+
+  Routes._();
+  static final routes = [
+
   //auth
-  static const splash = '/';
-  static const auth = '/auth';
-  static const register = '/register';
-  static const logIn = '/logIn';
+  GetPage(name: '/', page: () => SplashScreen()),
+  GetPage(name: '/auth', page: () => AuthenticScreen()),
+  GetPage(name: '/register', page: () => RegisterPage()),
+  GetPage(name: '/login', page: () => Login()),
   //User view
-  static const storeHome = '/storeHome';
-  static const cart = '/cart';
-  static const productPage = '/productPage';
+  GetPage(name: '/storeHome', page: () => AuthenticScreen()),
+  GetPage(name: '/cart', page: () => RegisterPage()),
+  GetPage(name: '/productPage', page: () => Login()),
   //Admin View
-  static const loadProducts = '/loadProducts';
-  static const adminHome = '/adminHome';
-  static const orders = '/orders';
+  GetPage(name: '/loadProducts', page: () => AuthenticScreen()),
+  GetPage(name: '/adminHome', page: () => RegisterPage()),
+  GetPage(name: '/orders', page: () => Login()),
+  ];
 
 
-  static Route routes(RouteSettings routeSettings) {
-    print('Route name: ${routeSettings.name}');
-
-    switch (routeSettings.name) {
-      case splash:
-        return _buildRoute(SplashScreen.create);
-      case auth:
-        return _buildRoute(AuthenticScreen.create);
-      case register:
-        return _buildRoute(() =>SignupPage);
-      case logIn:
-        return _buildRoute(Login.create);
-      case storeHome:
-        return _buildRoute(()=>HomePage());
-
-      default:
-        throw Exception('Route does not exists');
-    }
-  }
-
-  static MaterialPageRoute _buildRoute(Function build) => MaterialPageRoute(builder: (context) => build(context));
 }

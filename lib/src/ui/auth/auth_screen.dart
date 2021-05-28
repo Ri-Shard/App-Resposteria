@@ -1,4 +1,3 @@
-
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/ui/auth/login_screen.dart';
 import 'package:appreposteria/src/ui/auth/register_screen.dart';
@@ -80,7 +79,7 @@ class AuthenticScreen  extends StatelessWidget {
                       minWidth: double.infinity,
                       height: 60,
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SignupPage()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));
                       },
                       color: AppColors.kCategorypinkColor,
                       elevation: 0,

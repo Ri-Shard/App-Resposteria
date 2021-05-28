@@ -15,7 +15,7 @@ class SplashScreen extends StatelessWidget {
               Image.asset("images/welcome.png",height: 250.0, width: 250.0,),
               SizedBox(height:30.0),
               Text(
-                "Mmmm... Delicioso",
+                "Aca va el loading... \nSi, el que no me ha pasado \nDuvan ",
                   style: TextStyle(color: Colors.white, fontSize: 30,fontFamily: "Signatra"),
                 ),
             ],

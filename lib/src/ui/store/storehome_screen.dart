@@ -1,5 +1,5 @@
-import 'package:appreposteria/src/model/user_model.dart';
 import 'package:appreposteria/src/other/colors.dart';
+import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:flutter/material.dart';
 import 'package:mdi/mdi.dart';
 
@@ -23,7 +23,9 @@ class _HomePageState extends State<HomePage> {
           elevation: 0,
           backgroundColor: Colors.white10,
           leading: IconButton(
-            onPressed: () {},//TODO,
+            onPressed: () {
+              authController.signOut();
+            },
           icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.black,),
         ),
 

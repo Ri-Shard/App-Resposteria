@@ -1,20 +1,19 @@
+import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/other/errorDialog.dart';
 import 'package:appreposteria/src/other/loadingDialog.dart';
 import 'package:appreposteria/src/ui/auth/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
-class SignupPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   @override
-  _SignupPageState createState() => _SignupPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _SignupPageState extends State<SignupPage> {
+class _RegisterPageState extends State<RegisterPage> {
 
-
-    final TextEditingController _nameTextEditingController = TextEditingController();
-    final TextEditingController _emailTextEditingController = TextEditingController();
-    final TextEditingController _passwordTextEditingController = TextEditingController();
     final TextEditingController _cPasswordTextEditingController = TextEditingController();
 
     final _formKey = GlobalKey<FormState>();
@@ -26,7 +25,7 @@ class _SignupPageState extends State<SignupPage> {
   String? passwordValidator(String? value) {
     if (value == null || value.isEmpty) return 'Campo Requerido';
     if (value.length < 6) return 'La contraseña debe tener al menos 6 digitos';
-    if (_passwordTextEditingController.text != _cPasswordTextEditingController.text) return 'Las contraseñas no coinciden';
+    if (authController.password.text != _cPasswordTextEditingController.text) return 'Las contraseñas no coinciden';
     return null;
   }
 
@@ -71,9 +70,9 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 Column(
                   children: <Widget>[
-                    makeInput(label: "Nombre",controller: _nameTextEditingController,validator: emailValidator),
-                    makeInput(label: "Email",controller: _emailTextEditingController,validator: emailValidator),
-                    makeInput(label: "Contraseña", obscureText: true,controller:_passwordTextEditingController, validator: passwordValidator),
+                    makeInput(label: "Nombre",controller: authController.name,validator: emailValidator),
+                    makeInput(label: "Email",controller: authController.email,validator: emailValidator),
+                    makeInput(label: "Contraseña", obscureText: true,controller:authController.password ,validator: passwordValidator),
                     makeInput(label: "Confirmar Contraseña", obscureText: true,controller: _cPasswordTextEditingController, validator: passwordValidator),
                   ],
                 ),
@@ -91,7 +90,7 @@ class _SignupPageState extends State<SignupPage> {
                   child: MaterialButton(
                     minWidth: double.infinity,
                     height: 60,
-                     onPressed: () {uploadToStorage();}, 
+                     onPressed: () async{uploadToStorage();}, 
                     color: AppColors.kCategorypinkColor,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -105,9 +104,7 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 
                FlatButton(
-                        onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
-                        },                       
+                        onPressed: () => Get.to(Login()),                    
                         child :Text("¿Ya tienes cuenta?"+" Inicia Sesion", style: TextStyle(
                           fontWeight: FontWeight.w600, fontSize: 16
                            ),),                    
@@ -121,8 +118,10 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
-   uploadToStorage( ){    
-
+   uploadToStorage( ){   
+     if(_formKey.currentState?.validate() == true){
+      authController.register();
+     } 
    }
     
   Widget makeInput({label, obscureText = false, controller, validator}) {
