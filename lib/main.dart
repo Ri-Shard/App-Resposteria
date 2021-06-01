@@ -1,7 +1,6 @@
 import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/controllers/auth_controller.dart';
 import 'package:appreposteria/src/controllers/product_controller.dart';
-import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/ui/common/splash_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -21,6 +20,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+          theme: new ThemeData(            
+            primarySwatch:Colors.pink
+          ),
           debugShowCheckedModeBanner: false,
           home: SplashScreen(),
     ); 

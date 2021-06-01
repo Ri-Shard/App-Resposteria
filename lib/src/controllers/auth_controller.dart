@@ -37,7 +37,7 @@ class AuthController extends GetxController {
     await Future.delayed(const Duration(seconds: 1));
       Get.offAll(() => SplashScreen());
       Get.offAll(() => AuthenticScreen());
-    }else if (isAdmin == false.obs){
+    }else if (auth.currentUser!.uid != 'JfbPPdFfKlbqdFj4vF4Vy3FdGs93'){
       myuser.bindStream(listenToUser());
       Get.offAll(() =>HomePage());
     }else{
