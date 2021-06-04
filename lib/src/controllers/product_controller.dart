@@ -13,7 +13,7 @@ class ProducsController extends GetxController {
   TextEditingController name = TextEditingController();
   TextEditingController description = TextEditingController();
   TextEditingController ingredients = TextEditingController();
-  TextEditingController price = TextEditingController();
+  TextEditingController price = TextEditingController(); 
   late String image;
   String collection = "products";
 
@@ -34,15 +34,16 @@ class ProducsController extends GetxController {
       "ingredients": ingredients.text.trim(),
       "price": price.text.trim(),
       "image": image.trim(),
+      "uid": firebaseFirestore.collection(collection).doc().id.toString()
           });
           _clearControllers();
   }
 
       _clearControllers() {
-    name.clear();
-    description.clear();
-    ingredients.clear();
-    price.clear();
-  }
+        name.clear();
+        description.clear();
+        ingredients.clear();
+        price.clear();
+       } 
 
 }    // Uploading the selected image with some custom meta data

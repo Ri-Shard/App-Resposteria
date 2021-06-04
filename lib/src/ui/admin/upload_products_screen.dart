@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/other/bottom_navigatorbar.dart';
 import 'package:appreposteria/src/other/colors.dart';
+import 'package:appreposteria/src/other/errorDialog.dart';
 import 'package:appreposteria/src/other/general_appbar.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -82,7 +84,7 @@ class _UploadProductsState extends State<UploadProducts> {
                     makeInput(label: "Nombre Producto",controller:producsController.name,validator: emailValidator),
                     makeInput(label: "Descripcion",controller: producsController.description,validator: emailValidator),
                     makeInput(label: "Ingredientes",controller: producsController.ingredients,validator: emailValidator),
-                    makeInput(label: "Precio", controller: producsController.price, validator: emailValidator),
+                    makeInput(label: "Precio", controller: producsController.price, validator: emailValidator,type: TextInputType.number ),
                   ],
                 ),
                   Container(
@@ -98,7 +100,23 @@ class _UploadProductsState extends State<UploadProducts> {
                   ),
                   child: MaterialButton(
                     height: 50,
-                     onPressed: () async{ _pick('gallery');}, 
+                     onPressed: () async{if(_formKey.currentState?.validate() == true){
+                       _pick('gallery');
+                       }else{
+                        AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.ERROR,
+                          animType: AnimType.RIGHSLIDE,
+                          headerAnimationLoop: true,
+                          title: 'Error',
+                          desc:
+                            'No puedes seleccionar una imagen sin llenar los campos anteriores',
+                          btnOkOnPress: () {},
+                          btnOkIcon: Icons.cancel,
+                          btnOkColor: Colors.red)
+                        ..show();
+                       }
+                       }, 
                     color: AppColors.kCategorypinkColor,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -143,8 +161,7 @@ class _UploadProductsState extends State<UploadProducts> {
       ),
             );
 }
-
-  Widget makeInput({label, obscureText = false, controller, validator}) {
+  Widget makeInput({label, obscureText = false, controller, validator,type}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -155,6 +172,7 @@ class _UploadProductsState extends State<UploadProducts> {
         ),),
         SizedBox(height: 5,),
         TextFormField(
+          keyboardType: type,
           validator: validator,
           controller: controller,
           obscureText: obscureText,
@@ -189,8 +207,10 @@ class _UploadProductsState extends State<UploadProducts> {
   }
   Future<void> _upload() async {
               final String fileName = path.basename(pickedImage.path);
-              File imageFile = File(pickedImage.path);
-     try {
+              File imageFile = File(pickedImage.path);                  
+                   
+                   if(_formKey.currentState?.validate() == true){
+                        try {
         // Uploading the selected image with some custom meta data
         await storage.ref(fileName).putFile(
             imageFile,
@@ -201,11 +221,42 @@ class _UploadProductsState extends State<UploadProducts> {
           String url = await storage.ref(fileName).getDownloadURL();  
           producsController.image = url;
           producsController.addProductToFirestore();
+
+                             AwesomeDialog(
+                        context: context,
+                        animType: AnimType.LEFTSLIDE,
+                        headerAnimationLoop: false,
+                        dialogType: DialogType.SUCCES,
+                        showCloseIcon: true,
+                        title: 'Guardado',
+                        desc:
+                            'Producto guardado Con exito',
+                        btnOkOnPress: () {
+                          debugPrint('OnClcik');
+                        },
+                        btnOkIcon: Icons.check_circle,
+                        onDissmissCallback: (type) {
+                          debugPrint('Dialog Dissmiss from callback $type');
+                        })
+                      ..show();
         // Refresh the UI
         setState((){});
       } on FirebaseException catch (error) {
-        print(error);
+                  AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.ERROR,
+                        animType: AnimType.RIGHSLIDE,
+                        headerAnimationLoop: true,
+                        title: 'Error',
+                        desc:
+                          'Error al Guardar el producto',
+                        btnOkOnPress: () {},
+                        btnOkIcon: Icons.cancel,
+                        btnOkColor: Colors.red)
+                      ..show();
       }
+                   }
+
   
   }
 }

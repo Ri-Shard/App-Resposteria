@@ -1,7 +1,7 @@
+import 'package:appreposteria/src/model/item_model.dart';
 import 'package:appreposteria/src/other/bottom_navigatorbar.dart';
-import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/constants/controllers.dart';
-import 'package:appreposteria/src/ui/admin/upload_products_screen.dart';
+import 'package:appreposteria/src/other/single_products_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mdi/mdi.dart';
@@ -63,37 +63,16 @@ class _AdminHomePageState extends State<AdminHomePage> {
       return SafeArea(
         child: Stack(
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: width,
-                  height: 0.05 * height,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15.0, right: 15.0,),
-                  )
-                ),
-                 _buildRichText(),
-                Container(
-                  height: 0.56 * height,
-                  width: width,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(    
-                          children: [
-                                
-                          ],
-                        ),                        
-                      ),
-                     ],
-                  ),
-                ),
-              ]
-            )
+            Obx(()=>GridView.count(
+                crossAxisCount: 2,
+                childAspectRatio: .63,
+                padding: const EdgeInsets.all(10),
+                mainAxisSpacing: 4.0,
+                crossAxisSpacing: 10,
+                children: producsController.products.map((ProductModel product) {
+                  debugPrint(product.toString());
+                  return SingleProductWidget(product: product,);
+                }).toList())) 
           ]
         )
        );   

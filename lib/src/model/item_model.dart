@@ -9,7 +9,7 @@ class ProductModel{
 
    String? uid;
    String? image;
-   String? name;
+   String? name; 
    String? description;
    String? ingredients;
    double? price;
@@ -22,7 +22,7 @@ class ProductModel{
     name = data[NAME];
     description = data[DESCRIPTION];
     ingredients = data[INGREDIENTS];
-    price = data[PRICE].toDouble();
+    price = double.parse(data[PRICE]);
   }
 
 }

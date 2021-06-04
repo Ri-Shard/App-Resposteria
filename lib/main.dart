@@ -1,5 +1,6 @@
 import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/controllers/auth_controller.dart';
+import 'package:appreposteria/src/controllers/cart_controller.dart';
 import 'package:appreposteria/src/controllers/product_controller.dart';
 import 'package:appreposteria/src/ui/common/splash_screen.dart';
 
@@ -11,6 +12,7 @@ void main() async {
   await initialization.then((value){
   Get.put(AuthController());
   Get.put(ProducsController());
+  Get.put(CartController());
   });
   runApp(MyApp());
 } 
