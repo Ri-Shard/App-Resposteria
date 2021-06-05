@@ -29,6 +29,7 @@ class AuthController extends GetxController {
     super.onReady();
     firebaseUser = Rx<User?>(auth.currentUser);
     firebaseUser.bindStream(auth.userChanges());
+    myuser.bindStream(listenToUser());
     ever(firebaseUser, _setInitialScreen);
   }
   _setInitialScreen(User? user) async {
@@ -38,7 +39,6 @@ class AuthController extends GetxController {
       Get.offAll(() => SplashScreen());
       Get.offAll(() => AuthenticScreen());
     }else if (auth.currentUser!.uid != 'JfbPPdFfKlbqdFj4vF4Vy3FdGs93'){
-      myuser.bindStream(listenToUser());
       Get.offAll(() =>HomePage());
     }else{
       isAdmin = true.obs;

@@ -25,9 +25,9 @@ class CartItemModel {
     image = data[IMAGE];
     name = data[NAME];
     quantity = data[QUANTITY];
-    cost = data[COST].toDouble();
+    cost = double.parse( data[COST]);
     productId = data[PRODUCT_ID];
-    price = data[PRICE].toDouble();
+    price = double.parse(data[PRICE]);
 
   }
 

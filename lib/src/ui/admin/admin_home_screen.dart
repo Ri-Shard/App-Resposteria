@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:mdi/mdi.dart';
 
 class AdminHomePage extends StatefulWidget {
-  static const String route = "/HomePage";
   @override
   _AdminHomePageState createState() => _AdminHomePageState();
 }
@@ -43,10 +42,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              bottomNavigatorBar(_currentIndex, 0, Mdi.home),
-              bottomNavigatorBar(_currentIndex,1, Mdi.cart),
-              bottomNavigatorBar(_currentIndex, 2, Mdi.shoppingOutline),
-              bottomNavigatorBar(_currentIndex, 3, Mdi.accountSettings),
+              bottomNavigatorBar(_currentIndex, 0, Mdi.home,true),
+              bottomNavigatorBar(_currentIndex,1, Mdi.cart,true),
+              bottomNavigatorBar(_currentIndex, 2, Mdi.shoppingOutline,true),
+              bottomNavigatorBar(_currentIndex, 3, Mdi.accountSettings,true),
             ],
           ),
         ),

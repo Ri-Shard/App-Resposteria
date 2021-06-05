@@ -1,10 +1,12 @@
-import 'package:appreposteria/src/other/colors.dart';
+import 'package:appreposteria/src/model/item_model.dart';
+import 'package:appreposteria/src/other/bottom_navigatorbar.dart';
 import 'package:appreposteria/src/constants/controllers.dart';
+import 'package:appreposteria/src/other/single_products_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mdi/mdi.dart';
 
 class HomePage extends StatefulWidget {
-  static const String route = "/HomePage";
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -20,6 +22,11 @@ class _HomePageState extends State<HomePage> {
       width = constraints.maxWidth;
       return Scaffold(
         appBar: AppBar(
+          title: Text("Productos",  
+                style: TextStyle(
+                fontWeight: FontWeight.w800, 
+                color: Colors.black,
+                fontSize: 20)),
           elevation: 0,
           backgroundColor: Colors.white10,
           leading: IconButton(
@@ -35,10 +42,10 @@ class _HomePageState extends State<HomePage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildBottomNavItem(0, Mdi.home),
-              _buildBottomNavItem(1, Mdi.cart),
-              _buildBottomNavItem(2, Mdi.shoppingOutline),
-              _buildBottomNavItem(3, Mdi.accountSettings),
+              bottomNavigatorBar(_currentIndex, 0, Mdi.home,false),
+              bottomNavigatorBar(_currentIndex,1, Mdi.cart,false),
+              bottomNavigatorBar(_currentIndex, 2, Mdi.shoppingOutline,false),
+              bottomNavigatorBar(_currentIndex, 3, Mdi.accountSettings,false),
             ],
           ),
         ),
@@ -48,98 +55,40 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _buildBottomNavItem(int index, IconData icon) {
-    return GestureDetector(
-      onTap: () {
-        this._currentIndex = index;
-        setState(() {});
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: index == _currentIndex ? AppColors.kCategorypinkColor : Colors.white,
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20.0,
-            vertical: 12.0,
-          ),
-          child: Icon(
-            icon,
-            color: index == _currentIndex
-                ? Colors.white
-                : AppColors.kCategorypinkColor.withOpacity(0.6),
-          ),
-        ),
-      ),
-    );
-  }
 
-}
- _buildBody (constraints){
+ _buildBody(constraints){
       var height = constraints.maxHeight;
       var width = constraints.maxWidth;
       return SafeArea(
         child: Stack(
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: width,
-                  height: 0.05 * height,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15.0, right: 15.0, top: 10.0),
-                    child: Row(
-                      children: [
-                        Text(
-                        '',
-                          style: TextStyle(fontWeight: FontWeight.w500),
-                        ),
-                        Spacer(),
-                        CircleAvatar(
-                          backgroundColor: AppColors.kCategorypinkColor,
-                          backgroundImage: AssetImage("images/male_avatar.png"),                          
-                        ),
-                        
-                      ],
-                    ),
-                  )
-                ),
-                 _buildRichText(),
-                Container(
-                  height: 0.56 * height,
-                  width: width,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-
-                    ],
-                  ),
-                ),
-              ]
-            )
+            Obx(()=>GridView.count(
+                crossAxisCount: 2,
+                childAspectRatio: .63,
+                padding: const EdgeInsets.all(10),
+                mainAxisSpacing: 4.0,
+                crossAxisSpacing: 10,
+                children: producsController.products.map((ProductModel product) {
+                  debugPrint(product.toString());
+                  return SingleProductWidget(product: product,);
+                }).toList())) 
           ]
         )
        );   
-
  }
+
     _buildRichText() {
     return Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.only(left: 5.0,right: 5.0, top: 1.0),
       child: RichText(
-        text: TextSpan(
-            style: TextStyle(
-              fontSize: 30,
-            ),
-            children: [
+        text: 
               TextSpan(
-                  text: "Productos",
+                  text:  "Bienvenido, ${authController.myuser.value.name}",
                   style: TextStyle(
-                      fontWeight: FontWeight.w800, color: Colors.black)),
-            ]),
+                      fontWeight: FontWeight.w800, 
+                      color: Colors.black,
+                      fontSize: 20)),    
       ),
     );
   }
-
+}

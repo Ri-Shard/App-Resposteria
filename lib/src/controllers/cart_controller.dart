@@ -10,7 +10,7 @@ import 'package:uuid/uuid.dart';
 
 class CartController extends GetxController {
   static CartController instance = Get.find();
-double? totalCartPrice = 0.0;
+  double? totalCartPrice = 0.0;
 
   @override
   void onReady() {
@@ -42,7 +42,7 @@ double? totalCartPrice = 0.0;
         Get.snackbar("Item added", "${product.name} was added to your cart");
       }
     } catch (e) {
-      Get.snackbar("Error", "Cannot add this item");
+      Get.snackbar("Error", "No se pudo agregar este producto");
       debugPrint(e.toString());
     }
   }
@@ -53,7 +53,7 @@ double? totalCartPrice = 0.0;
         "cart": FieldValue.arrayRemove([cartItem.toJson()])
       });
     } catch (e) {
-      Get.snackbar("Error", "Cannot remove this item");
+      Get.snackbar("Error", "No se pudo remover este producto");
     }
   }
 
@@ -70,6 +70,8 @@ double? totalCartPrice = 0.0;
       authController.myuser.value.cart!
           .where((item) => item.productId == product.uid)
           .isNotEmpty;
+
+
 
   void decreaseQuantity(CartItemModel item){
     if(item.quantity == 1){
