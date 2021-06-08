@@ -14,26 +14,29 @@ import 'package:get/get.dart';
 class AuthController extends GetxController {
   static  AuthController instance = Get.find();
 
-  late Rx<User?> firebaseUser;
   RxBool isLoggedIn = false.obs;
   RxBool isAdmin = false.obs;
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   String usersCollection = "users";
-  Rx<MyUser> myuser = MyUser().obs;
+  MyUser myuser = MyUser();
 
   
   @override
+  void onInit() {
+    super.onInit();
+    if(auth.currentUser != null ){
+        listenToUser();
+    }
+  }
+
+  @override
   void onReady() {
     super.onReady();
-    firebaseUser = Rx<User?>(auth.currentUser);
-    firebaseUser.bindStream(auth.userChanges());
-    myuser.bindStream(listenToUser());
-    ever(firebaseUser, _setInitialScreen);
+    _setInitialScreen(auth.currentUser);
   }
   _setInitialScreen(User? user) async {
-
     if(user == null){  
     await Future.delayed(const Duration(seconds: 1));
       Get.offAll(() => SplashScreen());
@@ -41,7 +44,6 @@ class AuthController extends GetxController {
     }else if (auth.currentUser!.uid != 'JfbPPdFfKlbqdFj4vF4Vy3FdGs93'){
       Get.offAll(() =>HomePage());
     }else{
-      isAdmin = true.obs;
       Get.offAll(() => AdminHomePage());
     }
   }
@@ -52,9 +54,11 @@ class AuthController extends GetxController {
       .signInWithEmailAndPassword(email: email.text.trim(), password: password.text.trim())
       .then((result) {
         if(result.user!.uid == 'JfbPPdFfKlbqdFj4vF4Vy3FdGs93'){
-          isAdmin = true.obs;
           Get.offAll(() => AdminHomePage());
+        }else{
+          Get.offAll(() =>HomePage());
         }
+        listenToUser();
         _clearControllers();
       });
     }catch(e){
@@ -78,6 +82,8 @@ class AuthController extends GetxController {
   }
     void signOut() async {
     auth.signOut();
+    Get.offAll(() => AuthenticScreen());
+
   }
 
   _addUserToFirestore(String userUid){
@@ -97,12 +103,14 @@ class AuthController extends GetxController {
     logger.i("UPDATED");
     firebaseFirestore
         .collection(usersCollection)
-        .doc(firebaseUser.value!.uid)
+        .doc(auth.currentUser!.uid)
         .update(data);
   }
-    Stream<MyUser> listenToUser() => firebaseFirestore
+   listenToUser() => firebaseFirestore
       .collection(usersCollection)
-      .doc(firebaseUser.value!.uid)
-      .snapshots()
-      .map((snapshot) => MyUser.fromSnapshot(snapshot));
+      .doc(auth.currentUser!.uid)
+      .get()
+      .then((snapshot) {
+      myuser = myuser.fromSnapshot(snapshot);
+      }); 
 }

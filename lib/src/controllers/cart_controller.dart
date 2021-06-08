@@ -10,12 +10,11 @@ import 'package:uuid/uuid.dart';
 
 class CartController extends GetxController {
   static CartController instance = Get.find();
-  double? totalCartPrice = 0.0;
+  double? totalCartPrice = 0;
 
   @override
   void onReady() {
     super.onReady();
-    ever(authController.myuser, changeCartTotalPrice);
   }
 
   void addProductToCart(ProductModel product) {
@@ -58,7 +57,7 @@ class CartController extends GetxController {
   }
 
   changeCartTotalPrice(MyUser userModel) {
-    totalCartPrice = 0.0;
+    totalCartPrice = 0;
     if (userModel.cart!.isNotEmpty) {
       userModel.cart!.forEach((cartItem) {
         totalCartPrice = (totalCartPrice! + (cartItem.cost!));
@@ -67,7 +66,7 @@ class CartController extends GetxController {
   }
 
   bool _isItemAlreadyAdded(ProductModel product) =>
-      authController.myuser.value.cart!
+      authController.myuser.cart!
           .where((item) => item.productId == product.uid)
           .isNotEmpty;
 

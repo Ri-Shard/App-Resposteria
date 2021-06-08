@@ -16,7 +16,7 @@ class SplashScreen extends StatelessWidget {
               SizedBox(height:30.0),
               Text(
                 "Aca va el loading...",
-                  style: TextStyle(color: Colors.white, fontSize: 30,fontFamily: "Signatra"),
+                  style: TextStyle(color: Colors.white, fontSize: 30),
                 ),
             ],
           ),

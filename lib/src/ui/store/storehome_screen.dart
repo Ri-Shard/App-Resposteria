@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
       width = constraints.maxWidth;
       return Scaffold(
         appBar: AppBar(
-          title: Text("Productos",  
+          title: Text("Bienvenido, ${authController.myuser.name}" ,  
                 style: TextStyle(
                 fontWeight: FontWeight.w800, 
                 color: Colors.black,
@@ -42,10 +42,10 @@ class _HomePageState extends State<HomePage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              bottomNavigatorBar(_currentIndex, 0, Mdi.home,false),
-              bottomNavigatorBar(_currentIndex,1, Mdi.cart,false),
-              bottomNavigatorBar(_currentIndex, 2, Mdi.shoppingOutline,false),
-              bottomNavigatorBar(_currentIndex, 3, Mdi.accountSettings,false),
+              bottomNavigatorBar(_currentIndex, 0, Mdi.home,false,context),
+              bottomNavigatorBar(_currentIndex,1, Mdi.cart,false,context),
+              bottomNavigatorBar(_currentIndex, 2, Mdi.shoppingOutline,false,context),
+              bottomNavigatorBar(_currentIndex, 3, Mdi.accountSettings,false,context),
             ],
           ),
         ),
@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
       child: RichText(
         text: 
               TextSpan(
-                  text:  "Bienvenido, ${authController.myuser.value.name}",
+                  text:  "Bienvenido, ${authController.myuser!.name}",
                   style: TextStyle(
                       fontWeight: FontWeight.w800, 
                       color: Colors.black,

@@ -22,30 +22,6 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      height = constraints.maxHeight;
-      width = constraints.maxWidth;
-      return Scaffold(
-        appBar: generalAppbar("Carrito",HomePage()),
-        bottomNavigationBar: Container(
-          height: kBottomNavigationBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-             bottomNavigatorBar(_currentIndex, 0, Mdi.home,false),
-              bottomNavigatorBar(_currentIndex,1, Mdi.cart,false),
-              bottomNavigatorBar(_currentIndex, 2, Mdi.shoppingOutline,false),
-              bottomNavigatorBar(_currentIndex, 3, Mdi.accountSettings,false),
-            ],
-          ),
-        ),
-        body: _buildBody(constraints,context),
-      );
-      }
-    );
-  }
-
-   _buildBody(constraints,context){
         return Stack(
       children: [
         ListView(
@@ -56,11 +32,11 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
             SizedBox(
               height: 5,
             ),
-            Obx(()=>Column(            
-              children: authController.myuser.value.cart!
+            Column(            
+              children: authController.myuser.cart!
                   .map((cartItem) => CartItemWidget(cartItem: cartItem,))
                   .toList(),
-            )),
+            ),
                     ],
         ),
         Positioned(
@@ -71,5 +47,5 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
             ))
       ],
     );
-   }
+  }
 }

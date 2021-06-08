@@ -1,27 +1,3 @@
-/*
-class MyUser {
-  final String uid;
-  final String email;
-  final String name;
-
-  MyUser(
-      {required this.uid,
-      required this.email,
-      required this.name,});
-
-  factory MyUser.fromMap(Map data) {
-    return MyUser(
-      uid: data['uid'],
-      email: data['email'] ?? '',
-      name: data['name'] ?? '',
-    );
-  }
-
-  Map<String, dynamic> toJson() =>
-      {"uid": uid, "email": email, "name": name,};
-}
-*/
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'cart_item_model.dart';
@@ -39,11 +15,13 @@ class MyUser{
 
   MyUser({ this.uid, this.email, this.name,this.cart});
 
-  MyUser.fromSnapshot(DocumentSnapshot snapshot){
-    name = snapshot.data()![NAME];
-    email = snapshot.data()![EMAIL];
-    uid = snapshot.data()![UID];
-    cart = _convertCartItems(snapshot.data()![CART] ?? []);
+  MyUser fromSnapshot(DocumentSnapshot snapshot){
+    MyUser user = MyUser();
+    user.name = snapshot.data()![NAME];
+    user.email = snapshot.data()![EMAIL];
+    user.uid = snapshot.data()![UID];
+    user.cart = _convertCartItems(snapshot.data()![CART] ?? []);
+    return user;
   }
 
   

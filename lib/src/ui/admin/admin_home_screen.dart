@@ -42,10 +42,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              bottomNavigatorBar(_currentIndex, 0, Mdi.home,true),
-              bottomNavigatorBar(_currentIndex,1, Mdi.cart,true),
-              bottomNavigatorBar(_currentIndex, 2, Mdi.shoppingOutline,true),
-              bottomNavigatorBar(_currentIndex, 3, Mdi.accountSettings,true),
+              bottomNavigatorBar(_currentIndex, 0, Mdi.home,true,context),
+              bottomNavigatorBar(_currentIndex,1, Mdi.cart,true,context),
+              bottomNavigatorBar(_currentIndex, 2, Mdi.shoppingOutline,true,context),
+              bottomNavigatorBar(_currentIndex, 3, Mdi.accountSettings,true,context),
             ],
           ),
         ),

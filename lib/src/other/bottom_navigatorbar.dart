@@ -7,8 +7,9 @@ import 'package:appreposteria/src/ui/store/storehome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mdi/mdi.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-Widget bottomNavigatorBar(int _currentIndex ,int index, IconData icon, bool admin){
+Widget bottomNavigatorBar(int _currentIndex ,int index, IconData icon, bool admin, BuildContext context){
   if(admin){
     return GestureDetector(
       onTap: () {
@@ -58,7 +59,13 @@ Widget bottomNavigatorBar(int _currentIndex ,int index, IconData icon, bool admi
            Get.offAll(HomePage()); 
             break;
           case 1:
-           Get.offAll(ShoppingCartWidget()); 
+                  showBarModalBottomSheet(
+                    context: context,
+                    builder: (context) => Container(
+                      color: Colors.white,
+                      child: ShoppingCartWidget(),
+                    ),
+                  );
             break;
           case 2:
           //Get.offAll(ShoppingCartWidget()); 
