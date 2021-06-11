@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'custom_text.dart';
+import 'package:appreposteria/src/other/colors.dart';
 
 class CustomButton extends StatelessWidget {
   final String? text;
@@ -29,7 +30,7 @@ class CustomButton extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: bgColor ?? Colors.black,
+              color: bgColor ?? AppColors.kCategorypinkColor ,
      ),
           child: Container(
             margin: EdgeInsets.all(14),

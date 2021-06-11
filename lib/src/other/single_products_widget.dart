@@ -22,7 +22,7 @@ class SingleProductWidget extends StatelessWidget {
       child: Column(
         children: [
           Expanded(
-                      child: Padding(
+             child: Padding(
               padding: const EdgeInsets.all(8.0),
                      child: ClipRRect(
                         borderRadius: BorderRadius.only(
@@ -31,7 +31,7 @@ class SingleProductWidget extends StatelessWidget {
                       ),
                         child: Image.network(              
                             product.image!,
-                            width: 200,
+                            width: 220,
                         ),                     
                       ),
             ),
@@ -61,6 +61,7 @@ class SingleProductWidget extends StatelessWidget {
               IconButton(
                   icon: Icon(Icons.add_shopping_cart),
                   onPressed: () {
+                    authController.listenToUser();
                     cartController.addProductToCart(product);
                   })
             ],

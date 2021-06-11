@@ -3,8 +3,6 @@ import 'package:appreposteria/src/ui/auth/auth_screen.dart';
 import 'package:appreposteria/src/ui/auth/login_screen.dart';
 import 'package:appreposteria/src/ui/auth/register_screen.dart';
 import 'package:appreposteria/src/ui/common/splash_screen.dart';
-import 'package:appreposteria/src/ui/store/storehome_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Routes {

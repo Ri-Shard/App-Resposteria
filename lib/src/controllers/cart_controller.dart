@@ -10,7 +10,7 @@ import 'package:uuid/uuid.dart';
 
 class CartController extends GetxController {
   static CartController instance = Get.find();
-  double? totalCartPrice = 0;
+  double totalCartPrice = 0;
 
   @override
   void onReady() {
@@ -20,7 +20,7 @@ class CartController extends GetxController {
   void addProductToCart(ProductModel product) {
     try {
       if (_isItemAlreadyAdded(product)) {
-        Get.snackbar("Check your cart", "${product.name} is already added");
+        Get.snackbar("Revisa tu carrito", "${product.name} ya se encuentra añadido");
       } else {
         String itemId = Uuid().toString();
         authController.updateUserData({
@@ -38,7 +38,7 @@ class CartController extends GetxController {
             }
           ])
         });
-        Get.snackbar("Item added", "${product.name} was added to your cart");
+        Get.snackbar("Producto agregado", "${product.name} fue agregado a tu carrito");
       }
     } catch (e) {
       Get.snackbar("Error", "No se pudo agregar este producto");
@@ -49,20 +49,23 @@ class CartController extends GetxController {
   void removeCartItem(CartItemModel cartItem) {
     try {
       authController.updateUserData({
-        "cart": FieldValue.arrayRemove([cartItem.toJson()])
+        "cart": cartItem.quantity == 1 ? [] : FieldValue.arrayRemove([cartItem.toJson()]) 
       });
+          authController.listenToUser();
     } catch (e) {
       Get.snackbar("Error", "No se pudo remover este producto");
     }
   }
-
-  changeCartTotalPrice(MyUser userModel) {
+//TODO: Arreglar esto del carrito
+  double changeCartTotalPrice(MyUser userModel) {
     totalCartPrice = 0;
     if (userModel.cart!.isNotEmpty) {
       userModel.cart!.forEach((cartItem) {
-        totalCartPrice = (totalCartPrice! + (cartItem.cost!));
+       totalCartPrice = (totalCartPrice + (cartItem.cost!));     
       });
+    return totalCartPrice;
     }
+    return totalCartPrice;
   }
 
   bool _isItemAlreadyAdded(ProductModel product) =>
@@ -70,23 +73,23 @@ class CartController extends GetxController {
           .where((item) => item.productId == product.uid)
           .isNotEmpty;
 
-
-
   void decreaseQuantity(CartItemModel item){
     if(item.quantity == 1){
       removeCartItem(item);
     }else{
       removeCartItem(item);
-      item.quantity = (item.quantity! - 1);
+      item.quantity = (item.quantity - 1);
           authController.updateUserData({
         "cart": FieldValue.arrayUnion([item.toJson()])
       });
     }
   }
-
     void increaseQuantity(CartItemModel item){
+      if(item.quantity == 1){
+
+      }else{}
       removeCartItem(item);
-      item.quantity = (item.quantity! + 1);
+      item.quantity = (item.quantity + 1);
       logger.i({"quantity": item.quantity});
           authController.updateUserData({
         "cart": FieldValue.arrayUnion([item.toJson()])

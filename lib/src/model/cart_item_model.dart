@@ -11,24 +11,26 @@ class CartItemModel {
   String? id;
   String? image;
   String? name;
-  int? quantity;
+  int quantity;
   double? cost;
    String? productId;
    double? price;
 
 
 
-  CartItemModel({this.productId, this.id, this.image, this.name, this.quantity, this.cost});
+  CartItemModel({this.productId, this.id, this.image, this.name, required this.quantity, this.cost});
 
-  CartItemModel.fromMap(Map<String, dynamic> data){
-    id = data[ID];
-    image = data[IMAGE];
-    name = data[NAME];
-    quantity = data[QUANTITY];
-    cost = double.parse( data[COST]);
-    productId = data[PRODUCT_ID];
-    price = double.parse(data[PRICE]);
+ CartItemModel fromMap(Map<String, dynamic> data){
+    CartItemModel cart = CartItemModel(quantity: 1);
+    cart.id = data[ID];
+    cart.image = data[IMAGE];
+    cart.name = data[NAME];
+    cart.quantity = data[QUANTITY];
+    cart.cost = data[COST].toDouble();
+    cart.productId = data[PRODUCT_ID];
+    cart.price = data[PRICE].toDouble();
 
+    return cart;
   }
 
   Map toJson() => {
@@ -37,8 +39,8 @@ class CartItemModel {
     IMAGE: image, 
     NAME: name,
     QUANTITY: quantity,
-    COST: price! * quantity!,
-    PRICE: price
+    COST: price! * quantity,
+    PRICE: price 
   };
 
 }

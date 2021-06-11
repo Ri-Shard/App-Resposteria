@@ -3,12 +3,10 @@ import 'dart:io';
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/other/bottom_navigatorbar.dart';
 import 'package:appreposteria/src/other/colors.dart';
-import 'package:appreposteria/src/other/errorDialog.dart';
 import 'package:appreposteria/src/other/general_appbar.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mdi/mdi.dart';
 import 'package:path/path.dart' as path;
@@ -28,9 +26,9 @@ class _UploadProductsState extends State<UploadProducts> {
           String? emailValidator(String? value) {
     return (value == null || value.isEmpty) ? 'Campo Requerido' : null;
   }
-  @override
     late double height, width;
     int _currentIndex = 1;
+  @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       height = constraints.maxHeight;
@@ -254,6 +252,7 @@ class _UploadProductsState extends State<UploadProducts> {
                         btnOkIcon: Icons.cancel,
                         btnOkColor: Colors.red)
                       ..show();
+                      debugPrint(error.toString());
       }
                    }
 

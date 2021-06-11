@@ -22,7 +22,6 @@ class AuthController extends GetxController {
   String usersCollection = "users";
   MyUser myuser = MyUser();
 
-  
   @override
   void onInit() {
     super.onInit();

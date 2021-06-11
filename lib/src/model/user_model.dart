@@ -27,14 +27,16 @@ class MyUser{
   
   List<CartItemModel> _convertCartItems(List cartFomDb){
     List<CartItemModel> _result = [];
+    CartItemModel cartmodel = CartItemModel(quantity: 1);
     if(cartFomDb.length > 0){
       cartFomDb.forEach((element) {
-      _result.add(CartItemModel.fromMap(element));
+      _result.add(cartmodel.fromMap(element));
     });
     }
     return _result;
   }
 
-  List cartItemsToJson() => cart!.map((item) => item.toJson()).toList();
-
+  List? cartItemsToJson() {
+     cart!.map((item) => item.toJson()).toList();
+  }
 }

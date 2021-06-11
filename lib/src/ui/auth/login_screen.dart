@@ -1,7 +1,6 @@
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/other/colors.dart';
-import 'package:appreposteria/src/other/errorDialog.dart';
-import 'package:appreposteria/src/other/loadingDialog.dart';
+
 import 'package:appreposteria/src/ui/auth/register_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -100,7 +99,7 @@ class _LoginState extends State<Login>
                         ),
                       ),
                     ),
-                FlatButton(
+                TextButton(
                         onPressed: () {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));
                         }, 

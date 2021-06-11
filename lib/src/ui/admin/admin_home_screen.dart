@@ -57,8 +57,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
 
  _buildBody(constraints){
-      var height = constraints.maxHeight;
-      var width = constraints.maxWidth;
       return SafeArea(
         child: Stack(
           children: [
@@ -77,18 +75,4 @@ class _AdminHomePageState extends State<AdminHomePage> {
        );   
  }
 
-    _buildRichText() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 5.0,right: 5.0, top: 1.0),
-      child: RichText(
-        text: 
-              TextSpan(
-                  text:  "Bienvenido, Administrador",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w800, 
-                      color: Colors.black,
-                      fontSize: 20)),    
-      ),
-    );
-  }
 }

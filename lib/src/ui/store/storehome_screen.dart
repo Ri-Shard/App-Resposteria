@@ -1,3 +1,180 @@
+/*
+
+import 'package:appreposteria/src/constants/controllers.dart';
+import 'package:appreposteria/src/model/item_model.dart';
+import 'package:appreposteria/src/other/custom_paragraph.dart';
+import 'package:appreposteria/src/other/general_appbar.dart';
+import 'package:appreposteria/src/other/single_products_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+          title: Text("Bienvenido, ${authController.myuser.name}" ,  
+                style: TextStyle(
+                fontWeight: FontWeight.w800, 
+                color: Colors.black,
+                fontSize: 20)),
+          elevation: 0,
+          backgroundColor: Colors.white10,
+          leading: IconButton(
+            onPressed: () {
+              authController.signOut();
+            },
+          icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.black,),
+        ),
+      ),
+      body:Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.grey.shade200,
+        ),
+        padding: EdgeInsets.only(top:100,left:20,right:20),
+        child: Column(
+          children:[
+            _searchTextFormField(),
+            SizedBox(height:30 ),
+            CustomParagraph(
+              text:"Categorias",              
+            ),
+            SizedBox(height:30),
+            _listViewCategory(),
+            SizedBox(height:30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomParagraph(
+                  text: "Mas Vendidos",
+                  fontSize: 18,
+                ),
+                CustomParagraph(
+                  text: "Ver Todos",
+                  fontSize: 16,
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 30,
+            ),
+           // _buildBody(),
+          ],
+        ),
+      )
+    );
+  }
+    Widget _searchTextFormField() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.grey,
+      ),
+      child: TextFormField(
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          prefixIcon: Icon(
+            Icons.search,
+            color: Colors.black,
+          ),
+        ),
+      ),
+    );
+  }
+
+
+  Widget _listViewCategory() {
+        return Container(
+        height: 100,
+        child: ListView.separated(
+          itemCount: 5,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: Colors.grey.shade100,
+                  ),
+                  height: 60,
+                  width: 60,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset("images/Photos.png"),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                CustomParagraph(
+                  text: "Pasteles",
+                ),
+              ],
+            );
+          },
+          separatorBuilder: (context, index) => SizedBox(
+            width: 20,
+          ),
+        ),
+      );    
+  }
+}
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import 'package:appreposteria/src/model/item_model.dart';
 import 'package:appreposteria/src/other/bottom_navigatorbar.dart';
 import 'package:appreposteria/src/constants/controllers.dart';
@@ -57,8 +234,7 @@ class _HomePageState extends State<HomePage> {
 
 
  _buildBody(constraints){
-      var height = constraints.maxHeight;
-      var width = constraints.maxWidth;
+
       return SafeArea(
         child: Stack(
           children: [
@@ -77,18 +253,4 @@ class _HomePageState extends State<HomePage> {
        );   
  }
 
-    _buildRichText() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 5.0,right: 5.0, top: 1.0),
-      child: RichText(
-        text: 
-              TextSpan(
-                  text:  "Bienvenido, ${authController.myuser!.name}",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w800, 
-                      color: Colors.black,
-                      fontSize: 20)),    
-      ),
-    );
-  }
 }

@@ -1,9 +1,7 @@
   
 import 'dart:async';
-import 'dart:io';
 import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/model/item_model.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

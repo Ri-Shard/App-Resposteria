@@ -1,4 +1,5 @@
 
+import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
 import 'package:appreposteria/src/ui/admin/upload_products_screen.dart';
@@ -6,7 +7,6 @@ import 'package:appreposteria/src/ui/store/cart_screen.dart';
 import 'package:appreposteria/src/ui/store/storehome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mdi/mdi.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 Widget bottomNavigatorBar(int _currentIndex ,int index, IconData icon, bool admin, BuildContext context){
