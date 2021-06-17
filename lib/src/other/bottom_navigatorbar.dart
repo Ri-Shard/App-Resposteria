@@ -1,5 +1,3 @@
-
-import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
 import 'package:appreposteria/src/ui/admin/upload_products_screen.dart';
@@ -84,7 +82,7 @@ Widget bottomNavigatorBar(int _currentIndex ,int index, IconData icon, bool admi
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: 20.0,
+            horizontal: 20.0, 
             vertical: 12.0,
           ),
           child: Icon(

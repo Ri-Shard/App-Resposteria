@@ -12,9 +12,9 @@ class CartItemModel {
   String? image;
   String? name;
   int quantity;
-  double? cost;
+  int? cost;
    String? productId;
-   double? price;
+   int? price;
 
 
 
@@ -26,21 +26,21 @@ class CartItemModel {
     cart.image = data[IMAGE];
     cart.name = data[NAME];
     cart.quantity = data[QUANTITY];
-    cart.cost = data[COST].toDouble();
+    cart.cost = data[COST].toInt();
     cart.productId = data[PRODUCT_ID];
-    cart.price = data[PRICE].toDouble();
+    cart.price = data[PRICE].toInt();
 
     return cart;
   }
 
   Map toJson() => {
-    ID: id, 
-    PRODUCT_ID: productId,
-    IMAGE: image, 
-    NAME: name,
-    QUANTITY: quantity,
-    COST: price! * quantity,
-    PRICE: price 
+      "id" : id,
+      "image" : image,
+      "name" : name,
+      "quantity" : quantity,
+      "cost" : price! * quantity,
+      "price" : price,
+      "productId" : productId    
   };
 
 }

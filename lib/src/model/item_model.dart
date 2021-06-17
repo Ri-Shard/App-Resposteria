@@ -12,7 +12,7 @@ class ProductModel{
    String? name; 
    String? description;
    String? ingredients;
-   double? price;
+   int? price;
 
   ProductModel(this.uid,this.description,this.image,this.ingredients,this.name,this.price);
 
@@ -22,7 +22,7 @@ class ProductModel{
     name = data[NAME];
     description = data[DESCRIPTION];
     ingredients = data[INGREDIENTS];
-    price = double.parse(data[PRICE]);
+    price = int.parse(data[PRICE]);
   }
 
 }

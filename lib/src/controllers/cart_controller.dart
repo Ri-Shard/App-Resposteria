@@ -1,5 +1,6 @@
 import 'package:appreposteria/src/constants/app_constants.dart';
 import 'package:appreposteria/src/constants/controllers.dart';
+import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/model/cart_item_model.dart';
 import 'package:appreposteria/src/model/item_model.dart';
 import 'package:appreposteria/src/model/user_model.dart';
@@ -46,15 +47,28 @@ class CartController extends GetxController {
     }
   }
 
-  void removeCartItem(CartItemModel cartItem) {
-    try {
+   removeCartItem(CartItemModel cartItem)  {
+    try { 
       authController.updateUserData({
-        "cart": cartItem.quantity == 1 ? [] : FieldValue.arrayRemove([cartItem.toJson()]) 
+          "cart" : FieldValue.arrayRemove([cartItem.toJson()])
       });
-          authController.listenToUser();
+            authController.listenToUser();
     } catch (e) {
       Get.snackbar("Error", "No se pudo remover este producto");
     }
+  }
+  remove(String productid) {
+    List<CartItemModel>? tmpcart = authController.myuser.cart;
+    int index = 0;
+    tmpcart!.forEach((cartitem) {
+      if(productid == cartitem.name){
+        tmpcart.removeAt(index);
+      }
+      index += 1 ;
+    });
+         authController.updateUserData({
+        "cart": FieldValue.arrayUnion([tmpcart])
+      });
   }
 //TODO: Arreglar esto del carrito
   double changeCartTotalPrice(MyUser userModel) {
@@ -77,7 +91,7 @@ class CartController extends GetxController {
     if(item.quantity == 1){
       removeCartItem(item);
     }else{
-      removeCartItem(item);
+          removeCartItem(item);
       item.quantity = (item.quantity - 1);
           authController.updateUserData({
         "cart": FieldValue.arrayUnion([item.toJson()])
@@ -85,7 +99,7 @@ class CartController extends GetxController {
     }
   }
     void increaseQuantity(CartItemModel item){
-      if(item.quantity == 1){
+      if(item.quantity >= 1){
 
       }else{}
       removeCartItem(item);

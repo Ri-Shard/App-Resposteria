@@ -11,16 +11,16 @@ class MyUser{
     String? uid;
     String? email;
     String? name;
-   List<CartItemModel>? cart;
+   List<CartItemModel>? cart; 
 
   MyUser({ this.uid, this.email, this.name,this.cart});
 
   MyUser fromSnapshot(DocumentSnapshot snapshot){
     MyUser user = MyUser();
-    user.name = snapshot.data()![NAME];
-    user.email = snapshot.data()![EMAIL];
-    user.uid = snapshot.data()![UID];
-    user.cart = _convertCartItems(snapshot.data()![CART] ?? []);
+    user.name = snapshot[NAME];
+    user.email = snapshot[EMAIL];
+    user.uid = snapshot[UID];
+    user.cart = _convertCartItems(snapshot[CART] ?? []);
     return user;
   }
 
