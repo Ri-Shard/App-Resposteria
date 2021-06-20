@@ -23,8 +23,6 @@ class MyUser{
     user.cart = _convertCartItems(snapshot[CART] ?? []);
     return user;
   }
-
-  
   List<CartItemModel> _convertCartItems(List cartFomDb){
     List<CartItemModel> _result = [];
     CartItemModel cartmodel = CartItemModel(quantity: 1);

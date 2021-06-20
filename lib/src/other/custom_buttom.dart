@@ -9,11 +9,13 @@ class CustomButton extends StatelessWidget {
   final Color? bgColor;
   final Color? shadowColor;
   final Function() onTap;
+  final double? width;
 
   const CustomButton(
       {Key? key,
        this.text,
        this.txtColor,
+       this.width,
        this.bgColor,
        this.shadowColor,
       required this.onTap})
@@ -33,6 +35,7 @@ class CustomButton extends StatelessWidget {
               color: bgColor ?? AppColors.kCategorypinkColor ,
      ),
           child: Container(
+            width: width,
             margin: EdgeInsets.all(14),
             alignment: Alignment.center,
             child: CustomText(

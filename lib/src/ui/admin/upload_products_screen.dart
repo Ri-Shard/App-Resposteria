@@ -220,7 +220,7 @@ class _UploadProductsState extends State<UploadProducts> {
           producsController.image = url;
           producsController.addProductToFirestore();
 
-                             AwesomeDialog(
+                      AwesomeDialog(
                         context: context,
                         animType: AnimType.LEFTSLIDE,
                         headerAnimationLoop: false,

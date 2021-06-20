@@ -1,5 +1,6 @@
 import 'package:appreposteria/src/constants/app_constants.dart';
 import 'package:appreposteria/src/constants/firebase.dart';
+import 'package:appreposteria/src/model/address_model.dart';
 import 'package:appreposteria/src/model/user_model.dart';
 import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
 import 'package:appreposteria/src/ui/auth/auth_screen.dart';
@@ -21,12 +22,21 @@ class AuthController extends GetxController {
   TextEditingController password = TextEditingController();
   String usersCollection = "users";
   MyUser myuser = MyUser();
+ RxList<AddressModel> addresslist = RxList<AddressModel>([]);
+
+
+ //controllers Address
+TextEditingController barrio = TextEditingController(); 
+TextEditingController address = TextEditingController(); 
+TextEditingController city = TextEditingController(); 
+TextEditingController phone = TextEditingController(); 
 
   @override
   void onInit() {
     super.onInit();
     if(auth.currentUser != null ){
         listenToUser();
+        checkAddress();
     }
   }
 
@@ -97,6 +107,11 @@ class AuthController extends GetxController {
     name.clear();
     email.clear();
     password.clear();
+    //
+    address.clear();
+    city.clear();
+    phone.clear();
+    barrio.clear();
   }
     updateUserData(Map<String, dynamic> data) {
     logger.i("UPDATED");
@@ -112,4 +127,24 @@ class AuthController extends GetxController {
       .then((snapshot) {
       myuser = myuser.fromSnapshot(snapshot);
       }); 
+
+  List<AddressModel> checkAddress(){
+    addresslist.bindStream(getAddress(auth.currentUser!.uid.toString()));
+    return addresslist;
+  }
+  Stream<List<AddressModel>> getAddress(String userUid) =>
+    firebaseFirestore.collection(usersCollection).doc(userUid).collection("address").snapshots().map((event) => 
+    event.docs.map((e) => AddressModel.fromMap(e.data())).toList());
+  
+  addAddressToFirestore(String userUid){
+    firebaseFirestore.collection(usersCollection).doc(userUid).collection("address").doc(DateTime.now().toString()).set({
+      "name": myuser.name,
+      "address": address.text.trim(),
+      "city": city.text.trim(),
+      "phone": phone.text.trim(),
+      "barrio": barrio.text.trim(),
+      "date": DateTime.now().toString()
+    });
+    _clearControllers();
+  }
 }

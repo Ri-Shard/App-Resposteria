@@ -38,7 +38,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                 ],
               ),
             ),
-                      child: Row(
+        child: Row(
         mainAxisAlignment:
         MainAxisAlignment.center,
         children: [

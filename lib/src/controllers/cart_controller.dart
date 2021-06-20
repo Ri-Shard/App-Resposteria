@@ -1,6 +1,5 @@
 import 'package:appreposteria/src/constants/app_constants.dart';
 import 'package:appreposteria/src/constants/controllers.dart';
-import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/model/cart_item_model.dart';
 import 'package:appreposteria/src/model/item_model.dart';
 import 'package:appreposteria/src/model/user_model.dart';
@@ -11,7 +10,7 @@ import 'package:uuid/uuid.dart';
 
 class CartController extends GetxController {
   static CartController instance = Get.find();
-  double totalCartPrice = 0;
+  int totalCartPrice = 0;
 
   @override
   void onReady() {
@@ -59,19 +58,19 @@ class CartController extends GetxController {
   }
   remove(String productid) {
     List<CartItemModel>? tmpcart = authController.myuser.cart;
-    int index = 0;
+    var toRemove = [];
+
     tmpcart!.forEach((cartitem) {
       if(productid == cartitem.name){
-        tmpcart.removeAt(index);
+        toRemove.add(cartitem);
       }
-      index += 1 ;
     });
+        tmpcart.removeWhere((element) => toRemove.contains(element));
          authController.updateUserData({
-        "cart": FieldValue.arrayUnion([tmpcart])
+        "cart": FieldValue.arrayUnion(tmpcart)
       });
   }
-//TODO: Arreglar esto del carrito
-  double changeCartTotalPrice(MyUser userModel) {
+  int changeCartTotalPrice(MyUser userModel) {
     totalCartPrice = 0;
     if (userModel.cart!.isNotEmpty) {
       userModel.cart!.forEach((cartItem) {
@@ -89,9 +88,9 @@ class CartController extends GetxController {
 
   void decreaseQuantity(CartItemModel item){
     if(item.quantity == 1){
-      removeCartItem(item);
+      remove(item.name.toString());
     }else{
-          removeCartItem(item);
+      remove(item.name.toString());
       item.quantity = (item.quantity - 1);
           authController.updateUserData({
         "cart": FieldValue.arrayUnion([item.toJson()])
@@ -102,8 +101,8 @@ class CartController extends GetxController {
       if(item.quantity >= 1){
 
       }else{}
-      removeCartItem(item);
-      item.quantity = (item.quantity + 1);
+      remove(item.name.toString());     
+       item.quantity = (item.quantity + 1);
       logger.i({"quantity": item.quantity});
           authController.updateUserData({
         "cart": FieldValue.arrayUnion([item.toJson()])

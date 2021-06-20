@@ -2,8 +2,12 @@ import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/other/cart_item_widget.dart';
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/other/custom_buttom.dart';
+import 'package:appreposteria/src/ui/store/address_screen.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:mdi/mdi.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:get/get.dart';
 
 
 class ShoppingCartWidget extends StatefulWidget {
@@ -53,18 +57,29 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
 
     AppBar buildAppBar(BuildContext context) {
     return AppBar(
+      leading: Icon(Mdi.cart, color: Colors.black, size: 30,),
       backgroundColor: Colors.white,
       elevation: 0,
-      title: Column(
+      title: Row(
         children: [
-          Text(
-            "Carrito",
+          Column(
+            children: [
+              Text(
+                "Carrito",
+                style: TextStyle(color: Colors.black),
+              ),
+              Text(
+                "${authController.myuser.cart!.length} items",
+                style: Theme.of(context).textTheme.caption,
+              ), 
+            ]
+          ),
+            SizedBox(
+              width: 100,
+            ),
+            Text("Total: "+"\$${cartController.changeCartTotalPrice(authController.myuser)}",
             style: TextStyle(color: Colors.black),
-          ),
-          Text(
-            "${authController.myuser.cart!.length} items",
-            style: Theme.of(context).textTheme.caption,
-          ),
+            textAlign: TextAlign.center,)       
         ],
       ),
     );
@@ -78,17 +93,23 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
          height: 60,
               padding: EdgeInsets.only(top:0, left: 10,right: 10,bottom: 10),
               child: CustomButton(            
-                  text: "Pedir(\$${cartController.changeCartTotalPrice(authController.myuser)})", onTap: () {
+                  text: "Proceder a Pedir", onTap: () {
                       AwesomeDialog(
                         context: context,
-                        dialogType: DialogType.SUCCES,
-                        animType: AnimType.RIGHSLIDE,
-                        headerAnimationLoop: true,
-                        title: 'Exito',
+                        dialogType: DialogType.NO_HEADER,
+                        title: 'Ahora, Elige tu direccion',
                         desc:
-                          'Pedido en Proceso',
-                        btnOkOnPress: () {},
-                        btnOkIcon: Icons.check,
+                          'Seras Redirigido',
+                        btnOkOnPress: () {
+                          Get.close(1);
+                            showBarModalBottomSheet(
+                              context: context,
+                              builder: (context) => Container(
+                                color: Colors.white,
+                                child: AddressScreen(),
+                              ),
+                            );
+                        },
                         btnOkColor: AppColors.kCategorypinkColor)
                       ..show();
                   })
