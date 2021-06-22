@@ -28,11 +28,11 @@ dependencies:
   awesome_dialog: ^2.1.0
   uuid: ^3.0.4
   modal_bottom_sheet: ^2.0.0
+  pull_to_refresh: ^2.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
 
 
 flutter:

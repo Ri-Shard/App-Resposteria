@@ -4,7 +4,9 @@ import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/other/custom_text.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mdi/mdi.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class AddressScreen extends StatefulWidget {
   AddressScreen({Key? key}) : super(key: key);
@@ -15,9 +17,13 @@ class AddressScreen extends StatefulWidget {
 
 class _AddressScreenState extends State<AddressScreen> with SingleTickerProviderStateMixin{
       TabController? _tabController;
+       int? currentIndex;
+       int? value;
         final _formKey = GlobalKey<FormState>();
         bool mostrar = false;
         int? long;
+        RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
       String? emailValidator(String? value) {
     return (value == null || value.isEmpty) ? 'Campo Requerido' : null;
   }
@@ -34,53 +40,80 @@ void initState() {
     _tabController!.dispose();
     super.dispose();
   }
-
+  void _onRefresh() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+  }
+    void _onLoading() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    if(mounted)
+    setState(() {
+      initState();
+    });
+    _refreshController.loadComplete();
+  }
   @override
   Widget build(BuildContext context) {
      return 
         Scaffold(
         appBar: AppBar(backgroundColor: Colors.white, elevation: 0 ,title: Text("Direcciones",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),textAlign: TextAlign.center, )),
-         body:  TabBarView(
-          controller: _tabController, 
-          children: [
-          ListView(
+         body:  
+         SmartRefresher(
+            enablePullDown: true,
+            enablePullUp: true,            
+            header: WaterDropHeader(),         
+            controller: _refreshController,
+           onRefresh: _onRefresh,
+           onLoading:_onLoading,
+            child: TabBarView(
+            controller: _tabController, 
             children: [
-              SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              long == 0 && mostrar == false?
-              Container(                             
-                  child: imageMessage()                
-              )
-              :  
-              Column(
-                children: [
-                  Column(    
-                      children:           
-                          authController.addresslist.map((element) => itemWidget(element))
-                          .toList(),                     
-                    ),
+            ListView(
+              children: [
                 SizedBox(
-                height: 20
-                  ),
-                Text("Deslice para Añadir",
-                    style: TextStyle(fontWeight : FontWeight.bold,fontSize: 18 )),
+                  height: 10,
+                ),
                 SizedBox(
-                height: 20
-                  ),
-                Center(child: Icon(Mdi.arrowExpandLeft,color: AppColors.kCategorypinkColor, size: 40,),)   ,
+                  height: 5,
+                ),
+                long == 0 && mostrar == false?
+                Container(                             
+                    child: imageMessage()                
+                )
+                :  
+                Column(
+                  children: [
+                    SizedBox(height:20),
+                    CustomText(text: "Seleccione una direccion",weight: FontWeight.bold,size: 20),
+                    SizedBox(height:20),
+                    Column(    
+                        children:           
+                            authController.addresslist.map((element) => itemWidget(element))
+                            .toList(),                     
+                      ),
                   SizedBox(
-                   height: 20
-                  ),
-                ],
-              ),
-                   ],
-          ),
-          form(),
-          ],)
+                  height: 50
+                    ),
+                  Text("Deslice para Añadir",
+                      style: TextStyle(fontWeight : FontWeight.bold,fontSize: 18 )),
+                  SizedBox(
+                  height: 20
+                    ),
+                  Center(child: Icon(Mdi.arrowExpandLeft,color: AppColors.kCategorypinkColor, size: 40,),)   ,
+                    SizedBox(
+                     height: 20
+                    ),
+                  ],
+                ),
+                     ],
+            ),
+            form(),
+            ],),
+         )
 
        );
   }
@@ -107,22 +140,125 @@ void initState() {
   }
     Widget itemWidget(AddressModel addressModel)
     {
-      return Container(
-
-          padding: EdgeInsets.only(left: 14),
-            child: Column(
+     return Dismissible(
+      key: UniqueKey(),
+      direction: DismissDirection.startToEnd,
+      onDismissed: (direction) {
+        setState(() {
+          authController.deleteAddress(addressModel.date);
+          initState();
+          _onRefresh();
+        });
+      }, 
+                  background: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: Color(0xFFFFE6E6),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Row(
+                children: [
+                  Spacer(),
+                  Icon(Mdi.trashCan),
+                ],
+              ),
+            ),
+      child: Card(
+        color: AppColors.kCategorypinkColor,
+        child: Column(
+          children: [
+            Row(
               children: [
-                CustomText(
-                  text: addressModel.address, 
-                ),
-                SizedBox(
-                height: 20
-                  ),                             
+                Column(                
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [                   
+                       GestureDetector(
+                         onTap: (){
+                                   AwesomeDialog(
+                                    context: context,
+                                    animType: AnimType.LEFTSLIDE,
+                                    headerAnimationLoop: false,
+                                    dialogType: DialogType.SUCCES,
+                                    showCloseIcon: true,
+                                    title: 'Guardado',
+                                    desc:
+                                          addressModel.phone,
+                                    btnOkOnPress: () {
+                                      
+                                    },
+                                    btnOkIcon: Icons.check_circle,
+                                    onDissmissCallback: (type) {
+                                      debugPrint('Dialog Dissmiss from callback $type');
+                                    })
+                                  ..show();
+                         },
+                         child: Container(
+                          padding: EdgeInsets.all(20.0),
+                          width: Get.width *0.8,
+                          child: Table(
+                            children: [                            
+                              TableRow(
+                                children: [
+                                   Text(
+                                    "Nombre:",
+                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                   ),
+                                   Text(addressModel.name.toString()),  
+                                ]
+                              ),
+                              TableRow(
+                                children: [
+                                   Text(
+                                    "Ciudad:",
+                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                   ),
+                                   Text(addressModel.city.toString()),
+                                ]
+                              ),
+                              TableRow(
+                                children: [
+                                   Text(
+                                    "Barrio:",
+                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                   ),
+                                   Text(addressModel.barrio.toString()),
+                                ]
+                              ),
+                              TableRow(
+                                children: [
+                                   Text(
+                                    "Direccion:",
+                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                   ),
+                                   Text(addressModel.address.toString()),
+                                ]
+                              ),
+                              TableRow(
+                                children: [
+                                   Text(
+                                    "Telefono:",
+                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                   ),
+                                   Text(addressModel.phone.toString()),
+                                ]
+                              ),
+                            ]
+                          ),
+                      ),
+                       ),
+                    
+                  ],
+                )
               ],
-            ),            
-            
-            );
+            ),
+          ],
+        ),
+      )
+     );
     }
+
+
+
       Widget form(){                                                                                      
             return 
             Form(
@@ -169,7 +305,7 @@ void initState() {
                             onPressed: () async{
                               setState(() {                      
                               if(_formKey.currentState?.validate() == true){
-                              authController.addAddressToFirestore(authController.myuser.uid.toString());
+                              authController.addAddressToFirestore(authController.myuser.uid.toString());                              
                                   AwesomeDialog(
                                     context: context,
                                     animType: AnimType.LEFTSLIDE,
@@ -217,11 +353,19 @@ Widget card (AddressModel address){
               child: Wrap(
                 direction: Axis.vertical,
                 children: [
-                  Container(
-                    padding: EdgeInsets.only(left: 14),
-                      child: CustomText(
+                    CustomText(
                         text: address.name,
-                      )),
+                      ),
+                    CustomText(
+                        text: address.barrio,
+                      ),
+               
+                    CustomText(
+                        text: address.phone,
+                      ),
+                    CustomText(
+                        text: address.city,
+                      ),
                 ],
               )),
         ],

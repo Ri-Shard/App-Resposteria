@@ -137,14 +137,18 @@ TextEditingController phone = TextEditingController();
     event.docs.map((e) => AddressModel.fromMap(e.data())).toList());
   
   addAddressToFirestore(String userUid){
-    firebaseFirestore.collection(usersCollection).doc(userUid).collection("address").doc(DateTime.now().toString()).set({
+    String now = DateTime.now().microsecond.toString();
+    firebaseFirestore.collection(usersCollection).doc(userUid).collection("address").doc(now).set({
       "name": myuser.name,
       "address": address.text.trim(),
       "city": city.text.trim(),
       "phone": phone.text.trim(),
       "barrio": barrio.text.trim(),
-      "date": DateTime.now().toString()
+      "date": now
     });
     _clearControllers();
+  }
+  deleteAddress(String? date){
+    firebaseFirestore.collection(usersCollection).doc(myuser.uid).collection("address").doc(date).delete();
   }
 }
