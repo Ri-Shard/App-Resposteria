@@ -106,7 +106,7 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                               context: context,
                               builder: (context) => Container(
                                 color: Colors.white,
-                                child: AddressScreen(),
+                                child: AddressScreen() ,
                               ),
                             );
                         },

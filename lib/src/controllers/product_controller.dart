@@ -26,13 +26,14 @@ class ProducsController extends GetxController {
           query.docs.map((item) => ProductModel.fromMap(item.data())).toList());
 
    addProductToFirestore(){
-    firebaseFirestore.collection(collection).doc().set({
+     String doc = firebaseFirestore.collection(collection).doc().id.toString();
+    firebaseFirestore.collection(collection).doc(doc).set({
       "name": name.text.trim(),
       "description": description.text.trim(),
       "ingredients": ingredients.text.trim(),
       "price": price.text.trim(),
       "image": image.trim(),
-      "uid": firebaseFirestore.collection(collection).doc().id.toString()
+      "uid": doc
           });
           _clearControllers();
   }

@@ -23,7 +23,7 @@ class AuthController extends GetxController {
   String usersCollection = "users";
   MyUser myuser = MyUser();
  RxList<AddressModel> addresslist = RxList<AddressModel>([]);
-
+AddressModel addressModel = AddressModel();
 
  //controllers Address
 TextEditingController barrio = TextEditingController(); 

@@ -1,5 +1,4 @@
 /*
-
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/model/item_model.dart';
 import 'package:appreposteria/src/other/custom_paragraph.dart';
@@ -124,8 +123,8 @@ class HomePage extends StatelessWidget {
   }
 }
 
-
 */
+
 
 
 
@@ -231,7 +230,9 @@ void initState() {
             ],
           ),
         ),
-        body: _buildBody(constraints),
+        body: SafeArea(
+        child: _buildBody(constraints),
+        )
       );
       }
     );
@@ -240,8 +241,7 @@ void initState() {
 
  _buildBody(constraints){
 
-      return SafeArea(
-        child: Stack(
+      return Stack(
           children: [
             Obx(()=>GridView.count(
                 crossAxisCount: 2,
@@ -254,7 +254,7 @@ void initState() {
                   return SingleProductWidget(product: product,);
                 }).toList())) 
           ]
-        )
+        
        );   
  }
 

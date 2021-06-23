@@ -1,7 +1,9 @@
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/model/address_model.dart';
+import 'package:appreposteria/src/model/cart_item_model.dart';
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/other/custom_text.dart';
+import 'package:appreposteria/src/ui/store/order_screen.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,13 +11,12 @@ import 'package:mdi/mdi.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class AddressScreen extends StatefulWidget {
-  AddressScreen({Key? key}) : super(key: key);
-
   @override
   _AddressScreenState createState() => _AddressScreenState();
 }
 
 class _AddressScreenState extends State<AddressScreen> with SingleTickerProviderStateMixin{
+      List<CartItemModel>? cartlist = authController.myuser.cart!;
       TabController? _tabController;
        int? currentIndex;
        int? value;
@@ -24,6 +25,7 @@ class _AddressScreenState extends State<AddressScreen> with SingleTickerProvider
         int? long;
         RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+
       String? emailValidator(String? value) {
     return (value == null || value.isEmpty) ? 'Campo Requerido' : null;
   }
@@ -180,11 +182,10 @@ void initState() {
                                     headerAnimationLoop: false,
                                     dialogType: DialogType.SUCCES,
                                     showCloseIcon: true,
-                                    title: 'Guardado',
-                                    desc:
-                                          addressModel.phone,
+                                    title: 'Pedido Realizado',                                  
                                     btnOkOnPress: () {
-                                      
+                                      authController.addressModel=addressModel; 
+                                      Get.offAll(OrderScreen());
                                     },
                                     btnOkIcon: Icons.check_circle,
                                     onDissmissCallback: (type) {
@@ -196,30 +197,23 @@ void initState() {
                           padding: EdgeInsets.all(20.0),
                           width: Get.width *0.8,
                           child: Table(
-                            children: [                            
+                            children: [      
                               TableRow(
                                 children: [
                                    Text(
-                                    "Nombre:",
-                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                    "Direccion:",
+                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                                    ),
-                                   Text(addressModel.name.toString()),  
-                                ]
-                              ),
-                              TableRow(
-                                children: [
-                                   Text(
-                                    "Ciudad:",
-                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                   Text(addressModel.address.toString(),
+                                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)
                                    ),
-                                   Text(addressModel.city.toString()),
                                 ]
-                              ),
+                              ),                      
                               TableRow(
                                 children: [
                                    Text(
                                     "Barrio:",
-                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                                    ),
                                    Text(addressModel.barrio.toString()),
                                 ]
@@ -227,19 +221,10 @@ void initState() {
                               TableRow(
                                 children: [
                                    Text(
-                                    "Direccion:",
-                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                    "Ciudad:",
+                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                                    ),
-                                   Text(addressModel.address.toString()),
-                                ]
-                              ),
-                              TableRow(
-                                children: [
-                                   Text(
-                                    "Telefono:",
-                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                                   ),
-                                   Text(addressModel.phone.toString()),
+                                   Text(addressModel.city.toString()),
                                 ]
                               ),
                             ]
