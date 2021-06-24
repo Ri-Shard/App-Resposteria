@@ -5,6 +5,7 @@ import 'package:appreposteria/src/model/cart_item_model.dart';
 import 'package:appreposteria/src/model/order_model.dart';
 import 'package:appreposteria/src/other/bottom_navigatorbar.dart';
 import 'package:appreposteria/src/other/cart_item_widget.dart';
+import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
 import 'package:appreposteria/src/ui/store/storehome_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ void initState() {
         return Scaffold(
       appBar: AppBar(elevation: 0, backgroundColor: Colors.white, leading: IconButton(
             onPressed: () {
-              Get.offAll(HomePage());
+              Get.offAll(AdminHomePage());
             },
           icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.black,),
         ), 
@@ -80,10 +81,10 @@ void initState() {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              bottomNavigatorBar(_currentIndex, 0, Mdi.home,false,context),
-              bottomNavigatorBar(_currentIndex,1, Mdi.cart,false,context),
-              bottomNavigatorBar(_currentIndex, 2, Mdi.shoppingOutline,false,context),
-              bottomNavigatorBar(_currentIndex, 3, Mdi.accountSettings,false,context),
+              bottomNavigatorBar(_currentIndex, 0, Mdi.home,true,context),
+              bottomNavigatorBar(_currentIndex,1, Mdi.cart,true,context),
+              bottomNavigatorBar(_currentIndex, 2, Mdi.shoppingOutline,true,context),
+              bottomNavigatorBar(_currentIndex, 3, Mdi.accountSettings,true,context),
             ],
           ),
         ),
