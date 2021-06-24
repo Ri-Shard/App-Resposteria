@@ -20,6 +20,12 @@ class _OrderScreenState extends State<OrderScreen> {
   late double height, width;
   OrderModel ordelmodel = OrderModel();
     int _currentIndex = 2;
+
+    @override
+void initState() { 
+  super.initState();
+  authController.listenToUser();
+}
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints)
@@ -32,7 +38,20 @@ class _OrderScreenState extends State<OrderScreen> {
               Get.offAll(HomePage());
             },
           icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.black,),
-        ), ),
+        ), 
+        title:Row(
+        children: [
+          Column(
+            children: [
+              Text(
+                "Mis Pedidos",
+                style: TextStyle(color: Colors.black),
+              ),
+            ]
+          ),      
+        ],
+      ),
+         ),
       body: 
       StreamBuilder(
       stream: firebaseFirestore
@@ -48,15 +67,16 @@ class _OrderScreenState extends State<OrderScreen> {
             return new Card(
               child: new Column(
                 children: <Widget>[
-                   Text(snapshot.data!.docs[index].get("date")),
-                   
+                Text(snapshot.data!.docs[index].get("date"),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),   
+                SizedBox(height: 20,),                
                 Column(    
                 children:            
                 ordelmodel.fromSnapshot(snapshot.data!.docs[index]).cart!
                   .map((cartItem) => CartItemWidget(cartItem: cartItem,))
                     .toList(),
               ),
-              
+              SizedBox(height: 20,),
+                Text(snapshot.data!.docs[index].get("status"),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),                               
                 ],
               ),
             );

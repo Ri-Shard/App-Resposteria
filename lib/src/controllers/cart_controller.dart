@@ -71,8 +71,7 @@ class CartController extends GetxController {
       });
   }
   clearCart() {
-
-         authController.updateUserData({
+        authController.updateUserData({
         "cart": []
       });
   }

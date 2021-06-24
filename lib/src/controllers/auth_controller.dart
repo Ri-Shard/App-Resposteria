@@ -171,6 +171,7 @@ TextEditingController phone = TextEditingController();
       "name": myuser.name,
       "address": addressModel.address,
       "date": now,
+      "status": "EN PROCESO",
       "cart": FieldValue.arrayUnion(myuser.cartItemsToJson())
     });
     _clearControllers();
