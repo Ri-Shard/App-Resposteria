@@ -70,6 +70,13 @@ class CartController extends GetxController {
         "cart": FieldValue.arrayUnion(tmpcart)
       });
   }
+  clearCart() {
+
+         authController.updateUserData({
+        "cart": []
+      });
+  }
+
   int changeCartTotalPrice(MyUser userModel) {
     totalCartPrice = 0;
     if (userModel.cart!.isNotEmpty) {

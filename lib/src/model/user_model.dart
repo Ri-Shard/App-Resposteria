@@ -34,7 +34,5 @@ class MyUser{
     return _result;
   }
 
-  List? cartItemsToJson() {
-     cart!.map((item) => item.toJson()).toList();
-  }
+  List cartItemsToJson() => cart!.map((item) => item.toJson()).toList();
 }

@@ -250,7 +250,6 @@ void initState() {
                 mainAxisSpacing: 4.0,
                 crossAxisSpacing: 10,
                 children: producsController.products.map((ProductModel product) {
-                  debugPrint(product.toString());
                   return SingleProductWidget(product: product,);
                 }).toList())) 
           ]

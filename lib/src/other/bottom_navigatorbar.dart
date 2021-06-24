@@ -2,6 +2,7 @@ import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
 import 'package:appreposteria/src/ui/admin/upload_products_screen.dart';
 import 'package:appreposteria/src/ui/store/cart_screen.dart';
+import 'package:appreposteria/src/ui/store/order_screen.dart';
 import 'package:appreposteria/src/ui/store/storehome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -66,7 +67,7 @@ Widget bottomNavigatorBar(int _currentIndex ,int index, IconData icon, bool admi
                   );
             break;
           case 2:
-          //Get.offAll(ShoppingCartWidget()); 
+          Get.offAll(OrderScreen()); 
             break;
           case 3:
            //Get.offAll(); 

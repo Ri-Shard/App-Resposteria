@@ -185,7 +185,9 @@ void initState() {
                                     title: 'Pedido Realizado',                                  
                                     btnOkOnPress: () {
                                       authController.addressModel=addressModel; 
-                                      Get.offAll(OrderScreen());
+                                      Get.offAll(()=>OrderScreen());
+                                      authController.addOrderToFirestore(authController.myuser.uid.toString());
+                                      cartController.clearCart();
                                     },
                                     btnOkIcon: Icons.check_circle,
                                     onDissmissCallback: (type) {

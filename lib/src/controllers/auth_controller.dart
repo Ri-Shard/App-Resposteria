@@ -1,11 +1,14 @@
 import 'package:appreposteria/src/constants/app_constants.dart';
 import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/model/address_model.dart';
+import 'package:appreposteria/src/model/cart_item_model.dart';
+import 'package:appreposteria/src/model/order_model.dart';
 import 'package:appreposteria/src/model/user_model.dart';
 import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
 import 'package:appreposteria/src/ui/auth/auth_screen.dart';
 import 'package:appreposteria/src/ui/common/splash_screen.dart';
 import 'package:appreposteria/src/ui/store/storehome_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,6 +25,7 @@ class AuthController extends GetxController {
   TextEditingController password = TextEditingController();
   String usersCollection = "users";
   MyUser myuser = MyUser();
+  OrderModel order = OrderModel();
  RxList<AddressModel> addresslist = RxList<AddressModel>([]);
 AddressModel addressModel = AddressModel();
 
@@ -36,6 +40,7 @@ TextEditingController phone = TextEditingController();
     super.onInit();
     if(auth.currentUser != null ){
         listenToUser();
+        listenToOrder();
         checkAddress();
     }
   }
@@ -151,4 +156,30 @@ TextEditingController phone = TextEditingController();
   deleteAddress(String? date){
     firebaseFirestore.collection(usersCollection).doc(myuser.uid).collection("address").doc(date).delete();
   }
+
+  addOrderToFirestore(String userUid){
+    String dia = DateTime.now().day.toString();
+    String mes = DateTime.now().month.toString();
+    String year = DateTime.now().year.toString();
+    String hour = DateTime.now().hour.toString();
+    String min = DateTime.now().minute.toString();
+    String second = DateTime.now().second.toString();
+    String now  = dia+"/"+mes+"/"+year+"/"+hour+"/"+min+"/"+second;
+    String nowe  = dia+mes+year+hour+min+second;
+    firebaseFirestore.collection("pedidos").doc(userUid).collection(userUid).doc(userUid+nowe).set({
+      "uid": userUid,
+      "name": myuser.name,
+      "address": addressModel.address,
+      "date": now,
+      "cart": FieldValue.arrayUnion(myuser.cartItemsToJson())
+    });
+    _clearControllers();
+  }
+
+       listenToOrder() => firebaseFirestore
+      .collection("pedidos")
+      .doc(auth.currentUser!.uid)
+      .collection(auth.currentUser!.uid)
+      .snapshots();
+
 }
