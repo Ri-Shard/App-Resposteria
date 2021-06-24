@@ -7,6 +7,7 @@ import 'package:appreposteria/src/other/general_appbar.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mdi/mdi.dart';
 import 'package:path/path.dart' as path;
@@ -230,7 +231,7 @@ class _UploadProductsState extends State<UploadProducts> {
                         desc:
                             'Producto guardado Con exito',
                         btnOkOnPress: () {
-                          debugPrint('OnClcik');
+                          Get.offAll(()=>AdminHomePage());
                         },
                         btnOkIcon: Icons.check_circle,
                         onDissmissCallback: (type) {

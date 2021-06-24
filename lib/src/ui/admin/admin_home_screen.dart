@@ -14,7 +14,11 @@ class AdminHomePage extends StatefulWidget {
 class _AdminHomePageState extends State<AdminHomePage> {
   late double height, width;
   int _currentIndex = 0;
-
+@override
+void initState() { 
+  super.initState();
+  authController.listenToUser();
+}
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {

@@ -26,7 +26,7 @@ class ProducsController extends GetxController {
           query.docs.map((item) => ProductModel.fromMap(item.data())).toList());
 
    addProductToFirestore(){
-     String doc = firebaseFirestore.collection(collection).doc().id.toString();
+    String doc = firebaseFirestore.collection(collection).doc().id.toString();
     firebaseFirestore.collection(collection).doc(doc).set({
       "name": name.text.trim(),
       "description": description.text.trim(),
@@ -45,4 +45,11 @@ class ProducsController extends GetxController {
         price.clear();
        } 
 
-}    // Uploading the selected image with some custom meta data
+      deleteProduct(String idproduct){
+        try{
+            firebaseFirestore.collection(collection).doc(idproduct).delete();
+        }catch (e){
+
+        }
+      }
+}

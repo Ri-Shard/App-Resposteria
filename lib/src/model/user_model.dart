@@ -15,6 +15,12 @@ class MyUser{
 
   MyUser({ this.uid, this.email, this.name,this.cart});
 
+  MyUser.fromMap(Map<String, dynamic> data){
+    uid = data[UID];
+    email = data[EMAIL];
+    name= data[NAME];
+  }
+
   MyUser fromSnapshot(DocumentSnapshot snapshot){
     MyUser user = MyUser();
     user.name = snapshot[NAME];

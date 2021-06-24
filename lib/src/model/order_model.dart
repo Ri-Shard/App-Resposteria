@@ -18,7 +18,7 @@ class OrderModel {
 
 OrderModel({this.address,this.name,this.date,this.uid,this.cart,this.status});
 
-
+ 
   OrderModel fromSnapshot(DocumentSnapshot snapshot){
     OrderModel order = OrderModel();
     order.name = snapshot[NAME];

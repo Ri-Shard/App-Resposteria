@@ -1,7 +1,6 @@
 import 'package:appreposteria/src/constants/app_constants.dart';
 import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/model/address_model.dart';
-import 'package:appreposteria/src/model/cart_item_model.dart';
 import 'package:appreposteria/src/model/order_model.dart';
 import 'package:appreposteria/src/model/user_model.dart';
 import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
@@ -27,6 +26,7 @@ class AuthController extends GetxController {
   MyUser myuser = MyUser();
   OrderModel order = OrderModel();
  RxList<AddressModel> addresslist = RxList<AddressModel>([]);
+ RxList<MyUser> userlist = RxList<MyUser>([]);
 AddressModel addressModel = AddressModel();
 
  //controllers Address
@@ -42,6 +42,7 @@ TextEditingController phone = TextEditingController();
         listenToUser();
         listenToOrder();
         checkAddress();
+        checkUsers();
     }
   }
 
@@ -133,6 +134,15 @@ TextEditingController phone = TextEditingController();
       myuser = myuser.fromSnapshot(snapshot);
       }); 
 
+     Stream<List<MyUser>> getUsers()=>
+        firebaseFirestore.collection(usersCollection)
+        .snapshots().map((event) => event.docs.map((e) => MyUser.fromMap(e.data())).toList());
+  
+
+  List<MyUser> checkUsers(){
+    userlist.bindStream(getUsers());
+    return userlist;
+  }
   List<AddressModel> checkAddress(){
     addresslist.bindStream(getAddress(auth.currentUser!.uid.toString()));
     return addresslist;
@@ -166,7 +176,7 @@ TextEditingController phone = TextEditingController();
     String second = DateTime.now().second.toString();
     String now  = dia+"/"+mes+"/"+year+"/"+hour+"/"+min+"/"+second;
     String nowe  = dia+mes+year+hour+min+second;
-    firebaseFirestore.collection("pedidos").doc(userUid).collection(userUid).doc(userUid+nowe).set({
+    firebaseFirestore.collection(usersCollection).doc(userUid).collection("pedidos").doc(userUid+nowe).set({
       "uid": userUid,
       "name": myuser.name,
       "address": addressModel.address,
@@ -178,9 +188,15 @@ TextEditingController phone = TextEditingController();
   }
 
        listenToOrder() => firebaseFirestore
-      .collection("pedidos")
+      .collection("usersCollection")
       .doc(auth.currentUser!.uid)
-      .collection(auth.currentUser!.uid)
+      .collection("pedidos")
       .snapshots();
 
+    userindex() {
+    userlist.forEach((element) {
+    firebaseFirestore.collection(usersCollection).doc(element.uid).collection("pedidos").snapshots().map((event) => 
+    event.docs.map((e) => OrderModel.fromMap(e.data())).toList());    
+    });
+  }
 }

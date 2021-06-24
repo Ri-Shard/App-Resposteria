@@ -1,12 +1,9 @@
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/constants/firebase.dart';
-import 'package:appreposteria/src/model/address_model.dart';
-import 'package:appreposteria/src/model/cart_item_model.dart';
 import 'package:appreposteria/src/model/order_model.dart';
 import 'package:appreposteria/src/other/bottom_navigatorbar.dart';
 import 'package:appreposteria/src/other/cart_item_widget.dart';
 import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
-import 'package:appreposteria/src/ui/store/storehome_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -45,7 +42,7 @@ void initState() {
           Column(
             children: [
               Text(
-                "Mis Pedidos",
+                "Pedidos",
                 style: TextStyle(color: Colors.black),
               ),
             ]
@@ -66,7 +63,8 @@ void initState() {
             return new Card(
               child: new Column(
                 children: <Widget>[
-                Text(snapshot.data!.docs[index].get("date"),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),   
+
+              
                 SizedBox(height: 20,),                
               SizedBox(height: 20,),
                 ],

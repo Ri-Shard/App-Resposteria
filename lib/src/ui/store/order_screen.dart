@@ -1,7 +1,5 @@
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/constants/firebase.dart';
-import 'package:appreposteria/src/model/address_model.dart';
-import 'package:appreposteria/src/model/cart_item_model.dart';
 import 'package:appreposteria/src/model/order_model.dart';
 import 'package:appreposteria/src/other/bottom_navigatorbar.dart';
 import 'package:appreposteria/src/other/cart_item_widget.dart';
@@ -55,9 +53,9 @@ void initState() {
       body: 
       StreamBuilder(
       stream: firebaseFirestore
-      .collection("pedidos")
+      .collection("users")
       .doc(authController.myuser.uid)
-      .collection(authController.myuser.uid.toString())
+      .collection("pedidos")
       .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) return CircularProgressIndicator();

@@ -1,7 +1,6 @@
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/model/item_model.dart';
 import 'package:appreposteria/src/other/custom_buttom.dart';
-import 'package:appreposteria/src/ui/store/storehome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -52,7 +51,7 @@ class ProductScreen extends StatelessWidget {
           top: 60.0,
           child: InkWell(
             onTap: () {
-            Get.offAll(HomePage());
+            Get.close(1);
             },
             child: Icon(Icons.arrow_back, color: Colors.black),
           ),
@@ -61,7 +60,11 @@ class ProductScreen extends StatelessWidget {
     );
 
     final bottomContentText = Text(
-      product.description.toString(),
+      product.description.toString(),      
+      style: TextStyle(fontSize: 18.0),
+    );
+    final ingredients =Text(
+      product.ingredients.toString(),overflow: TextOverflow.clip,
       style: TextStyle(fontSize: 18.0),
     );
     final readButton = Container(
@@ -81,7 +84,7 @@ class ProductScreen extends StatelessWidget {
       padding: EdgeInsets.all(40.0),
       child: Center(
         child: Column(
-          children: <Widget>[topContentText,SizedBox(height: 90,), bottomContentText, readButton],
+          children: <Widget>[topContentText,bottomContentText,SizedBox(height: 30,),Column(mainAxisAlignment: MainAxisAlignment.start,children:[Text("ingredientes",textAlign: TextAlign.start,),ingredients]),SizedBox(height: 4,),  readButton],
         ),
       ),
     );

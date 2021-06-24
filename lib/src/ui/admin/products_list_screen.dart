@@ -1,20 +1,80 @@
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/model/item_model.dart';
 import 'package:appreposteria/src/other/custom_text.dart';
-import 'package:appreposteria/src/ui/store/product_page_screen.dart';
+import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mdi/mdi.dart';
 
-class SingleProductWidget extends StatelessWidget {
-  final ProductModel product;
 
-  const SingleProductWidget({required this.product});
+
+class ProductList extends StatefulWidget {
+  @override
+  _ProductListState createState() => _ProductListState();
+}
+
+class _ProductListState extends State<ProductList> {
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: (){
-        Get.to(()=>ProductScreen(product: product,));
-      },
+    return Scaffold(
+            appBar: AppBar(elevation: 0, backgroundColor: Colors.white, leading: IconButton(
+            onPressed: () {
+              Get.offAll(AdminHomePage());
+            },
+          icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.black,),
+        ), 
+        title:Row(
+        children: [
+          Column(
+            children: [
+              Text(
+                "Listado Productos",
+                style: TextStyle(color: Colors.black),
+              ),
+            ]
+          ),      
+        ],
+      ),
+         ),
+      body: Stack(
+          children: [
+            Obx(()=>GridView.count(
+                crossAxisCount: 2,
+                childAspectRatio: .63,
+                padding: const EdgeInsets.all(10),
+                mainAxisSpacing: 4.0,
+                crossAxisSpacing: 10,
+                children: producsController.products.map((ProductModel product) {
+                  return itemWidget(product,);
+                }).toList())) 
+          ]
+        
+       ));   
+  }
+
+  Widget itemWidget(ProductModel product){
+        return Dismissible(
+              key: UniqueKey(),
+      direction: DismissDirection.startToEnd,
+      onDismissed: (direction) {
+        setState(() {
+          producsController.deleteProduct(product.uid.toString());
+        });
+      },  
+            background: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: Color(0xFFFFE6E6),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Row(
+                children: [
+                  Spacer(),
+                  Icon(Mdi.trashCan),
+                ],
+              ),
+            ),
           child: Container(
         decoration: BoxDecoration(
             color: Colors.white,
@@ -77,5 +137,4 @@ class SingleProductWidget extends StatelessWidget {
       ),
     );
   }
-
 }
