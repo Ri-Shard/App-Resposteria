@@ -2,7 +2,6 @@ import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/model/order_model.dart';
 import 'package:appreposteria/src/other/bottom_navigatorbar.dart';
-import 'package:appreposteria/src/other/cart_item_widget.dart';
 import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -62,9 +61,7 @@ void initState() {
           itemBuilder: (BuildContext context, int index) {
             return new Card(
               child: new Column(
-                children: <Widget>[
-
-              
+                children: <Widget>[             
                 SizedBox(height: 20,),                
               SizedBox(height: 20,),
                 ],

@@ -2,6 +2,7 @@ import 'package:appreposteria/src/model/item_model.dart';
 import 'package:appreposteria/src/other/bottom_navigatorbar.dart';
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/other/single_products_widget.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mdi/mdi.dart';
@@ -35,7 +36,24 @@ void initState() {
           backgroundColor: Colors.white10,
           leading: IconButton(
             onPressed: () {
-              authController.signOut();
+             AwesomeDialog(
+                context: context,
+                dialogType: DialogType.INFO,
+                animType: AnimType.RIGHSLIDE,
+                headerAnimationLoop: true,
+                title: 'Error',
+                desc:
+                  'No puedes seleccionar una imagen sin llenar los campos anteriores',
+                btnOkOnPress: () {
+                  authController.signOut();
+                },
+                btnCancelOnPress: (){
+                  
+                },
+                btnOkIcon: Icons.cancel,
+                btnOkColor: Colors.red)
+                ..show();
+
             },
           icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.black,),
         ),
