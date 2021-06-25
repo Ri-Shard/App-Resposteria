@@ -15,7 +15,7 @@ class SplashScreen extends StatelessWidget {
               Image.asset("images/welcome.png",height: 250.0, width: 250.0,),
               SizedBox(height:30.0),
               Text(
-                "Aca va el loading...",
+                "Cargando",
                   style: TextStyle(color: Colors.white, fontSize: 30),
                 ),
             ],

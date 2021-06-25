@@ -184,7 +184,16 @@ TextEditingController phone = TextEditingController();
       "status": "EN PROCESO",
       "cart": FieldValue.arrayUnion(myuser.cartItemsToJson())
     });
-    _clearControllers();
+
+    firebaseFirestore.collection(usersCollection).doc('JfbPPdFfKlbqdFj4vF4Vy3FdGs93').collection("pedidos").doc(userUid+nowe).set({
+      "uid": userUid,
+      "name": myuser.name,
+      "address": addressModel.address,
+      "date": now,
+      "status": "EN PROCESO",
+      "cart": FieldValue.arrayUnion(myuser.cartItemsToJson())
+    });
+
   }
 
        listenToOrder() => firebaseFirestore
