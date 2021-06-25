@@ -2,6 +2,7 @@ import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/other/colors.dart';
 
 import 'package:appreposteria/src/ui/auth/login_screen.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -89,7 +90,20 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: MaterialButton(
                     minWidth: double.infinity,
                     height: 60,
-                     onPressed: () async{uploadToStorage();}, 
+                     onPressed: () async{
+                       AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.SUCCES,
+                        animType: AnimType.RIGHSLIDE,
+                        headerAnimationLoop: true,
+                        title: 'Registrado con Exito',
+                        btnOkOnPress: () {
+                          uploadToStorage(); Get.to(Login());
+                        },                
+                        btnOkColor: AppColors.kCategorypinkColor,
+                      )
+                      ..show();
+                       }, 
                     color: AppColors.kCategorypinkColor,
                     elevation: 0,
                     shape: RoundedRectangleBorder(

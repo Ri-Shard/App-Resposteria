@@ -35,14 +35,14 @@ class _UploadProductsState extends State<UploadProducts> {
       height = constraints.maxHeight;
       width = constraints.maxWidth;
       return Scaffold(
-        appBar: generalAppbar("Admin",AdminHomePage()),
+        appBar: generalAppbar("Agregar Producto",AdminHomePage()),
         bottomNavigationBar: Container(
           height: kBottomNavigationBarHeight,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
              bottomNavigatorBar(_currentIndex, 0, Mdi.home,true,context),
-              bottomNavigatorBar(_currentIndex,1, Mdi.cart,true,context),
+              bottomNavigatorBar(_currentIndex,1, Mdi.plus,true,context),
               bottomNavigatorBar(_currentIndex, 2, Mdi.shoppingOutline,true,context),
               bottomNavigatorBar(_currentIndex, 3, Mdi.accountSettings,true,context),
             ],
@@ -67,15 +67,7 @@ class _UploadProductsState extends State<UploadProducts> {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    Text("Agregar Producto", style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold
-                    ),),
-                    SizedBox(height: 10,),
-                    Text("Digita la informacion Basica de tu producto", style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey[700]
-                    ),),
+                    SizedBox(height: 10,)           
                   ],
                 ),
                 Column(
@@ -127,7 +119,6 @@ class _UploadProductsState extends State<UploadProducts> {
                     ),),
                   ),
                 ),
-                Text("Imagen:"),
                 Container(
                   padding: EdgeInsets.only(top: 3, left: 3),
                   decoration: BoxDecoration(

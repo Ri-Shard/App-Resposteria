@@ -2,7 +2,9 @@
 import 'package:appreposteria/src/model/item_model.dart';
 import 'package:appreposteria/src/other/bottom_navigatorbar.dart';
 import 'package:appreposteria/src/constants/controllers.dart';
+import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/other/single_products_widget.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mdi/mdi.dart';
@@ -28,16 +30,29 @@ void initState() {
       width = constraints.maxWidth;
       return Scaffold(
         appBar: AppBar(
-          title: Text("Bienvenido, ${authController.myuser.name}" ,  
+          title: Text("¿Que deseas comprar?" ,  
                 style: TextStyle(
                 fontWeight: FontWeight.w800, 
                 color: Colors.black,
-                fontSize: 20)),
+                fontSize: 25)),
           elevation: 0,
           backgroundColor: Colors.white10,
           leading: IconButton(
             onPressed: () {
-              authController.signOut();
+              AwesomeDialog(
+                context: context,
+                dialogType: DialogType.WARNING,
+                animType: AnimType.RIGHSLIDE,
+                headerAnimationLoop: true,
+                title: '¿Seguro que deseas salir?',
+                btnOkOnPress: () {
+                  authController.signOut();
+                },                
+                btnOkColor: AppColors.kCategorypinkColor,
+                btnCancelColor: AppColors.kCategorypinkColor,
+                btnCancelOnPress: (){},
+              )
+              ..show();             
             },
           icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.black,),
         ),

@@ -2,6 +2,7 @@ import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/other/colors.dart';
 
 import 'package:appreposteria/src/ui/auth/register_screen.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -23,7 +24,7 @@ class _LoginState extends State<Login>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
@@ -38,90 +39,105 @@ class _LoginState extends State<Login>
       ),
       body:  Form(
                       key:_formKey,
-                    child: Container(
-        height: MediaQuery.of(context).size.height,
-        width: double.infinity,
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Text("Iniciar Sesion", style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold
-                        ),),
-                        SizedBox(height: 20,),
-                        Text("Accede a tu cuenta", style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.grey[700]
-                        ),),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 40),
-                      child: Column(
+                    child: SingleChildScrollView(
+                      child: Container(
+                            height: MediaQuery.of(context).size.height,
+                            width: double.infinity,
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                      Column(
                         children: <Widget>[
-                           makeInput(label: "Email",controller:authController.email, validator: emptyValidator),
-                           makeInput(label: "Contraseña", obscureText: true,controller:authController.password, validator: emptyValidator),
+                          Text("Iniciar Sesion", style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold
+                          ),),
+                          SizedBox(height: 20,),
+                          Text("Accede a tu cuenta", style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.grey[700]
+                          ),),
                         ],
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 40),
-                      child: Container(
-                        padding: EdgeInsets.only(top: 3, left: 3),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          border: Border(
-                            bottom: BorderSide(color: Colors.black),
-                            top: BorderSide(color: Colors.black),
-                            left: BorderSide(color: Colors.black),
-                            right: BorderSide(color: Colors.black),
-                          )
-                        ),
-                        child: MaterialButton(
-                          minWidth: double.infinity,
-                          height: 60,
-                          onPressed: () async {loginUser();},                         
-                          color: AppColors.kCategorypinkColor,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50)
-                          ),
-                          child: Text("Iniciar Sesion", style: TextStyle(
-                            fontWeight: FontWeight.w600, 
-                            fontSize: 18
-                          ),),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 40),
+                        child: Column(
+                          children: <Widget>[
+                             makeInput(label: "Email",controller:authController.email, validator: emptyValidator),
+                             makeInput(label: "Contraseña", obscureText: true,controller:authController.password, validator: emptyValidator),
+                          ],
                         ),
                       ),
-                    ),
-                TextButton(
-                        onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));
-                        }, 
-                        child :Text("¿No tienes cuenta?"+" Registrate", style: TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 16
-                           ),),                    
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 40),
+                        child: Container(
+                          padding: EdgeInsets.only(top: 3, left: 3),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border(
+                              bottom: BorderSide(color: Colors.black),
+                              top: BorderSide(color: Colors.black),
+                              left: BorderSide(color: Colors.black),
+                              right: BorderSide(color: Colors.black),
+                            )
+                          ),
+                          child: MaterialButton(
+                            minWidth: double.infinity,
+                            height: 60,
+                            onPressed: () async {
+                              AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.SUCCES,
+                                animType: AnimType.RIGHSLIDE,
+                                headerAnimationLoop: true,
+                                title: 'Bienvenido',
+                                btnOkOnPress: () {
+                                  loginUser();
+                                },                
+                                btnOkColor: AppColors.kCategorypinkColor,
+                              )
+                              ..show();
+                              },                         
+                            color: AppColors.kCategorypinkColor,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50)
+                            ),
+                            child: Text("Iniciar Sesion", style: TextStyle(
+                              fontWeight: FontWeight.w600, 
+                              fontSize: 18
+                            ),),
+                          ),
                         ),
-                  ],
-                ),
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height / 3,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('images/login.png'),
-                    fit: BoxFit.cover
-                  )
-                ),
-              )
-            ],
-        ),
-      ),
+                      ),
+                                    TextButton(
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));
+                          }, 
+                          child :Text("¿No tienes cuenta?"+" Registrate", style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 16
+                             ),),                    
+                          ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            height: MediaQuery.of(context).size.height*0.28,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('images/login.png'),
+                                fit: BoxFit.cover
+                              )
+                            ),
+                          )
+                        ],
+                    ),
+                  ),
+            ),
          ));
   }
 

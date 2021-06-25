@@ -61,7 +61,7 @@ class CartController extends GetxController {
     var toRemove = [];
 
     tmpcart!.forEach((cartitem) {
-      if(productid == cartitem.id){
+      if(productid == cartitem.productId){
         toRemove.add(cartitem);
       }
     });

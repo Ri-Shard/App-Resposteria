@@ -23,7 +23,7 @@ class ProductScreen extends StatelessWidget {
       children: <Widget>[
         Text(
           product.name.toString(),
-          style: TextStyle(color: Colors.black, fontSize: 45.0),
+          style: TextStyle(color: Colors.black, fontSize: 30),
         ),
         SizedBox(height:10),
         Row(
@@ -39,7 +39,7 @@ class ProductScreen extends StatelessWidget {
       children: <Widget>[
         Container(
             padding: EdgeInsets.only(left: 10.0),
-            height: MediaQuery.of(context).size.height * 0.5,
+            height: MediaQuery.of(context).size.height * 0.47,
             decoration: new BoxDecoration(
               image: new DecorationImage(
                 image: new NetworkImage(product.image.toString()),
@@ -62,13 +62,14 @@ class ProductScreen extends StatelessWidget {
     final bottomContentText = Text(
       product.description.toString(),      
       style: TextStyle(fontSize: 18.0),
+      textAlign: TextAlign.start,
     );
     final ingredients =Text(
       product.ingredients.toString(),overflow: TextOverflow.clip,
       style: TextStyle(fontSize: 18.0),
     );
     final readButton = Container(
-        padding: EdgeInsets.symmetric(vertical: 16.0),
+        padding: EdgeInsets.only(top:0, left: 10,right: 10,bottom: 10),
         width: MediaQuery.of(context).size.width,
         child: CustomButton(
           text: "Añadir al Carrito",
@@ -82,11 +83,11 @@ class ProductScreen extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       // color: Theme.of(context).primaryColor,
       padding: EdgeInsets.all(40.0),
-      child: Center(
         child: Column(
-          children: <Widget>[topContentText,bottomContentText,SizedBox(height: 30,),Column(mainAxisAlignment: MainAxisAlignment.start,children:[Text("ingredientes",textAlign: TextAlign.start,),ingredients]),SizedBox(height: 4,),  readButton],
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[topContentText,bottomContentText,SizedBox(height: 30,),Column(mainAxisAlignment: MainAxisAlignment.start,children:[ingredients]),SizedBox(height: 4,),  readButton],
         ),
-      ),
+      
     );
 
     return Scaffold(

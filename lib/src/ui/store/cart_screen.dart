@@ -75,11 +75,13 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
             ]
           ),
             SizedBox(
-              width: 100,
+              width: 40,
             ),
             Text("Total: "+"\$${cartController.changeCartTotalPrice(authController.myuser)}",
             style: TextStyle(color: Colors.black),
-            textAlign: TextAlign.center,)       
+            textAlign: TextAlign.end,),
+            IconButton(onPressed: (){  setState(() {cartController.clearCart();});},
+            icon: Icon(Mdi.trashCan, color: Colors.black,))       
         ],
       ),
     );

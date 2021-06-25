@@ -21,7 +21,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
       direction: DismissDirection.startToEnd,
       onDismissed: (direction) {
         setState(() {
-          cartController.remove(widget.cartItem.name.toString());
+          cartController.remove(widget.cartItem.productId.toString());
         });
       }, 
     

@@ -303,7 +303,7 @@ void initState() {
                                     desc:
                                         'Direccion guardada Con exito',
                                     btnOkOnPress: () {
-                                      
+                                      Get.to(AddressScreen());
                                     },
                                     btnOkIcon: Icons.check_circle,
                                     onDissmissCallback: (type) {
