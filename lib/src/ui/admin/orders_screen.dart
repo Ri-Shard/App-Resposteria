@@ -88,7 +88,7 @@ void initState() {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               bottomNavigatorBar(_currentIndex, 0, Mdi.home,true,context),
-              bottomNavigatorBar(_currentIndex,1, Mdi.plus,true,context),
+              bottomNavigatorBar(_currentIndex, 1, Mdi.plus,true,context),
               bottomNavigatorBar(_currentIndex, 2, Mdi.shoppingOutline,true,context),
               bottomNavigatorBar(_currentIndex, 3, Mdi.cake,true,context),
             ],

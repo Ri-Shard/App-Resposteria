@@ -7,7 +7,6 @@ import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
 import 'package:appreposteria/src/ui/auth/auth_screen.dart';
 import 'package:appreposteria/src/ui/common/splash_screen.dart';
 import 'package:appreposteria/src/ui/store/storehome_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,23 +24,15 @@ class AuthController extends GetxController {
   String usersCollection = "users";
   MyUser myuser = MyUser();
   OrderModel order = OrderModel();
- RxList<AddressModel> addresslist = RxList<AddressModel>([]);
- RxList<MyUser> userlist = RxList<MyUser>([]);
-AddressModel addressModel = AddressModel();
-
- //controllers Address
-TextEditingController barrio = TextEditingController(); 
-TextEditingController address = TextEditingController(); 
-TextEditingController city = TextEditingController(); 
-TextEditingController phone = TextEditingController(); 
+  RxList<AddressModel> addresslist = RxList<AddressModel>([]);
+  RxList<MyUser> userlist = RxList<MyUser>([]);
+  AddressModel addressModel = AddressModel();
 
   @override
   void onInit() {
     super.onInit();
     if(auth.currentUser != null ){
-        listenToUser();
-        listenToOrder();
-        checkAddress();
+        listenToUser();        
         checkUsers();
     }
   }
@@ -53,7 +44,7 @@ TextEditingController phone = TextEditingController();
   }
   _setInitialScreen(User? user) async {
     if(user == null){  
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 2));
       Get.offAll(() => SplashScreen());
       Get.offAll(() => AuthenticScreen());
     }else if (auth.currentUser!.uid != 'JfbPPdFfKlbqdFj4vF4Vy3FdGs93'){
@@ -113,11 +104,6 @@ TextEditingController phone = TextEditingController();
     name.clear();
     email.clear();
     password.clear();
-    //
-    address.clear();
-    city.clear();
-    phone.clear();
-    barrio.clear();
   }
     updateUserData(Map<String, dynamic> data) {
     logger.i("UPDATED");
@@ -143,69 +129,5 @@ TextEditingController phone = TextEditingController();
     userlist.bindStream(getUsers());
     return userlist;
   }
-  List<AddressModel> checkAddress(){
-    addresslist.bindStream(getAddress(auth.currentUser!.uid.toString()));
-    return addresslist;
-  }
-  Stream<List<AddressModel>> getAddress(String userUid) =>
-    firebaseFirestore.collection(usersCollection).doc(userUid).collection("address").snapshots().map((event) => 
-    event.docs.map((e) => AddressModel.fromMap(e.data())).toList());
-  
-  addAddressToFirestore(String userUid){
-    String now = DateTime.now().microsecond.toString();
-    firebaseFirestore.collection(usersCollection).doc(userUid).collection("address").doc(now).set({
-      "name": myuser.name,
-      "address": address.text.trim(),
-      "city": city.text.trim(),
-      "phone": phone.text.trim(),
-      "barrio": barrio.text.trim(),
-      "date": now
-    });
-    _clearControllers();
-  }
-  deleteAddress(String? date){
-    firebaseFirestore.collection(usersCollection).doc(myuser.uid).collection("address").doc(date).delete();
-  }
 
-  addOrderToFirestore(String userUid){
-    String dia = DateTime.now().day.toString();
-    String mes = DateTime.now().month.toString();
-    String year = DateTime.now().year.toString();
-    String hour = DateTime.now().hour.toString();
-    String min = DateTime.now().minute.toString();
-    String second = DateTime.now().second.toString();
-    String now  = dia+"/"+mes+"/"+year+"/"+hour+"/"+min+"/"+second;
-    String nowe  = dia+mes+year+hour+min+second;
-    firebaseFirestore.collection(usersCollection).doc(userUid).collection("pedidos").doc(userUid+nowe).set({
-      "uid": userUid,
-      "name": myuser.name,
-      "address": addressModel.address,
-      "date": now,
-      "status": "EN PROCESO",
-      "cart": FieldValue.arrayUnion(myuser.cartItemsToJson())
-    });
-
-    firebaseFirestore.collection(usersCollection).doc('JfbPPdFfKlbqdFj4vF4Vy3FdGs93').collection("pedidos").doc(userUid+nowe).set({
-      "uid": userUid,
-      "name": myuser.name,
-      "address": addressModel.address,
-      "date": now,
-      "status": "EN PROCESO",
-      "cart": FieldValue.arrayUnion(myuser.cartItemsToJson())
-    });
-
-  }
-
-       listenToOrder() => firebaseFirestore
-      .collection("usersCollection")
-      .doc(auth.currentUser!.uid)
-      .collection("pedidos")
-      .snapshots();
-
-    userindex() {
-    userlist.forEach((element) {
-    firebaseFirestore.collection(usersCollection).doc(element.uid).collection("pedidos").snapshots().map((event) => 
-    event.docs.map((e) => OrderModel.fromMap(e.data())).toList());    
-    });
-  }
 }

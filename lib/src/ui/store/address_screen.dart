@@ -33,7 +33,7 @@ class _AddressScreenState extends State<AddressScreen> with SingleTickerProvider
 @override
 void initState() { 
   super.initState();
-  long = authController.checkAddress().length;
+  long = addressController.checkAddress().length;
    _tabController = TabController(length: 2, vsync: this); 
 }
 
@@ -147,7 +147,7 @@ void initState() {
       direction: DismissDirection.startToEnd,
       onDismissed: (direction) {
         setState(() {
-          authController.deleteAddress(addressModel.date);
+          addressController.deleteAddress(addressModel.date);
           initState();
           _onRefresh();
         });
@@ -186,7 +186,7 @@ void initState() {
                                     btnOkOnPress: () {
                                       authController.addressModel=addressModel; 
                                       Get.offAll(()=>OrderScreen());
-                                      authController.addOrderToFirestore(authController.myuser.uid.toString());
+                                      orderController.addOrderToFirestore(authController.myuser.uid.toString());
                                       cartController.clearCart();
                                     },
                                     btnOkIcon: Icons.check_circle,
@@ -268,10 +268,10 @@ void initState() {
                    SizedBox(height: 10,),
                    Column(
                     children: <Widget>[
-                      makeInput(label: "Dirección",controller: authController.address,validator: emailValidator),
-                      makeInput(label: "Barrio", controller: authController.barrio, validator: emailValidator),
-                      makeInput(label: "Ciudad",controller: authController.city,validator: emailValidator),
-                      makeInput(label: "Numero de Telefono", controller: authController.phone, validator: emailValidator,type: TextInputType.number ),
+                      makeInput(label: "Dirección",controller: addressController.address,validator: emailValidator),
+                      makeInput(label: "Barrio", controller: addressController.barrio, validator: emailValidator),
+                      makeInput(label: "Ciudad",controller: addressController.city,validator: emailValidator),
+                      makeInput(label: "Numero de Telefono", controller: addressController.phone, validator: emailValidator,type: TextInputType.number ),
                     ],
                   ),
                   SizedBox(height: 20,),
@@ -292,7 +292,7 @@ void initState() {
                             onPressed: () async{
                               setState(() {                      
                               if(_formKey.currentState?.validate() == true){
-                              authController.addAddressToFirestore(authController.myuser.uid.toString());                              
+                              addressController.addAddressToFirestore(authController.myuser.uid.toString());                              
                                   AwesomeDialog(
                                     context: context,
                                     animType: AnimType.LEFTSLIDE,
