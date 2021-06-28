@@ -18,11 +18,12 @@ class AddressController extends GetxController{
   RxList<AddressModel> addresslist = RxList<AddressModel>([]);
   AddressModel addressModel = AddressModel();
 
-  @override
-  void onInit() {
-    super.onInit();
-    checkAddress();    
+    @override
+  void onReady() {
+    super.onReady();
+    checkAddress();
   }
+  
 
     _clearControllers() {
 
@@ -33,7 +34,7 @@ class AddressController extends GetxController{
   }
 
   List<AddressModel> checkAddress(){
-    addresslist.bindStream(getAddress(auth.currentUser!.uid.toString()));
+    addresslist.bindStream(getAddress(authController.myuser.uid.toString()));
     return addresslist;
   }
   Stream<List<AddressModel>> getAddress(String userUid) =>

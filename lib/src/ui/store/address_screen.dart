@@ -8,6 +8,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mdi/mdi.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class AddressScreen extends StatefulWidget {
@@ -94,7 +95,7 @@ void initState() {
                     SizedBox(height:20),
                     Column(    
                         children:           
-                            authController.addresslist.map((element) => itemWidget(element))
+                            addressController.addresslist.map((element) => itemWidget(element))
                             .toList(),                     
                       ),
                   SizedBox(
@@ -184,7 +185,7 @@ void initState() {
                                     showCloseIcon: true,
                                     title: 'Pedido Realizado',                                  
                                     btnOkOnPress: () {
-                                      authController.addressModel=addressModel; 
+                                      addressController.addressModel=addressModel; 
                                       Get.offAll(()=>OrderScreen());
                                       orderController.addOrderToFirestore(authController.myuser.uid.toString());
                                       cartController.clearCart();
@@ -303,8 +304,13 @@ void initState() {
                                     desc:
                                         'Direccion guardada Con exito',
                                     btnOkOnPress: () {
-                                      Get.to(AddressScreen());
-                                    },
+                                                  showBarModalBottomSheet(
+                                                    context: context,
+                                                    builder: (context) => Container(
+                                                      color: Colors.white,
+                                                      child: AddressScreen(),
+                                                    ),
+                                                  );                                    },
                                     btnOkIcon: Icons.check_circle,
                                     onDissmissCallback: (type) {
                                       debugPrint('Dialog Dissmiss from callback $type');

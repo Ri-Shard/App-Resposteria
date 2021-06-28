@@ -1,22 +1,24 @@
 
 class DeliveryModel   {
-  final String id;
-  final String name;
-  final String vehicle;
+  static const ID = "id";
+  static const PLACA = "placa";
+  static const NAME = "name";
+  static const VEHICULO = "vehiculo";
+  static const ESTADO = "estado";
 
-  DeliveryModel(this.id, this.name, this.vehicle,);
+   String? id;
+   String? placa;
+   String? name; 
+   String? vehiculo;
+   String? estado;
 
-  Map<String, Object?> toFirebaseMap({String? newImage}) {
-    return <String, Object?>{
-      'id': id,
-      'name': name,
-      'vehicle': vehicle,
+  DeliveryModel(this.estado,this.id,this.name,this.placa,this.vehiculo);
 
-    };
+  DeliveryModel.fromMap(Map<String, dynamic> data){
+    id = data[ID];
+    placa = data[PLACA];
+    name = data[NAME];
+    vehiculo = data[VEHICULO];
+    estado = data[ESTADO];
   }
-
-  DeliveryModel.fromFirebaseMap(Map<String, Object?> data)
-      : id = data['id'] as String,
-        name = data['name'] as String,
-        vehicle = data['vehicle'] as String;
 }

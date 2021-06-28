@@ -6,6 +6,7 @@ import 'package:appreposteria/src/ui/admin/upload_products_screen.dart';
 import 'package:appreposteria/src/ui/store/cart_screen.dart';
 import 'package:appreposteria/src/ui/store/order_screen.dart';
 import 'package:appreposteria/src/ui/store/storehome_screen.dart';
+import 'package:appreposteria/src/ui/user/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -72,7 +73,7 @@ Widget bottomNavigatorBar(int _currentIndex ,int index, IconData icon, bool admi
           Get.to(()=>OrderScreen()); 
             break;
           case 3:
-           //Get.offAll(); 
+           Get.to(()=>ProfileUI2()); 
             break;
           default:
           Get.offAll(HomePage()); 

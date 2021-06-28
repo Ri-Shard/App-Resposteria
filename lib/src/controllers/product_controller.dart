@@ -49,7 +49,6 @@ class ProducsController extends GetxController {
         try{
             firebaseFirestore.collection(collection).doc(idproduct).delete();
         }catch (e){
-
         }
       }
 }

@@ -5,18 +5,22 @@ class OrderModel {
   static const ADDRESS = "address";
   static const UID = "uid";  
   static const DATE = "date";  
+  static const DAT = "dat";  
   static const NAME = "name";  
   static const CART  = "cart";  
   static const STATUS  = "status";  
+  static const TOTAL  = "total";  
 
   String? address;
   String? uid;
   String? name;
   String? date;
+  String? dat;
   String? status;
+  String? total;
   List<CartItemModel>? cart; 
 
-OrderModel({this.address,this.name,this.date,this.uid,this.cart,this.status});
+OrderModel({this.address,this.name,this.date,this.uid,this.cart,this.status,this.total,this.dat});
 
  
   OrderModel fromSnapshot(DocumentSnapshot snapshot){
@@ -24,8 +28,10 @@ OrderModel({this.address,this.name,this.date,this.uid,this.cart,this.status});
     order.name = snapshot[NAME];
     order.address = snapshot[ADDRESS];
     order.date = snapshot[DATE];
+    order.dat = snapshot[DAT];
     order.uid = snapshot[UID];
     order.status = snapshot[STATUS];
+    order.total = snapshot[TOTAL];
     order.cart = _convertCartItems(snapshot[CART] ?? []);
     
     return order;
@@ -46,7 +52,9 @@ OrderModel({this.address,this.name,this.date,this.uid,this.cart,this.status});
     name = data[NAME];
     address = data[ADDRESS];
     date = data[DATE];
+    dat = data[DAT];
     status = data[STATUS];
+    total = data[TOTAL];
     cart = cartItemsToJson().cast<CartItemModel>();
   }
 

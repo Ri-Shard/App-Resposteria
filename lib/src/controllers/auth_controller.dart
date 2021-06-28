@@ -1,6 +1,5 @@
 import 'package:appreposteria/src/constants/app_constants.dart';
 import 'package:appreposteria/src/constants/firebase.dart';
-import 'package:appreposteria/src/model/address_model.dart';
 import 'package:appreposteria/src/model/order_model.dart';
 import 'package:appreposteria/src/model/user_model.dart';
 import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
@@ -24,9 +23,7 @@ class AuthController extends GetxController {
   String usersCollection = "users";
   MyUser myuser = MyUser();
   OrderModel order = OrderModel();
-  RxList<AddressModel> addresslist = RxList<AddressModel>([]);
   RxList<MyUser> userlist = RxList<MyUser>([]);
-  AddressModel addressModel = AddressModel();
 
   @override
   void onInit() {

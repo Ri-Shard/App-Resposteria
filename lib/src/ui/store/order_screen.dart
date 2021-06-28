@@ -51,6 +51,11 @@ void initState() {
       ),
          ),
       body: 
+                orderController.orderlist.length== 0 ?
+                        Container(                             
+                    child: imageMessage()                
+               )
+      :
       StreamBuilder(
       stream: firebaseFirestore
       .collection("users")
@@ -66,6 +71,7 @@ void initState() {
               child: new Column(
                 children: <Widget>[
                 Text(snapshot.data!.docs[index].get("date"),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),   
+                Text(snapshot.data!.docs[index].get("total"),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),   
                 SizedBox(height: 20,),                
                 Column(    
                 children:            
@@ -97,4 +103,19 @@ void initState() {
     );
   });
 }
+    imageMessage(){
+    return Column(
+                    children: [                
+                      Image(image: AssetImage("images/Empty_Orders.png")),
+                      SizedBox(
+                        height: 20
+                      ),
+                      Text("No hay Pedidos",
+                          style: TextStyle(fontWeight : FontWeight.bold,fontSize: 25 )),
+                       SizedBox(
+                        height: 20
+                         ),
+                          ]
+                  );
+  }
 }

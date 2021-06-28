@@ -9,13 +9,14 @@ class OrderController extends GetxController{
   static  OrderController instance = Get.find();
   
   String usersCollection = "users";
+  OrderModel ordermodel = OrderModel();
+  RxList<OrderModel> orderlist = RxList<OrderModel>([]);
 
   @override
   void onInit() {
     super.onInit();
-
         listenToOrder();
-    
+  
   }
 
   addOrderToFirestore(String userUid){
@@ -27,21 +28,25 @@ class OrderController extends GetxController{
     String second = DateTime.now().second.toString();
     String now  = dia+"/"+mes+"/"+year+"/"+hour+"/"+min+"/"+second;
     String nowe  = dia+mes+year+hour+min+second;
-    firebaseFirestore.collection(usersCollection).doc(userUid).collection("pedidos").doc(userUid+nowe).set({
+    firebaseFirestore.collection(usersCollection).doc(userUid).collection("pedidos").doc(nowe).set({
       "uid": userUid,
       "name": authController.myuser.name,
-      "address": authController.addressModel.address,
+      "address":addressController.addressModel.address,
       "date": now,
+      "dat": nowe,
       "status": "EN PROCESO",
+      "total": cartController.changeCartTotalPrice(authController.myuser).toString(),
       "cart": FieldValue.arrayUnion(authController.myuser.cartItemsToJson())
     });
 
-    firebaseFirestore.collection(usersCollection).doc('JfbPPdFfKlbqdFj4vF4Vy3FdGs93').collection("pedidos").doc(userUid+nowe).set({
+    firebaseFirestore.collection(usersCollection).doc('JfbPPdFfKlbqdFj4vF4Vy3FdGs93').collection("pedidos").doc(nowe).set({
       "uid": userUid,
       "name": authController.myuser.name,
-      "address": authController.addressModel.address,
+      "address": addressController.addressModel.address,
       "date": now,
+      "dat": nowe,
       "status": "EN PROCESO",
+      "total": cartController.changeCartTotalPrice(authController.myuser).toString(),
       "cart": FieldValue.arrayUnion(authController.myuser.cartItemsToJson())
     });
 
@@ -49,7 +54,7 @@ class OrderController extends GetxController{
 
        listenToOrder() => firebaseFirestore
       .collection("usersCollection")
-      .doc(auth.currentUser!.uid)
+      .doc(authController.myuser.uid)
       .collection("pedidos")
       .snapshots();
 
@@ -58,6 +63,35 @@ class OrderController extends GetxController{
     firebaseFirestore.collection(usersCollection).doc(element.uid).collection("pedidos").snapshots().map((event) => 
     event.docs.map((e) => OrderModel.fromMap(e.data())).toList());    
     });
+  }
+  updateOrder(OrderModel order){
+
+    deleteOrder();
+    firebaseFirestore.collection(usersCollection).doc(order.uid).collection("pedidos").doc(order.dat).set({
+      "uid": order.uid,
+      "name": authController.myuser.name,
+      "address":addressController.addressModel.address,
+      "date": order.date,
+      "dat": order.dat,
+      "status": "ENTREGADO",
+      "total": order.total,
+      "cart": FieldValue.arrayUnion(order.cartItemsToJson())
+    });
+
+    firebaseFirestore.collection(usersCollection).doc('JfbPPdFfKlbqdFj4vF4Vy3FdGs93').collection("pedidos").doc(order.dat).set({
+      "uid": order.uid,
+      "name": authController.myuser.name,
+      "address": addressController.addressModel.address,
+      "date": order.date,
+      "dat": order.dat,
+      "status": "ENTREGADO",
+      "total": order.total,
+      "cart": FieldValue.arrayUnion(order.cartItemsToJson())
+    });
+  }
+  deleteOrder(){
+  firebaseFirestore.collection(usersCollection).doc(authController.myuser.uid).collection("pedidos").doc(ordermodel.dat).delete();
+  firebaseFirestore.collection(usersCollection).doc('JfbPPdFfKlbqdFj4vF4Vy3FdGs93').collection("pedidos").doc(ordermodel.dat).delete();
   }
 
 }
