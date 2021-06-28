@@ -3,6 +3,7 @@ import 'package:appreposteria/src/other/bottom_navigatorbar.dart';
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/other/single_products_widget.dart';
+import 'package:appreposteria/src/ui/admin/user_list_screen.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,7 +17,6 @@ class AdminHomePage extends StatefulWidget {
 class _AdminHomePageState extends State<AdminHomePage> {
   late double height, width;
   int _currentIndex = 0;
-
 @override
 void initState() { 
   super.initState();
@@ -29,6 +29,11 @@ void initState() {
       width = constraints.maxWidth;
       return Scaffold(
         appBar: AppBar(
+          actions: [
+           IconButton(onPressed: (){
+             Get.to(()=>UsersList());
+           }, icon: Icon(Mdi.accountDetailsOutline),color: Colors.black)   
+          ],
           title: Text("Reposteria App",  
                 style: TextStyle(
                 fontWeight: FontWeight.w800, 
