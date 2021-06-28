@@ -2,10 +2,7 @@
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/model/user_model.dart';
 import 'package:appreposteria/src/other/colors.dart';
-import 'package:appreposteria/src/other/custom_text.dart';
 import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
-import 'package:appreposteria/src/ui/user/user_profile_screen.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
