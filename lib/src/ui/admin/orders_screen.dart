@@ -52,11 +52,7 @@ void initState() {
       ),
          ),         
       body:
-          orderController.orderlist.length== 0 ?
-                        Container(                             
-                    child: imageMessage()                
-               )
-      :
+
        StreamBuilder(
         stream: firebaseFirestore
         .collection("users")

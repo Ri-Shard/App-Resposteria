@@ -11,12 +11,10 @@ class OrderController extends GetxController{
   String usersCollection = "users";
   OrderModel ordermodel = OrderModel();
   RxList<OrderModel> orderlist = RxList<OrderModel>([]);
-
-  @override
-  void onInit() {
-    super.onInit();
-        listenToOrder();
-  
+      @override
+  void onReady() {
+    super.onReady();
+    checkAddress();
   }
 
   addOrderToFirestore(String userUid){
@@ -58,15 +56,18 @@ class OrderController extends GetxController{
       .collection("pedidos")
       .snapshots();
 
-    userindex() {
-    authController.userlist.forEach((element) {
-    firebaseFirestore.collection(usersCollection).doc(element.uid).collection("pedidos").snapshots().map((event) => 
-    event.docs.map((e) => OrderModel.fromMap(e.data())).toList());    
-    });
+  List<OrderModel> checkAddress(){
+    orderlist.bindStream(getAddress(authController.myuser.uid.toString()));
+    return orderlist;
   }
+  Stream<List<OrderModel>> getAddress(String userUid) =>
+    firebaseFirestore.collection(usersCollection).doc(userUid).collection("pedidos").snapshots().map((event) => 
+    event.docs.map((e) => OrderModel.fromMap(e.data())).toList());
+  
+  
   updateOrder(OrderModel order){
 
-    deleteOrder();
+    deleteOrder(order);
     firebaseFirestore.collection(usersCollection).doc(order.uid).collection("pedidos").doc(order.dat).set({
       "uid": order.uid,
       "name": authController.myuser.name,
@@ -89,9 +90,9 @@ class OrderController extends GetxController{
       "cart": FieldValue.arrayUnion(order.cartItemsToJson())
     });
   }
-  deleteOrder(){
-  firebaseFirestore.collection(usersCollection).doc(authController.myuser.uid).collection("pedidos").doc(ordermodel.dat).delete();
-  firebaseFirestore.collection(usersCollection).doc('JfbPPdFfKlbqdFj4vF4Vy3FdGs93').collection("pedidos").doc(ordermodel.dat).delete();
+  deleteOrder(OrderModel order){
+  firebaseFirestore.collection(usersCollection).doc(authController.myuser.uid).collection("pedidos").doc(order.dat).delete();
+  firebaseFirestore.collection(usersCollection).doc('JfbPPdFfKlbqdFj4vF4Vy3FdGs93').collection("pedidos").doc(order.dat).delete();
   }
 
 }
