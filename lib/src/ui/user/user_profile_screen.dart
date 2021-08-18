@@ -1,15 +1,12 @@
 import 'package:appreposteria/src/constants/controllers.dart';
-import 'package:appreposteria/src/other/bottom_navigatorbar.dart';
-import 'package:appreposteria/src/ui/store/storehome_screen.dart';
+import 'package:appreposteria/src/other/bottom_bar_User.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mdi/mdi.dart';
 // ignore: must_be_immutable
 class ProfileUI2 extends StatelessWidget {
-    int _currentIndex = 3;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {  
     return Scaffold(
       appBar: AppBar(
           title: Text("Perfil de usuario" ,  
@@ -21,23 +18,11 @@ class ProfileUI2 extends StatelessWidget {
           backgroundColor: Colors.white10,
           leading: IconButton(
             onPressed: () { 
-              Get.to(()=>HomePage());       
+              Get.offAll(BottomBarUser());
             },
           icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.black,),
         ),
 
-        ),
-        bottomNavigationBar: Container(
-          height: kBottomNavigationBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              bottomNavigatorBar(_currentIndex, 0, Mdi.home,false,context),
-              bottomNavigatorBar(_currentIndex,1, Mdi.cart,false,context),
-              bottomNavigatorBar(_currentIndex, 2, Mdi.shoppingOutline,false,context),
-              bottomNavigatorBar(_currentIndex, 3, Mdi.accountSettings,false,context),
-            ],
-          ),
         ),
       body: SafeArea(
         child: Column(

@@ -1,14 +1,12 @@
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/model/order_model.dart';
-import 'package:appreposteria/src/other/bottom_navigatorbar.dart';
+import 'package:appreposteria/src/other/bottom_bar_Admin.dart';
 import 'package:appreposteria/src/other/single_orders_widget.dart';
 import 'package:appreposteria/src/ui/admin/Delivery_screen.dart';
-import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mdi/mdi.dart';
 
 class OrdersScreen extends StatefulWidget {
   @override
@@ -17,7 +15,6 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   late double height, width;
-    int _currentIndex = 2;
   OrderModel ordelmodel = OrderModel();
 
     @override
@@ -34,7 +31,7 @@ void initState() {
         return Scaffold(
       appBar: AppBar(elevation: 0, backgroundColor: Colors.white, leading: IconButton(
             onPressed: () {
-              Get.offAll(()=>AdminHomePage());
+              Get.offAll(()=>BottomBarScreen());
             },
           icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.black,),
         ), 
@@ -92,18 +89,6 @@ void initState() {
         }
     ),
 
-        bottomNavigationBar: Container(
-          height: kBottomNavigationBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              bottomNavigatorBar(_currentIndex, 0, Mdi.home,true,context),
-              bottomNavigatorBar(_currentIndex, 1, Mdi.plus,true,context),
-              bottomNavigatorBar(_currentIndex, 2, Mdi.shoppingOutline,true,context),
-              bottomNavigatorBar(_currentIndex, 3, Mdi.cake,true,context),
-            ],
-          ),
-        ),
     );
   });
 }

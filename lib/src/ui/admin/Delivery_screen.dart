@@ -1,7 +1,7 @@
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/model/delivery_model.dart';
+import 'package:appreposteria/src/other/bottom_bar_Admin.dart';
 import 'package:appreposteria/src/other/custom_text.dart';
-import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
 import 'package:appreposteria/src/ui/admin/upload_delivery_screen.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class _DomiciliariosPageState extends State<DomiciliariosPage> {
         return Scaffold(
             appBar: AppBar(elevation: 0, backgroundColor: Colors.white, leading: IconButton(
             onPressed: () {
-              Get.offAll(AdminHomePage());
+              Get.offAll(BottomBarScreen());
             },
           icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.black,),
         ), 

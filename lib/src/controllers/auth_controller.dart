@@ -2,10 +2,10 @@ import 'package:appreposteria/src/constants/app_constants.dart';
 import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/model/order_model.dart';
 import 'package:appreposteria/src/model/user_model.dart';
-import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
+import 'package:appreposteria/src/other/bottom_bar_Admin.dart';
+import 'package:appreposteria/src/other/bottom_bar_User.dart';
 import 'package:appreposteria/src/ui/auth/auth_screen.dart';
 import 'package:appreposteria/src/ui/common/splash_screen.dart';
-import 'package:appreposteria/src/ui/store/storehome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -45,9 +45,9 @@ class AuthController extends GetxController {
       Get.offAll(() => SplashScreen());
       Get.offAll(() => AuthenticScreen());
     }else if (auth.currentUser!.uid != 'JfbPPdFfKlbqdFj4vF4Vy3FdGs93'){
-      Get.offAll(() =>HomePage());
+      Get.offAll(() =>BottomBarUser());
     }else{
-      Get.offAll(() => AdminHomePage());
+      Get.offAll(() => BottomBarScreen());
     }
   }
 
@@ -57,9 +57,9 @@ class AuthController extends GetxController {
       .signInWithEmailAndPassword(email: email.text.trim(), password: password.text.trim())
       .then((result) {
         if(result.user!.uid == 'JfbPPdFfKlbqdFj4vF4Vy3FdGs93'){
-          Get.offAll(() => AdminHomePage());
+          Get.offAll(() => BottomBarScreen());
         }else{
-          Get.offAll(() =>HomePage());
+          Get.offAll(() =>BottomBarUser());
         }
         listenToUser();
         _clearControllers();

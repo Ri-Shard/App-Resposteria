@@ -1,7 +1,7 @@
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/model/item_model.dart';
+import 'package:appreposteria/src/other/bottom_bar_Admin.dart';
 import 'package:appreposteria/src/other/custom_text.dart';
-import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mdi/mdi.dart';
@@ -20,7 +20,7 @@ class _ProductListState extends State<ProductList> {
     return Scaffold(
             appBar: AppBar(elevation: 0, backgroundColor: Colors.white, leading: IconButton(
             onPressed: () {
-              Get.offAll(AdminHomePage());
+              Get.offAll(BottomBarScreen());
             },
           icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.black,),
         ), 
@@ -37,7 +37,19 @@ class _ProductListState extends State<ProductList> {
         ],
       ),
          ),
-      body: Stack(
+      body: 
+              producsController.products.length == 0 ?
+              Container(                             
+              child: Column(
+                children: [
+                  Image(image: AssetImage("images/No_data.png")),
+                  Text("Listado de Productos Vacio",
+                      style: TextStyle(fontWeight : FontWeight.bold,fontSize: 25 )),]
+              ),
+          
+             )  
+        :
+      Stack(
           children: [
             Obx(()=>GridView.count(
                 crossAxisCount: 2,

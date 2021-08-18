@@ -9,7 +9,8 @@ class AppColors{
 
 static const kPrimaryColor = Color(0xFF26b78b);
 static const kCategoryBackColor = Color(0xFFECFCF6);
-static const kCategorypinkColor = Color(0xFFFF9494);
+static const kCategorypinkColor = Color.fromRGBO(231, 76, 60,100);
+static const kCategorypink2Color = Color.fromRGBO(176, 58, 46 ,100);
 static const kBackGroundColor = Color(0xFFF5FAF8);
 static const secondary = Color(0xff323335);
 static const lightGray = Color(0xffc0c1c3);

@@ -7,7 +7,6 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:mdi/mdi.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:get/get.dart';
 
 
 class ShoppingCartWidget extends StatefulWidget {
@@ -42,7 +41,7 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                 ),
                 
             )
-            :
+            : 
             Column(    
                 children:            
                     authController.myuser.cart!
@@ -96,14 +95,27 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
               padding: EdgeInsets.only(top:0, left: 10,right: 10,bottom: 10),
               child: CustomButton(            
                   text: "Proceder a Pedir", onTap: () {
-                      AwesomeDialog(
+                    if (authController.myuser.cart!.length == 0) {
+                                                                AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.ERROR,
+                        title: 'UPS',
+                        desc:
+                          'No puedes pedir con un carrito Vacio',
+                        btnOkOnPress: () {
+                    
+                        },
+                        btnOkColor: AppColors.kCategorypinkColor)
+                      ..show();
+                    }else{
+                                                                AwesomeDialog(
                         context: context,
                         dialogType: DialogType.NO_HEADER,
                         title: 'Ahora, Elige tu direccion',
                         desc:
                           'Seras Redirigido',
                         btnOkOnPress: () {
-                          Get.close(1);
+                        
                             showBarModalBottomSheet(
                               context: context,
                               builder: (context) => Container(
@@ -114,6 +126,7 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                         },
                         btnOkColor: AppColors.kCategorypinkColor)
                       ..show();
+                    }
                   })
             );
   }

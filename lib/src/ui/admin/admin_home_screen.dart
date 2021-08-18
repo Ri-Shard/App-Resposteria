@@ -1,13 +1,13 @@
 import 'package:appreposteria/src/model/item_model.dart';
-import 'package:appreposteria/src/other/bottom_navigatorbar.dart';
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/other/single_products_widget.dart';
-import 'package:appreposteria/src/ui/admin/user_list_screen.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mdi/mdi.dart';
+
+import 'Delivery_screen.dart';
 
 class AdminHomePage extends StatefulWidget {
   @override
@@ -16,7 +16,6 @@ class AdminHomePage extends StatefulWidget {
 
 class _AdminHomePageState extends State<AdminHomePage> {
   late double height, width;
-  int _currentIndex = 0;
 @override
 void initState() { 
   super.initState();
@@ -31,7 +30,7 @@ void initState() {
         appBar: AppBar(
           actions: [
            IconButton(onPressed: (){
-             Get.to(()=>UsersList());
+             Get.to(()=>DomiciliariosPage());
            }, icon: Icon(Mdi.accountDetailsOutline),color: Colors.black)   
           ],
           title: Text("Reposteria App",  
@@ -63,19 +62,19 @@ void initState() {
         ),
 
         ),
-        bottomNavigationBar: Container(
-          height: kBottomNavigationBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              bottomNavigatorBar(_currentIndex, 0, Mdi.home,true,context),
-              bottomNavigatorBar(_currentIndex,1, Mdi.plus,true,context),
-              bottomNavigatorBar(_currentIndex, 2, Mdi.shoppingOutline,true,context),
-              bottomNavigatorBar(_currentIndex, 3, Mdi.cake,true,context),
-            ],
-          ),
-        ),
-        body: _buildBody(constraints),
+        body: 
+        producsController.products.length == 0 ?
+              Container(                             
+              child: Column(
+                children: [
+                  Image(image: AssetImage("images/No_data.png")),
+                  Text("Listado de Productos Vacio",
+                      style: TextStyle(fontWeight : FontWeight.bold,fontSize: 25 )),]
+              ),
+          
+             )  
+        :
+      _buildBody(constraints),
       );
       }
     );
@@ -98,7 +97,8 @@ void initState() {
                 }).toList())) 
           ]
         )
-       );   
+       ); 
+
  }
 
 }

@@ -75,6 +75,7 @@ class CartController extends GetxController {
         "cart": []
       });
   }
+//guardar el carro menos el item que voy guardar, despues hacer un merge
 
   int changeCartTotalPrice(MyUser userModel) {
     totalCartPrice = 0;

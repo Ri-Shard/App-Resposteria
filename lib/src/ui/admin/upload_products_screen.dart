@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:appreposteria/src/constants/controllers.dart';
-import 'package:appreposteria/src/other/bottom_navigatorbar.dart';
+import 'package:appreposteria/src/other/bottom_bar_Admin.dart';
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/other/general_appbar.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -9,10 +9,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mdi/mdi.dart';
 import 'package:path/path.dart' as path;
 
-import 'admin_home_screen.dart';
 
 class UploadProducts extends StatefulWidget {
 
@@ -28,26 +26,13 @@ class _UploadProductsState extends State<UploadProducts> {
     return (value == null || value.isEmpty) ? 'Campo Requerido' : null;
   }
     late double height, width;
-    int _currentIndex = 1;
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       height = constraints.maxHeight;
       width = constraints.maxWidth;
       return Scaffold(
-        appBar: generalAppbar("Agregar Producto",AdminHomePage()),
-        bottomNavigationBar: Container(
-          height: kBottomNavigationBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-             bottomNavigatorBar(_currentIndex, 0, Mdi.home,true,context),
-              bottomNavigatorBar(_currentIndex,1, Mdi.plus,true,context),
-              bottomNavigatorBar(_currentIndex, 2, Mdi.shoppingOutline,true,context),
-              bottomNavigatorBar(_currentIndex, 3, Mdi.accountSettings,true,context),
-            ],
-          ),
-        ),
+        appBar: generalAppbar("Agregar Producto",BottomBarScreen()),
         body: body(),
       );
       }
@@ -221,8 +206,8 @@ class _UploadProductsState extends State<UploadProducts> {
                         title: 'Guardado',
                         desc:
                             'Producto guardado Con exito',
-                        btnOkOnPress: () {
-                          Get.offAll(()=>AdminHomePage());
+                        btnOkOnPress: () {  
+                          Get.offAll(()=>BottomBarScreen());
                         },
                         btnOkIcon: Icons.check_circle,
                         onDissmissCallback: (type) {
@@ -251,5 +236,3 @@ class _UploadProductsState extends State<UploadProducts> {
   
   }
 }
-
-

@@ -1,13 +1,11 @@
 
 import 'package:appreposteria/src/model/item_model.dart';
-import 'package:appreposteria/src/other/bottom_navigatorbar.dart';
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/other/single_products_widget.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mdi/mdi.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,7 +14,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late double height, width;
-  int _currentIndex = 0;
 
 @override
 void initState() { 
@@ -57,18 +54,6 @@ void initState() {
           icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.black,),
         ),
 
-        ),
-        bottomNavigationBar: Container(
-          height: kBottomNavigationBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              bottomNavigatorBar(_currentIndex, 0, Mdi.home,false,context),
-              bottomNavigatorBar(_currentIndex,1, Mdi.cart,false,context),
-              bottomNavigatorBar(_currentIndex, 2, Mdi.shoppingOutline,false,context),
-              bottomNavigatorBar(_currentIndex, 3, Mdi.accountSettings,false,context),
-            ],
-          ),
         ),
         body: SafeArea(
         child: _buildBody(constraints),
