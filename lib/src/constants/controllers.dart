@@ -4,8 +4,9 @@ import 'package:appreposteria/src/controllers/cart_controller.dart';
 import 'package:appreposteria/src/controllers/delivery_controller.dart';
 import 'package:appreposteria/src/controllers/order_controller.dart';
 import 'package:appreposteria/src/controllers/product_controller.dart';
+import 'package:get/get.dart';
 
-AuthController authController = AuthController.instance;
+AuthController authController = Get.find();
 ProducsController producsController = ProducsController.instance;
 CartController  cartController = CartController.instance;
 OrderController orderController = OrderController.instance;

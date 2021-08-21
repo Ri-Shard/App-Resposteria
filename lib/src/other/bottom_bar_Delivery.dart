@@ -1,21 +1,19 @@
 
 import 'package:appreposteria/src/other/colors.dart';
-
-import 'package:appreposteria/src/ui/store/Search_Screen.dart';
-import 'package:appreposteria/src/ui/store/cart_screen.dart';
-import 'package:appreposteria/src/ui/store/order_screen.dart';
-import 'package:appreposteria/src/ui/store/storehome_screen.dart';
-import 'package:appreposteria/src/ui/user/user_profile_screen.dart';
+import 'package:appreposteria/src/ui/Delivery/Delivery_HomeScreen.dart';
+import 'package:appreposteria/src/ui/Delivery/Delivery_OrderInformationScreen.dart';
+import 'package:appreposteria/src/ui/Delivery/Delivery_OrdersScreen.dart';
+import 'package:appreposteria/src/ui/Delivery/Delivery_ProfileScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:mdi/mdi.dart';
 
 
-class BottomBarUser extends StatefulWidget {
+class BottomBarDelivery extends StatefulWidget {
   @override
-  _BottomBarUserState createState() => _BottomBarUserState();
+  _BottomBarDeliveryState createState() => _BottomBarDeliveryState();
 }
 
-class _BottomBarUserState extends State<BottomBarUser> {
+class _BottomBarDeliveryState extends State<BottomBarDelivery> {
  late List<Map<String, Widget>> _pages;
   int _selectedPageIndex = 0;
 
@@ -23,19 +21,16 @@ class _BottomBarUserState extends State<BottomBarUser> {
   void initState() {
     _pages = [
       {
-        'page': HomePage(),
+        'page': DeliveryHomeScreen(),
       },
       {
-        'page': ShoppingCartWidget(),
+        'page': DeliveryOrderInformation(),
       },
       {
-        'page': SearchScreen(),
+        'page': DeliveryOrdersScreen(),
       },
       {
-        'page': OrderScreen(),
-      },
-      {
-        'page': ProfileUI2(),
+        'page': DeliveryProfileScreen(),
       },
     ];
     super.initState();
@@ -85,8 +80,7 @@ class _BottomBarUserState extends State<BottomBarUser> {
 
                 ),
                 BottomNavigationBarItem(
-                  activeIcon: null,
-                  icon: Icon(null),
+                  icon: Icon(Mdi.emailCheckOutline),
                   label: 'Buscar',
                 ),
                 BottomNavigationBarItem(
@@ -96,30 +90,9 @@ class _BottomBarUserState extends State<BottomBarUser> {
                   label: 'Mis Pedidos',
 
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                 label: 'Mi Perfil',
-
-                ),
               ],
             ),
           ),
-        ),
-      ),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterDocked,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: FloatingActionButton(
-          backgroundColor: AppColors.kCategorypinkColor,
-          hoverElevation: 10,
-          splashColor: Colors.grey,
-          tooltip: 'Añadir Producto',
-          elevation: 4,
-          child: Icon(Icons.search),
-          onPressed: () => setState(() {
-            _selectedPageIndex = 2;
-          }),
         ),
       ),
     );

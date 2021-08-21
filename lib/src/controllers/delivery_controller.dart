@@ -12,8 +12,9 @@ class DeliveryController extends GetxController {
   TextEditingController name = TextEditingController();
   TextEditingController placa = TextEditingController();
   TextEditingController vehiculo = TextEditingController();
+  TextEditingController cedula = TextEditingController();
+  TextEditingController email = TextEditingController();
   String collection = "delivery";
-
   @override
   onReady() {
     super.onReady();
@@ -24,16 +25,31 @@ class DeliveryController extends GetxController {
       firebaseFirestore.collection(collection).snapshots().map((query) =>
           query.docs.map((item) => DeliveryModel.fromMap(item.data())).toList());
 
-   addDeliveryToFirestore(){
-    String doc = firebaseFirestore.collection(collection).doc().id.toString();
-    firebaseFirestore.collection(collection).doc(doc).set({
+   addDeliveryToFirestore(String uid){
+    firebaseFirestore.collection(collection).doc(uid).set({
       "name": name.text.trim(),
       "placa": placa.text.trim(),
       "vehiculo": vehiculo.text.trim(),
+      "cedula": cedula.text.trim(),
+      "email": email.text.trim(),
       "estado": "ACTIVO",
-      "id": doc
+      "id": uid
           });
           _clearControllers();
+          register();
+  }
+    void register() async {
+    try{    
+      await auth.createUserWithEmailAndPassword(email: email.text.trim(), password: cedula.text.trim())
+      .then((result){
+       String _userUid = result.user!.uid;
+       addDeliveryToFirestore(_userUid);
+        _clearControllers();
+      });
+    }catch (e){
+      debugPrint(e.toString());
+      Get.snackbar("Registro Fallido", "Intentelo Mas Tarde");
+    }
   }
 
       _clearControllers() {
