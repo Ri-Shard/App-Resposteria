@@ -1,6 +1,5 @@
 import 'package:appreposteria/src/constants/app_constants.dart';
 import 'package:appreposteria/src/constants/firebase.dart';
-import 'package:appreposteria/src/model/delivery_model.dart';
 import 'package:appreposteria/src/model/user_model.dart';
 import 'package:appreposteria/src/other/bottom_bar_Admin.dart';
 import 'package:appreposteria/src/other/bottom_bar_Delivery.dart';
@@ -23,7 +22,7 @@ class AuthController extends GetxController {
   RxList<MyUser> userlist = RxList<MyUser>([]);
 
   @override
-  void onInit() async{
+  void onInit() async {
     super.onInit();
     if (auth.currentUser != null) {
       listenToUser();
@@ -63,19 +62,27 @@ class AuthController extends GetxController {
         getDelivery();
         if (result.user!.uid == 'JfbPPdFfKlbqdFj4vF4Vy3FdGs93') {
           Get.offAll(() => BottomBarScreen());
+          Get.snackbar("Bienvenido", "");
         } else if (deliverylist
             .any((element) => (element == result.user!.uid))) {
           deliverylist = [];
           Get.offAll(() => BottomBarDelivery());
+          Get.snackbar("Bienvenido", "");
         } else {
           Get.offAll(() => BottomBarUser());
+          Get.snackbar("Bienvenido", "");
         }
         listenToUser();
         _clearControllers();
       });
     } catch (e) {
-      debugPrint(e.toString());
-      Get.snackbar("LogIn Fallido", "Intentelo Mas Tarde");
+      debugPrint(e.hashCode.toString());
+      if (e.hashCode.toInt() == 505284406) {
+        Get.snackbar("Login Incorrecto", "Email no registrado");
+      }
+      if (e.hashCode.toInt() == 185768934) {
+        Get.snackbar("Login Incorrecto", "Contraseña Incorrecta");
+      }
     }
   }
 
@@ -86,12 +93,15 @@ class AuthController extends GetxController {
               email: email.text.trim(), password: password.text.trim())
           .then((result) {
         String _userUid = result.user!.uid;
+        Get.snackbar("Enhorabuena", "Registrado Con Exito");
         _addUserToFirestore(_userUid);
         _clearControllers();
       });
     } catch (e) {
-      debugPrint(e.toString());
-      Get.snackbar("Registro Fallido", "Intentelo Mas Tarde");
+      debugPrint(e.hashCode.toString());
+      if (e.hashCode.toInt() == 34618382) {
+        Get.snackbar("Registro Incorrecto", "Email registrado Con otra Cuenta");
+      }
     }
   }
 
@@ -153,6 +163,4 @@ class AuthController extends GetxController {
     userlist.bindStream(getUsers());
     return userlist;
   }
-
-
 }

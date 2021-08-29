@@ -8,7 +8,7 @@ class OrderController extends GetxController{
 
   static  OrderController instance = Get.find();
   
-  String usersCollection = "users";
+  String usersCollection = "orders";
   OrderModel ordermodel = OrderModel();
   RxList<OrderModel> orderlist = RxList<OrderModel>([]);
       @override
@@ -26,21 +26,10 @@ class OrderController extends GetxController{
     String second = DateTime.now().second.toString();
     String now  = dia+"/"+mes+"/"+year+"/"+hour+"/"+min+"/"+second;
     String nowe  = dia+mes+year+hour+min+second;
-    firebaseFirestore.collection(usersCollection).doc(userUid).collection("pedidos").doc(nowe).set({
+    firebaseFirestore.collection(usersCollection).doc(nowe).set({
       "uid": userUid,
       "name": authController.myuser.name,
       "address":addressController.addressModel.address,
-      "date": now,
-      "dat": nowe,
-      "status": "EN PROCESO",
-      "total": cartController.changeCartTotalPrice(authController.myuser).toString(),
-      "cart": FieldValue.arrayUnion(authController.myuser.cartItemsToJson())
-    });
-
-    firebaseFirestore.collection(usersCollection).doc('JfbPPdFfKlbqdFj4vF4Vy3FdGs93').collection("pedidos").doc(nowe).set({
-      "uid": userUid,
-      "name": authController.myuser.name,
-      "address": addressController.addressModel.address,
       "date": now,
       "dat": nowe,
       "status": "EN PROCESO",
@@ -68,7 +57,7 @@ class OrderController extends GetxController{
   updateOrder(OrderModel order){
 
     deleteOrder(order);
-    firebaseFirestore.collection(usersCollection).doc(order.uid).collection("pedidos").doc(order.dat).set({
+    firebaseFirestore.collection(usersCollection).doc(order.dat).set({
       "uid": order.uid,
       "name": authController.myuser.name,
       "address":addressController.addressModel.address,
@@ -79,20 +68,9 @@ class OrderController extends GetxController{
       "cart": FieldValue.arrayUnion(order.cartItemsToJson())
     });
 
-    firebaseFirestore.collection(usersCollection).doc('JfbPPdFfKlbqdFj4vF4Vy3FdGs93').collection("pedidos").doc(order.dat).set({
-      "uid": order.uid,
-      "name": authController.myuser.name,
-      "address": addressController.addressModel.address,
-      "date": order.date,
-      "dat": order.dat,
-      "status": "ENTREGADO",
-      "total": order.total,
-      "cart": FieldValue.arrayUnion(order.cartItemsToJson())
-    });
   }
   deleteOrder(OrderModel order){
-  firebaseFirestore.collection(usersCollection).doc(authController.myuser.uid).collection("pedidos").doc(order.dat).delete();
-  firebaseFirestore.collection(usersCollection).doc('JfbPPdFfKlbqdFj4vF4Vy3FdGs93').collection("pedidos").doc(order.dat).delete();
+  firebaseFirestore.collection(usersCollection).doc(order.dat).delete();
   }
 
 }

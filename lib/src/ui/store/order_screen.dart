@@ -57,14 +57,12 @@ void initState() {
       body: 
       StreamBuilder(
       stream: firebaseFirestore
-      .collection("users")
-      .doc(authController.myuser.uid)
-      .collection("pedidos")
+      .collection("orders")
       .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) return CircularProgressIndicator();
         return ListView.builder(
-          itemCount: snapshot.data!.docs.length,
+          itemCount: length(snapshot) ,
           itemBuilder: (BuildContext context, int index) {
             return Dismissible(
                             key: UniqueKey(),
@@ -91,7 +89,19 @@ void initState() {
                 ],
               ),
             ),
-                 child: new Card(
+                  child: _if(index,snapshot),
+
+            );
+          }
+        );
+      }
+    ),
+    );
+  });
+}
+Widget _if(int index,AsyncSnapshot<QuerySnapshot> snapshot){
+    if (snapshot.data!.docs[index].get("uid") == authController.myuser.uid) {
+               return Card(
                 child: new Column(
                   children: <Widget>[
                   Text(snapshot.data!.docs[index].get("date"),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),   
@@ -104,19 +114,12 @@ void initState() {
                       .toList(),
                 ),
                 SizedBox(height: 20,),
-                    Text(snapshot.data!.docs[index].get("status"),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),)                                                 
+                    Text(snapshot.data!.docs[index].get("status"),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),) 
                   ],
                 ),
-              ),
-            );
-          }
-        );
-      }
-    ),
-    );
-  });
-}
-    imageMessage(){
+              );
+                                                
+    }else{
     return Column(
                     children: [                
                       Image(image: AssetImage("images/Empty_Orders.png")),
@@ -130,5 +133,21 @@ void initState() {
                          ),
                           ]
                   );
-  }
+    }
+}
+
+int length (AsyncSnapshot<QuerySnapshot> snapshot){
+int suma = 0;
+for (var i = 0; i < snapshot.data!.docs.length; i++) {
+   if (snapshot.data!.docs[i].get("uid") == authController.myuser.uid){
+     suma = suma + 1;
+   }else{
+     suma = 1;
+   }   
+   
+}
+return suma;
+
+}
+
 }
