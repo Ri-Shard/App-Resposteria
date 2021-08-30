@@ -28,14 +28,14 @@ class DeliveryController extends GetxController {
    addDeliveryToFirestore(String uid){
     firebaseFirestore.collection(collection).doc(uid).set({
       "name": name.text.trim(),
-      "placa": placa.text.trim(),
+      "placa": placa.text.replaceAll('-', '').trim(),
       "vehiculo": vehiculo.text.trim(),
       "cedula": cedula.text.trim(),
       "email": email.text.trim(),
       "estado": "ACTIVO",
       "id": uid
           });
-          _clearControllers();
+          clearControllers();
           register();
   }
     void register() async {
@@ -44,16 +44,21 @@ class DeliveryController extends GetxController {
       .then((result){
        String _userUid = result.user!.uid;
        addDeliveryToFirestore(_userUid);
-        _clearControllers();
+        Get.snackbar("Registro Correcto", "Se ha registrado correctamenta el Domiciliario");
+        clearControllers();
       });
     }catch (e){
-      debugPrint(e.toString());
-      Get.snackbar("Registro Fallido", "Intentelo Mas Tarde");
+      debugPrint(e.hashCode.toString());
+      if (e.hashCode.toInt() == 34618382) {
+        Get.snackbar("Registro Incorrecto", "Email registrado Con otra Cuenta");
+      }
     }
   }
 
-      _clearControllers() {
+      void clearControllers() {
         name.clear();
+        cedula.clear();
+        email.clear();
         placa.clear();
         vehiculo.clear();
        } 

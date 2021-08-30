@@ -14,6 +14,7 @@ class AuthController extends GetxController {
   RxBool isLoggedIn = false.obs;
   RxBool isAdmin = false.obs;
   TextEditingController name = TextEditingController();
+  TextEditingController lastname = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   String usersCollection = "users";
@@ -62,7 +63,7 @@ class AuthController extends GetxController {
         getDelivery();
         if (result.user!.uid == 'JfbPPdFfKlbqdFj4vF4Vy3FdGs93') {
           Get.offAll(() => BottomBarScreen());
-          Get.snackbar("Bienvenido", "");
+          Get.snackbar("Bienvenido ADMINISTRADOR", "");
         } else if (deliverylist
             .any((element) => (element == result.user!.uid))) {
           deliverylist = [];
@@ -95,7 +96,6 @@ class AuthController extends GetxController {
         String _userUid = result.user!.uid;
         Get.snackbar("Enhorabuena", "Registrado Con Exito");
         _addUserToFirestore(_userUid);
-        _clearControllers();
       });
     } catch (e) {
       debugPrint(e.hashCode.toString());
@@ -113,6 +113,7 @@ class AuthController extends GetxController {
   _addUserToFirestore(String userUid) {
     firebaseFirestore.collection(usersCollection).doc(userUid).set({
       "name": name.text.trim(),
+      "lastname": lastname.text.trim(),
       "uid": userUid,
       "email": email.text.trim(),
       "cart": []
@@ -121,6 +122,7 @@ class AuthController extends GetxController {
 
   _clearControllers() {
     name.clear();
+    lastname.clear();
     email.clear();
     password.clear();
   }

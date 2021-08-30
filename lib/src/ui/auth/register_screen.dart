@@ -86,6 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Column(
                   children: <Widget>[
                     makeInputName(),
+                    makeInputLName(),
                     makeInputEmail(),
                     makeInputPass(),
                     makeInputConfirmPass()
@@ -104,7 +105,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: MaterialButton(
                     minWidth: double.infinity,
                     height: 60,
-                    onPressed: () async {
+                    onPressed: () {
                       uploadToStorage();
                     },
                     color: AppColors.kCategorypinkColor,
@@ -135,7 +136,6 @@ class _RegisterPageState extends State<RegisterPage> {
   uploadToStorage() {
     if (_formKey.currentState?.validate() == true) {
       authController.register();
-      Get.to(Login());
     }else{
       Get.snackbar("Error", "Digite los campos");
     }
@@ -221,6 +221,37 @@ class _RegisterPageState extends State<RegisterPage> {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: nameValidator,
           controller: authController.name,
+          obscureText: false,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+            enabledBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+            border:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+          ),
+        ),
+        SizedBox(
+          height: 30,
+        ),
+      ],
+    );
+  }
+  Widget makeInputLName() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          "Apellido",
+          style: TextStyle(
+              fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black87),
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: nameValidator,
+          controller: authController.lastname,
           obscureText: false,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),

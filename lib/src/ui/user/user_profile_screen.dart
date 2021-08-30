@@ -55,7 +55,7 @@ class ProfileUI2 extends StatelessWidget {
               height: 60,
             ),
             Text(
-              authController.myuser.name.toString()
+              authController.myuser.lastname.toString()
               ,style: TextStyle(
                 fontSize: 25.0,
                 color:Colors.blueGrey,

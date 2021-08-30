@@ -6,6 +6,7 @@ import 'package:appreposteria/src/other/custom_text.dart';
 import 'package:appreposteria/src/ui/store/order_screen.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 import 'package:mdi/mdi.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -27,9 +28,29 @@ class _AddressScreenState extends State<AddressScreen> with SingleTickerProvider
         RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-      String? emailValidator(String? value) {
-    return (value == null || value.isEmpty) ? 'Campo Requerido' : null;
-  }
+  final barrValidator = MultiValidator([
+    RequiredValidator(errorText: 'El Nombre del barrio es Requerido'),
+    MaxLengthValidator(20, errorText: 'Nombre del barrio muy largo, pruebe uno mas corto'),
+    MinLengthValidator(2, errorText: 'Nombre del barrio muy corto')
+  ]);
+  final cityValidator = MultiValidator([
+    RequiredValidator(errorText: 'El Nombre de la ciudad es Requerido'),
+    MaxLengthValidator(20, errorText: 'Nombre de la ciudad muy largo, pruebe uno mas corto'),
+    MinLengthValidator(2, errorText: 'Nombre de la ciudad muy corto')
+  ]);
+  final numValidator = MultiValidator([
+    RequiredValidator(errorText: 'El telefono de contacto es Requerido'),
+    MaxLengthValidator(10, errorText: 'Nombre muy largo, pruebe uno mas corto'),
+    MinLengthValidator(10, errorText: 'Nombre muy corto')
+  ]);
+  final dirValidator = MultiValidator([
+    RequiredValidator(errorText: 'La direccion es Requerida'),
+    MaxLengthValidator(50, errorText: 'Direccion muy larga, pruebe una mas corta'),
+    MinLengthValidator(10, errorText: 'direccion muy corta'),
+    PatternValidator(r'(Autopista|Avenida|Avenida Calle|Avenida Carrera|Avenida|Carrera|Calle|Carrera|Circunvalar|Diagonal|Kilometro|Transversal|AUTOP|AV|AC|AK|CL|KR|CCV|DG|KM|TV)(\s)?([a-zA-Z]{0,15}|[0-9]{1,3})(\s)?[a-zA-Z]?(\s)?(bis)?(\s)?(Este|Norte|Occidente|Oeste|Sur)?(\s)?(#(\s)?[0-9]{1,2}(\s)?[a-zA-Z]?(\s)?(bis)?(\s)?(Este|Norte|Occidente|Oeste|Sur)?(\s)?(-)?(\s)?[0-9]{1,3}(\s)?(Este|Norte|Occidente|Oeste|Sur)?)?((\s)?(Agrupación|Altillo|Apartamento|Apartamento Sótano|Barrio|Bloque|Bodega|Cabecera Municipal|Callejón|Camino|Carretera|Casa|Caserio|Célula|Centro|Centro Comercial|Centro Urbano|Circular|Condominio|Conjunto|Consultorio|Corregimiento|Deposito|Deposito |Sótano|Edificio|Entrada|Esquina|Etapa|Finca|Garaje|Garaje Sótano|Grada|Inferior|Inspección de Policia|Interior|Kilometro|Local|Local Mezzanine|Local Sótano|Lote|Manzana|Manzanita|Mejora|Mezzanine|Módulo|Municipio|Núcleo|Oficina|Oficina Sótano|Parcela|Parcelación|Pasaje|Penthouse|Piso|Porteria|Predio|Principal|Puente|Quebrada|Salon|Sector|Semisótano|Suite|Supermanzana|Terraza|Torre|Troncal|Unidad|Urbanización|Vereda|Via|Zona|AGN|AL|APTO|AS|BR|BL|BG|CM|CLJ|CN|CT|CA|CAS|CEL|CE|CECO|CEUR|CIR|CDM|CONJ|CS|CO|DP|DS|ED|EN|ESQ|ET|FCA|GJ|GS|GR|INF|IP|IN|KM|LC|LM|LS|LT|MZ|MZTA|MJ|MN|MD|MUN|NCO|OF|OS|PA|PCN|PSJ|PH|PI|PT|PD|PPAL|PN|QDA|SA|SEC|SS|SU|SMZ|TZ|TO|TRL|UN|URB|VDA|VIA|ZN)?(\s)?[1-9][0-9]{0,3})', errorText: 'Error, direccion invalida')
+
+  ]);
+
 
 @override
 void initState() { 
@@ -269,10 +290,10 @@ void initState() {
                    SizedBox(height: 10,),
                    Column(
                     children: <Widget>[
-                      makeInput(label: "Dirección",controller: addressController.address,validator: emailValidator),
-                      makeInput(label: "Barrio", controller: addressController.barrio, validator: emailValidator),
-                      makeInput(label: "Ciudad",controller: addressController.city,validator: emailValidator),
-                      makeInput(label: "Numero de Telefono", controller: addressController.phone, validator: emailValidator,type: TextInputType.number ),
+                      makeInputDire(),
+                      makeInputBarr(),
+                      makeInputCiu(),
+                      makeInputTel(),
                     ],
                   ),
                   SizedBox(height: 20,),
@@ -364,23 +385,22 @@ Widget card (AddressModel address){
         ],
       );
 }
-    Widget makeInput({label, obscureText = false, controller, validator,type}) {
+    Widget makeInputDire() {
     return Container(
       width: 300,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(label, style: TextStyle(
+          Text('Direccion', style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w400,
             color: Colors.black87
           ),),
           SizedBox(height: 5,),
-          TextFormField(          
-            keyboardType: type,
-            validator: validator,
-            controller: controller,
-            obscureText: obscureText,
+          TextFormField(      
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: dirValidator,
+            controller: addressController.address,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
               enabledBorder: OutlineInputBorder(
@@ -396,4 +416,99 @@ Widget card (AddressModel address){
       ),
     );
   }
+    Widget makeInputBarr() {
+    return Container(
+      width: 300,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text('Barrio', style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
+            color: Colors.black87
+          ),),
+          SizedBox(height: 5,),
+          TextFormField(    
+            autovalidateMode: AutovalidateMode.onUserInteraction,      
+            validator: barrValidator,
+            controller: addressController.barrio,
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey)
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey)
+              ),
+            ),
+          ),
+          SizedBox(height: 5,),
+        ],
+      ),
+    );
+  }
+    Widget makeInputCiu() {
+    return Container(
+      width: 300,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text('Ciudad', style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
+            color: Colors.black87
+          ),),
+          SizedBox(height: 5,),
+          TextFormField( 
+            autovalidateMode: AutovalidateMode.onUserInteraction,               
+            validator: cityValidator,
+            controller: addressController.city,
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey)
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey)
+              ),
+            ),
+          ),
+          SizedBox(height: 5,),
+        ],
+      ),
+    );
+  }
+    Widget makeInputTel() {
+    return Container(
+      width: 300,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text('Telefono', style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
+            color: Colors.black87
+          ),),
+          SizedBox(height: 5,),
+          TextFormField(   
+            autovalidateMode: AutovalidateMode.onUserInteraction,                      
+             keyboardType: TextInputType.number,
+            validator: numValidator,
+            controller: addressController.phone,
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey)
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey)
+              ),
+            ),
+          ),
+          SizedBox(height: 5,),
+        ],
+      ),
+    );
+  }
+
 }
