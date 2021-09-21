@@ -8,20 +8,23 @@ class MyUser{
     static const CART = "cart";
     static const NAME = "name";
     static const LASTNAME = "lastname";
+    static const PHONE = "phone";
 
     String? uid;
     String? email;
     String? name;
     String? lastname;
+    String? phone;
    List<CartItemModel>? cart; 
 
-  MyUser({ this.uid, this.email, this.name,this.cart,this.lastname});
+  MyUser({ this.uid, this.email, this.name,this.cart,this.lastname,this.phone});
 
   MyUser.fromMap(Map<String, dynamic> data){
     uid = data[UID];
     email = data[EMAIL];
     name= data[NAME];
     lastname= data[LASTNAME];
+    phone= data[PHONE];
   }
 
   MyUser fromSnapshot(DocumentSnapshot snapshot){
@@ -30,6 +33,7 @@ class MyUser{
     user.lastname = snapshot[LASTNAME];
     user.email = snapshot[EMAIL];
     user.uid = snapshot[UID];
+    user.phone = snapshot[PHONE];
     user.cart = _convertCartItems(snapshot[CART] ?? []);
     return user;
   }

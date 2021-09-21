@@ -1,26 +1,24 @@
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/other/colors.dart';
-
-import 'package:appreposteria/src/ui/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 
-class RegisterPage extends StatefulWidget {
+class EditUserPage extends StatefulWidget {
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _EditUserPageState createState() => _EditUserPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _EditUserPageState extends State<EditUserPage> {
   final TextEditingController _cPasswordTextEditingController =
       TextEditingController();
-
-  final passwordValidator = MultiValidator([
-    RequiredValidator(errorText: 'La contraseña es Requerida'),
+bool? q = false;
+    final passwordValidator = MultiValidator([
     MinLengthValidator(6, errorText: 'Minimo 6 digitos'),
     MaxLengthValidator(15, errorText: 'Maximo 15 digitos'),
   ]);
+
   final emailValidator = MultiValidator([
     RequiredValidator(errorText: 'El Email es Requerido'),
     MaxLengthValidator(50, errorText: 'Email muy largo, pruebe uno mas corto'),
@@ -37,8 +35,7 @@ class _RegisterPageState extends State<RegisterPage> {
     MinLengthValidator(10, errorText: 'Numero muy corto')
   ]);
   String? confirmPassValidator(String? value) {
-    if (value == null || value.isEmpty) return 'Campo Requerido';
-    if (value.length < 6) return 'Debe tener al menos 6 digitos';
+    if (value!.length < 6) return 'Debe tener al menos 6 digitos';
     if (authController.password.text != _cPasswordTextEditingController.text)
       return 'Las contraseñas no coinciden';
     return null;
@@ -48,6 +45,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    authController.name.text = authController.myuser.name.toString();
+    authController.lastname.text = authController.myuser.lastname.toString();
+    authController.email.text = authController.myuser.email.toString();
+    authController.phone.text = authController.myuser.phone.toString();
     return Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
@@ -58,6 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
+              authController.clearControllers();
             },
             icon: Icon(
               Icons.arrow_back_ios,
@@ -74,7 +76,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Column(
                   children: <Widget>[
                     Text(
-                      "Registrarse",
+                      "Modificar Informacion",
                       style:
                           TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                     ),
@@ -82,8 +84,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       height: 20,
                     ),
                     Text(
-                      "Create una cuenta, es gratis",
+                      "Puedes Modificar la informacion a Continuacion: ",
                       style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+                    ),
+                                        SizedBox(
+                      height: 20,
                     ),
                   ],
                 ),
@@ -92,8 +97,29 @@ class _RegisterPageState extends State<RegisterPage> {
                     makeInputName(),
                     makeInputLName(),
                     makeInputEmail(),
+                    Column(                      
+                    children: [Text("Desea modificar la contraseña?"),
+                    Checkbox(  
+                      checkColor: Colors.greenAccent,  
+                      activeColor: Colors.red,  
+                      value: q,  
+                      onChanged: (bool? valu) {  
+                        setState(() {  
+                          this.q = valu;  
+                        });  
+                      },  
+                    ),  
+                      ],
+                    ),
+                    q == true ?
+                    Column(                                     
+                      children: [
                     makeInputPass(),
                     makeInputConfirmPass(),
+                      ],
+                    )                    :
+                    Container()
+                    ,
                     makeInputTel(),
                   ],
                 ),
@@ -111,26 +137,20 @@ class _RegisterPageState extends State<RegisterPage> {
                     minWidth: double.infinity,
                     height: 60,
                     onPressed: () {
-                      uploadToStorage();
+                      updateToStorage();
                     },
                     color: AppColors.kCategorypinkColor,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50)),
                     child: Text(
-                      "Registrarse",
+                      "Guardar",
                       style:
                           TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
                     ),
                   ),
                 ),
-                TextButton(
-                  onPressed: () => Get.to(Login()),
-                  child: Text(
-                    "¿Ya tienes cuenta?" + " Inicia Sesion",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                  ),
-                ),
+                SizedBox(height: 20)
               ]),
             ),
             key: _formKey,
@@ -138,9 +158,9 @@ class _RegisterPageState extends State<RegisterPage> {
         ]));
   }
 
-  uploadToStorage() {
+  updateToStorage() {
     if (_formKey.currentState?.validate() == true) {
-      authController.register();
+      authController.updateUserData();
     }else{
       Get.snackbar("Error", "Digite los campos");
     }
@@ -151,7 +171,7 @@ class _RegisterPageState extends State<RegisterPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          "Confirmar Contraseña",
+          "Confirmar Nueva Contraseña",
           style: TextStyle(
               fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black87),
         ),
@@ -183,7 +203,7 @@ class _RegisterPageState extends State<RegisterPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          "Contraseña",
+          "Nueva Contraseña",
           style: TextStyle(
               fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black87),
         ),

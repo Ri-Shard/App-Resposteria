@@ -13,7 +13,6 @@ class AddressController extends GetxController{
   TextEditingController barrio = TextEditingController(); 
   TextEditingController address = TextEditingController(); 
   TextEditingController city = TextEditingController(); 
-  TextEditingController phone = TextEditingController(); 
 
   RxList<AddressModel> addresslist = RxList<AddressModel>([]);
   AddressModel addressModel = AddressModel();
@@ -29,7 +28,6 @@ class AddressController extends GetxController{
 
     address.clear();
     city.clear();
-    phone.clear();
     barrio.clear();
   }
 
@@ -47,7 +45,6 @@ class AddressController extends GetxController{
       "name": authController.myuser.name,
       "address": address.text.trim(),
       "city": city.text.trim(),
-      "phone": phone.text.trim(),
       "barrio": barrio.text.trim(),
       "date": now
     });

@@ -23,7 +23,7 @@ class CartController extends GetxController {
         Get.snackbar("Revisa tu carrito", "${product.name} ya se encuentra añadido");
       } else {
         String itemId = Uuid().toString();
-        authController.updateUserData({
+        authController.updateCart({
           "cart": FieldValue.arrayUnion([
             {
               "id": itemId,
@@ -48,7 +48,7 @@ class CartController extends GetxController {
 
    removeCartItem(CartItemModel cartItem)  {
     try { 
-      authController.updateUserData({
+      authController.updateCart({
           "cart" : FieldValue.arrayRemove([cartItem.toJson()])
       });
             authController.listenToUser();
@@ -66,12 +66,12 @@ class CartController extends GetxController {
       }
     });
         tmpcart.removeWhere((element) => toRemove.contains(element));
-         authController.updateUserData({
+         authController.updateCart({
         "cart": FieldValue.arrayUnion(tmpcart)
       });
   }
   clearCart() {
-        authController.updateUserData({
+        authController.updateCart({
         "cart": []
       });
   }
@@ -99,7 +99,7 @@ class CartController extends GetxController {
     }else{
       remove(item.name.toString());
       item.quantity = (item.quantity - 1);
-          authController.updateUserData({
+          authController.updateCart({
         "cart": FieldValue.arrayUnion([item.toJson()])
       });
     }
@@ -111,7 +111,7 @@ class CartController extends GetxController {
       remove(item.name.toString());     
        item.quantity = (item.quantity + 1);
       logger.i({"quantity": item.quantity});
-          authController.updateUserData({
+          authController.updateCart({
         "cart": FieldValue.arrayUnion([item.toJson()])
       });
   }

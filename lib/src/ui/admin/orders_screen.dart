@@ -2,8 +2,9 @@ import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/model/order_model.dart';
 import 'package:appreposteria/src/other/bottom_bar_Admin.dart';
+import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/other/single_orders_widget.dart';
-import 'package:appreposteria/src/ui/admin/Delivery_screen.dart';
+import 'package:appreposteria/src/ui/admin/order_GoToDelivery_Screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,8 +16,7 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   late double height, width;
-  OrderModel ordelmodel = OrderModel();
-
+  OrderModel ordermodel = OrderModel();
     @override
 void initState() { 
   super.initState();
@@ -40,7 +40,7 @@ void initState() {
           Column(
             children: [
               Text(
-                "Mis Pedidos",
+                "Pedidos",
                 style: TextStyle(color: Colors.black),
               ),
             ]
@@ -49,7 +49,6 @@ void initState() {
       ),
          ),         
       body:
-
        StreamBuilder(
         stream: firebaseFirestore
         .collection("orders")
@@ -61,42 +60,50 @@ void initState() {
             itemBuilder: (BuildContext context, int index) {
               return GestureDetector(
                       onTap: (){
-                        Get.to(()=>DomiciliariosPage());
-                        orderController.ordermodel =  ordelmodel.fromSnapshot(snapshot.data!.docs[index]);
+                        Get.to(()=>GoToDeliveryPage());
+                        orderController.ordermodel =  ordermodel.fromSnapshot(snapshot.data!.docs[index]);
                       },
                 child: _if(index,snapshot),
               );
             }
           );
         }
-    ),
-
+    )
     );
   });
 }
 
 Widget _if(int index,AsyncSnapshot<QuerySnapshot> snapshot){
-    if (snapshot.data!.docs.length != 0) {
-               return Card(
-                child: new Column(
-                  children: <Widget>[
-                  Text(snapshot.data!.docs[index].get("date"),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),   
-                  Text("Total: \$"+snapshot.data!.docs[index].get("total"),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),   
-                  SizedBox(height: 20,),                
-                  Column(    
-                  children:            
-                  ordelmodel.fromSnapshot(snapshot.data!.docs[index]).cart!
-                    .map((cartItem) => SingleOrderWidget(cartItem: cartItem,))
-                      .toList(),
-                ),
-                SizedBox(height: 20,),
-                    Text(snapshot.data!.docs[index].get("status"),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),) 
-                  ],
-                ),
-              );
-                                                
-    }else{
-    return Column(
+      if(snapshot.data!.docs.length != 0){
+                return Column(
+                 children: [
+                   Container(
+                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: AppColors.kCategorypinkColor ),                 
+
+                        child: new Column(
+                          children: <Widget>[
+                          Text(snapshot.data!.docs[index].get("date"),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),   
+                          Text(snapshot.data!.docs[index].get("status"),style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),                           
+                          SizedBox(height: 20,),                
+                          Column(    
+                          children:            
+                          ordermodel.fromSnapshot(snapshot.data!.docs[index]).cart!
+                            .map((cartItem) => SingleOrderWidget(cartItem: cartItem,))
+                              .toList(),
+
+                        ),
+                        SizedBox(height: 20,),
+                        Text("Total: \$"+snapshot.data!.docs[index].get("total"),style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),   
+                        SizedBox(height: 20,),
+                          ],
+                        ),                               
+                   ),
+                                    SizedBox(height: 20,),
+                 ],
+               );
+        
+      }else{
+        return Column(
                     children: [                
                       Image(image: AssetImage("images/Empty_Orders.png")),
                       SizedBox(

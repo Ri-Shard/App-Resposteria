@@ -54,8 +54,7 @@ class OrderController extends GetxController{
     event.docs.map((e) => OrderModel.fromMap(e.data())).toList());
   
   
-  updateOrder(OrderModel order){
-
+  updateDeliveryOrder(OrderModel order){
     deleteOrder(order);
     firebaseFirestore.collection(usersCollection).doc(order.dat).set({
       "uid": order.uid,
@@ -67,10 +66,24 @@ class OrderController extends GetxController{
       "total": order.total,
       "cart": FieldValue.arrayUnion(order.cartItemsToJson())
     });
-
+  }
+  updateOrder(OrderModel order){
+    deleteOrder(order);
+    firebaseFirestore.collection(usersCollection).doc(order.dat).set({
+      "uid": order.uid,
+      "name": authController.myuser.name,
+      "address":addressController.addressModel.address,
+      "date": order.date,
+      "dat": order.dat,
+      "status": "PEDIDO LISTO",
+      "total": order.total,
+      "cart": FieldValue.arrayUnion(order.cartItemsToJson())
+    });
   }
   deleteOrder(OrderModel order){
   firebaseFirestore.collection(usersCollection).doc(order.dat).delete();
   }
+
+
 
 }

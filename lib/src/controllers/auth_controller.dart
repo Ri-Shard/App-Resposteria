@@ -17,6 +17,7 @@ class AuthController extends GetxController {
   TextEditingController lastname = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController phone = TextEditingController(); 
   String usersCollection = "users";
   MyUser myuser = MyUser();
   List<String> deliverylist = [];
@@ -74,7 +75,7 @@ class AuthController extends GetxController {
           Get.snackbar("Bienvenido", "");
         }
         listenToUser();
-        _clearControllers();
+        clearControllers();
       });
     } catch (e) {
       debugPrint(e.hashCode.toString());
@@ -116,24 +117,73 @@ class AuthController extends GetxController {
       "lastname": lastname.text.trim(),
       "uid": userUid,
       "email": email.text.trim(),
+      "phone": phone.text.trim(),
       "cart": []
     });
   }
 
-  _clearControllers() {
+  clearControllers() {
     name.clear();
     lastname.clear();
     email.clear();
     password.clear();
+    phone.clear();
+
   }
 
-  updateUserData(Map<String, dynamic> data) {
+  updateCart(Map<String, dynamic> data) {
     logger.i("UPDATED");
     firebaseFirestore
         .collection(usersCollection)
         .doc(auth.currentUser!.uid)
         .update(data);
   }
+  updateUserData() {
+    try{
+
+  final user = auth.currentUser;
+  user!.updateEmail(email.text.trim());
+  user.updatePassword(password.text.trim());
+    logger.i("UPDATED");
+    firebaseFirestore
+        .collection(usersCollection)
+        .doc(auth.currentUser!.uid)
+        .update({
+          "name": name.text.trim(),
+          "lastname": lastname.text.trim(),
+          "email": email.text.trim(),
+          "phone": phone.text.trim(),
+        });
+
+      Get.snackbar("Enhorabuena", "Modificado Con Exito");
+    }catch(e){
+      debugPrint(e.hashCode.toString());
+      if (e.hashCode.toInt() == 34618382) {
+        Get.snackbar("Actualizacion Incorrecta", "Email registrado Con otra Cuenta");
+      }    }
+      clearControllers();  
+  }
+
+  deleteUserAccount()async{
+    try{
+        Get.snackbar("Eliminado correctamente","Se ha eliminado la cuenta correctamente, sera redirigido al Login");
+        final uid = auth.currentUser!.uid;
+         await   firebaseFirestore
+        .collection(usersCollection)
+        .doc(uid)
+        .delete();
+        final user = auth.currentUser;
+      await  user!.delete();
+        signOut();
+    }catch(e){
+      debugPrint(e.hashCode.toString());
+      if (e.hashCode.toInt() == 34618382) {
+        Get.snackbar("Error al Eliminar","Ocurrieron uno o varios problemas al eliminar");
+      }    }
+      clearControllers();  
+    }
+  
+  
 
   listenToUser() => firebaseFirestore
           .collection(usersCollection)

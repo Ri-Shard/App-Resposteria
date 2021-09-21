@@ -2,6 +2,7 @@ import 'package:appreposteria/src/model/item_model.dart';
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/other/single_products_widget.dart';
+import 'package:appreposteria/src/ui/admin/products_list_screen.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,7 +31,7 @@ void initState() {
         appBar: AppBar(
           actions: [
            IconButton(onPressed: (){
-             Get.to(()=>DomiciliariosPage());
+             Get.to(()=>ProductList());
            }, icon: Icon(Mdi.accountDetailsOutline),color: Colors.black)   
           ],
           title: Text("Reposteria App",  

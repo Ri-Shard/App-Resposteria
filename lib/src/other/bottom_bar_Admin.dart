@@ -1,5 +1,6 @@
 
 import 'package:appreposteria/src/other/colors.dart';
+import 'package:appreposteria/src/ui/admin/Delivery_screen.dart';
 import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
 import 'package:appreposteria/src/ui/admin/orders_screen.dart';
 import 'package:appreposteria/src/ui/admin/products_list_screen.dart';
@@ -34,7 +35,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
         'page': OrdersScreen(),
       },
       {
-        'page': ProductList(),
+        'page': DomiciliariosPage(),
       },
     ];
     super.initState();
@@ -97,7 +98,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.person),
-                 label: 'Productos',
+                 label: 'Domiciliarios',
 
                 ),
               ],

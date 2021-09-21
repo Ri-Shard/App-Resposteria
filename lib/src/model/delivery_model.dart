@@ -9,6 +9,7 @@ class DeliveryModel   {
   static const ESTADO = "estado";
   static const CEDULA = "cedula";
   static const EMAIL = "email";
+  static const PHONE = "phone";
 
    String? id;
    String? placa;
@@ -17,8 +18,9 @@ class DeliveryModel   {
    String? estado;
    String? cedula;
    String? email;
+   String? phone;
 
-  DeliveryModel({this.estado,this.id,this.name,this.placa,this.vehiculo,this.cedula,this.email});
+  DeliveryModel({this.estado,this.id,this.name,this.placa,this.vehiculo,this.cedula,this.email,this.phone});
 
   DeliveryModel.fromMap(Map<String, dynamic> data){
     id = data[ID];
@@ -28,6 +30,7 @@ class DeliveryModel   {
     estado = data[ESTADO];
     email = data[EMAIL];
     cedula = data[CEDULA];
+    phone = data[PHONE];
   }
 
     DeliveryModel fromSnapshot(DocumentSnapshot snapshot){
@@ -39,6 +42,7 @@ class DeliveryModel   {
     user.vehiculo = snapshot[VEHICULO];
     user.estado = snapshot[ESTADO];
     user.cedula = snapshot[CEDULA];
+    user.phone = snapshot[PHONE];
     return user;
   }
 }

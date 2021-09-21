@@ -38,11 +38,7 @@ class _AddressScreenState extends State<AddressScreen> with SingleTickerProvider
     MaxLengthValidator(20, errorText: 'Nombre de la ciudad muy largo, pruebe uno mas corto'),
     MinLengthValidator(2, errorText: 'Nombre de la ciudad muy corto')
   ]);
-  final numValidator = MultiValidator([
-    RequiredValidator(errorText: 'El telefono de contacto es Requerido'),
-    MaxLengthValidator(10, errorText: 'Nombre muy largo, pruebe uno mas corto'),
-    MinLengthValidator(10, errorText: 'Nombre muy corto')
-  ]);
+
   final dirValidator = MultiValidator([
     RequiredValidator(errorText: 'La direccion es Requerida'),
     MaxLengthValidator(50, errorText: 'Direccion muy larga, pruebe una mas corta'),
@@ -293,7 +289,6 @@ void initState() {
                       makeInputDire(),
                       makeInputBarr(),
                       makeInputCiu(),
-                      makeInputTel(),
                     ],
                   ),
                   SizedBox(height: 20,),
@@ -375,7 +370,7 @@ Widget card (AddressModel address){
                       ),
                
                     CustomText(
-                        text: address.phone,
+                        text: authController.myuser.phone,
                       ),
                     CustomText(
                         text: address.city,
@@ -478,37 +473,6 @@ Widget card (AddressModel address){
       ),
     );
   }
-    Widget makeInputTel() {
-    return Container(
-      width: 300,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text('Telefono', style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w400,
-            color: Colors.black87
-          ),),
-          SizedBox(height: 5,),
-          TextFormField(   
-            autovalidateMode: AutovalidateMode.onUserInteraction,                      
-             keyboardType: TextInputType.number,
-            validator: numValidator,
-            controller: addressController.phone,
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey)
-              ),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey)
-              ),
-            ),
-          ),
-          SizedBox(height: 5,),
-        ],
-      ),
-    );
-  }
+
 
 }

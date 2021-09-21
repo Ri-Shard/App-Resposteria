@@ -1,5 +1,6 @@
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/other/bottom_bar_User.dart';
+import 'package:appreposteria/src/ui/user/user_edit_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,12 @@ class ProfileUI2 extends StatelessWidget {
   Widget build(BuildContext context) {  
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(onPressed: (){
+            Get.to(EditUserPage());
+          },          
+           icon: Icon(Icons.mode,size: 35, color: Colors.black,))
+        ],
           title: Text("Perfil de usuario" ,  
                 style: TextStyle(
                 fontWeight: FontWeight.w800, 
@@ -25,14 +32,13 @@ class ProfileUI2 extends StatelessWidget {
 
         ),
       body: SafeArea(
-        child: Column(
-          
+        child: Column(          
           children: [
             Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(
-                    "images/Checklist.png"
+                    "images/Photos.png"
                   ),
                   fit: BoxFit.cover
                 )
@@ -53,15 +59,30 @@ class ProfileUI2 extends StatelessWidget {
             ),
             SizedBox(
               height: 60,
-            ),
-            Text(
-              authController.myuser.lastname.toString()
-              ,style: TextStyle(
-                fontSize: 25.0,
-                color:Colors.blueGrey,
-                letterSpacing: 2.0,
-                fontWeight: FontWeight.w400
-            ),
+            ),            
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+               Text(            
+                  authController.myuser.name.toString()
+                  ,style: TextStyle(
+                    fontSize: 25.0,
+                    color:Colors.blueGrey,
+                    letterSpacing: 2.0,
+                    fontWeight: FontWeight.w400
+                ),
+                ),
+                SizedBox(width: 10,),
+                Text(            
+                  authController.myuser.lastname.toString()
+                  ,style: TextStyle(
+                    fontSize: 25.0,
+                    color:Colors.blueGrey,
+                    letterSpacing: 2.0,
+                    fontWeight: FontWeight.w400
+                ),
+                ),
+              ],
             ),
             Text(
               "Usuario"
@@ -111,6 +132,13 @@ class ProfileUI2 extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(
+              height: 20,
+            ),
+            TextButton(onPressed: (){
+              authController.deleteUserAccount();
+            }, child: Text("Eliminar Cuenta", style: TextStyle(color: Colors.red),)),
+
             SizedBox(
               height: 50,
             ),

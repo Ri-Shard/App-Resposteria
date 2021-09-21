@@ -8,40 +8,46 @@ class SingleOrderWidget extends StatelessWidget {
   const SingleOrderWidget({Key? key, required this.cartItem}): super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Row(
-        mainAxisAlignment:
-        MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding:
-            const EdgeInsets.all(8.0),
-            child: Image.network(
-              cartItem.image!,
-              width: 80,
+
+    return Container(
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+      child: Row(
+          mainAxisAlignment:
+          MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding:
+              const EdgeInsets.all(8.0),
+              child: Image.network(
+                cartItem.image!,
+                width: 80,
+              ),
             ),
-          ),
-          Expanded(
-              child: Wrap(
-                direction: Axis.vertical,
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(left: 14),
-                      child: CustomText(
-                        text: cartItem.name,
-                      )),
-                ],
-              )),
-          Padding(
-            padding:
-            const EdgeInsets.all(14),
-            child: CustomText(
-              text: "\$${cartItem.cost}",                          
-              size: 22,
-              weight: FontWeight.bold,
+            Expanded(
+                child: Wrap(
+                  direction: Axis.vertical,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(left: 14),
+                        child: CustomText(
+                          text: cartItem.name,
+                          size: 16,
+                          weight: FontWeight.bold,
+                        )),
+                  ],
+                )),
+            Padding(
+              padding:
+              const EdgeInsets.all(14),
+              child: CustomText(
+                text: "\$${cartItem.cost}",                          
+                size: 22,
+                weight: FontWeight.bold,
+              ),
             ),
-          ),
-        ],
-      ); 
+          ],
+        ),
+    ); 
   }
 }
 
