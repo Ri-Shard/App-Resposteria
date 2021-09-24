@@ -34,9 +34,10 @@ class AuthController extends GetxController {
   }
 
   @override
-  void onReady() {
+  void onReady() async{
     super.onReady();
     _setInitialScreen(auth.currentUser);
+          deliverylist = await getDelivery();
   }
 
   _setInitialScreen(User? user) async {
@@ -67,7 +68,6 @@ class AuthController extends GetxController {
           Get.snackbar("Bienvenido ADMINISTRADOR", "");
         } else if (deliverylist
             .any((element) => (element == result.user!.uid))) {
-          deliverylist = [];
           Get.offAll(() => BottomBarDelivery());
           Get.snackbar("Bienvenido", "");
         } else {

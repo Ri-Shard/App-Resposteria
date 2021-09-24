@@ -3,9 +3,11 @@ import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/model/order_model.dart';
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/other/single_orders_widget.dart';
+import 'package:appreposteria/src/ui/Delivery/Delivery_OrderInformationScreen.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class DeliveryHomeScreen extends StatefulWidget {
   DeliveryHomeScreen({Key? key}) : super(key: key);
@@ -57,7 +59,7 @@ void initState() {
           Column(
             children: [
               Text(
-                "Mis Pedidos",
+                "Pedidos Disponibles",
                 style: TextStyle(color: Colors.black),
               ),
             ]
@@ -79,6 +81,7 @@ void initState() {
               return GestureDetector(
                       onTap: (){
                         orderController.ordermodel =  ordelmodel.fromSnapshot(snapshot.data!.docs[index]);
+                        Get.to(()=>DeliveryOrderInformation());
                       },
                 child: _if(index,snapshot),
               );
@@ -92,25 +95,59 @@ void initState() {
 }
 
 Widget _if(int index,AsyncSnapshot<QuerySnapshot> snapshot){
-    if (snapshot.data!.docs.length != 0) {
-               return Card(
-                child: new Column(
-                  children: <Widget>[
-                  Text(snapshot.data!.docs[index].get("date"),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),   
-                  Text("Total: \$"+snapshot.data!.docs[index].get("total"),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),   
-                  SizedBox(height: 20,),                
-                  Column(    
-                  children:            
-                  ordelmodel.fromSnapshot(snapshot.data!.docs[index]).cart!
-                    .map((cartItem) => SingleOrderWidget(cartItem: cartItem,))
-                      .toList(),
-                ),
-                SizedBox(height: 20,),
-                    Text(snapshot.data!.docs[index].get("status"),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),) 
-                  ],
-                ),
-              );
+  if(snapshot.data!.docs.length != 0){
+    if (snapshot.data!.docs[index].get("status") == "PEDIDO LISTO") {
+               return Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: AppColors.kCategorypinkColor),
+              child: new Column(
+                children: <Widget>[
+                  Text(snapshot.data!.docs[index].get("date"),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text(
+                    snapshot.data!.docs[index].get("status"),
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    snapshot.data!.docs[index].get("address"),
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),                  
+                  SizedBox(
+                    height: 20,
+                  ),
+                    Column(
+                      children: ordelmodel
+                          .fromSnapshot(snapshot.data!.docs[index])
+                          .cart!
+                          .map((cartItem) => SingleOrderWidget(
+                                cartItem: cartItem,
+                              ))
+                          .toList(),
+                    ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text("Total: \$" + snapshot.data!.docs[index].get("total"),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+          ],
+        );
                                                 
+  }
+  return Container();
     }else{
     return Column(
                     children: [                

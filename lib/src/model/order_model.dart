@@ -10,6 +10,9 @@ class OrderModel {
   static const CART  = "cart";  
   static const STATUS  = "status";  
   static const TOTAL  = "total";  
+  static const DELIVERY  = "delivery";  
+  static const DELIVERYNAME  = "deliveryname";  
+  static const CLIENTRATING  = "clientrating";  
 
   String? address;
   String? uid;
@@ -18,9 +21,12 @@ class OrderModel {
   String? dat;
   String? status;
   String? total;
+  String? delivery;
+  String? deliveryname;
+  String? clientrating;
   List<CartItemModel>? cart; 
 
-OrderModel({this.address,this.name,this.date,this.uid,this.cart,this.status,this.total,this.dat});
+OrderModel({this.clientrating,this.deliveryname,this.delivery,this.address,this.name,this.date,this.uid,this.cart,this.status,this.total,this.dat});
 
  
   OrderModel fromSnapshot(DocumentSnapshot snapshot){
@@ -32,6 +38,9 @@ OrderModel({this.address,this.name,this.date,this.uid,this.cart,this.status,this
     order.uid = snapshot[UID];
     order.status = snapshot[STATUS];
     order.total = snapshot[TOTAL];
+    order.delivery = snapshot[DELIVERY];
+    order.deliveryname = snapshot[DELIVERYNAME];
+    order.clientrating = snapshot[CLIENTRATING];
     order.cart = _convertCartItems(snapshot[CART] ?? []);
     
     return order;
@@ -55,6 +64,9 @@ OrderModel({this.address,this.name,this.date,this.uid,this.cart,this.status,this
     dat = data[DAT];
     status = data[STATUS];
     total = data[TOTAL];
+    delivery = data[DELIVERY];
+    clientrating = data[CLIENTRATING];
+    deliveryname = data[DELIVERYNAME];
     cart = cartItemsToJson().cast<CartItemModel>();
   }
 

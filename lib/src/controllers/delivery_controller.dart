@@ -15,13 +15,26 @@ class DeliveryController extends GetxController {
   TextEditingController cedula = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController phone = TextEditingController(); 
-
+  DeliveryModel delivery = DeliveryModel();
   String collection = "delivery";
   @override
   onReady() {
     super.onReady();
+    listenToUser(); 
     deliverys.bindStream(getAllDeliverys());
   }
+  listenToUser() => firebaseFirestore
+          .collection(collection)
+          .doc(auth.currentUser!.uid)
+          .get()
+          .then((snapshot) {
+        delivery = delivery.fromSnapshot(snapshot);
+      });
+
+  Stream<List<DeliveryModel>> getUsers() => firebaseFirestore
+      .collection(collection)
+      .snapshots()
+      .map((event) => event.docs.map((e) => DeliveryModel.fromMap(e.data())).toList());
 
   Stream<List<DeliveryModel>> getAllDeliverys() =>
       firebaseFirestore.collection(collection).snapshots().map((query) =>

@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mdi/mdi.dart';
 
-import 'Delivery_screen.dart';
 
 class AdminHomePage extends StatefulWidget {
   @override

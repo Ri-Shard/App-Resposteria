@@ -44,8 +44,7 @@ class _GoToDeliveryPageState extends State<GoToDeliveryPage> {
   }
 
   Widget _cardOrder(OrderModel order){
-    if(order.status.toString() == "PEDIDO LISTO"){
-
+    if(order.status.toString() != "EN PROCESO"){
       return Column(
         children:[
             Container(
@@ -69,6 +68,8 @@ class _GoToDeliveryPageState extends State<GoToDeliveryPage> {
                           children: <Widget>[
                           Text(order.date.toString(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),   
                           Text(order.status.toString(), style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),                           
+                          Text(order.address.toString(), style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),                           
+
                           SizedBox(height: 20,),                
                           Column(    
                           children:            

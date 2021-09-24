@@ -3,7 +3,6 @@ import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/ui/admin/Delivery_screen.dart';
 import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
 import 'package:appreposteria/src/ui/admin/orders_screen.dart';
-import 'package:appreposteria/src/ui/admin/products_list_screen.dart';
 import 'package:appreposteria/src/ui/admin/upload_products_screen.dart';
 import 'package:appreposteria/src/ui/admin/user_list_screen.dart';
 import 'package:flutter/material.dart';

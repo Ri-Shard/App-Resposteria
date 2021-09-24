@@ -1,4 +1,5 @@
 import 'package:appreposteria/src/constants/controllers.dart';
+import 'package:appreposteria/src/other/bottom_bar_User.dart';
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -138,6 +139,7 @@ bool? q = false;
                     height: 60,
                     onPressed: () {
                       updateToStorage();
+                      Get.offAll(()=>BottomBarUser());
                     },
                     color: AppColors.kCategorypinkColor,
                     elevation: 0,

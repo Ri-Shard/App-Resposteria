@@ -1,7 +1,6 @@
 
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/ui/Delivery/Delivery_HomeScreen.dart';
-import 'package:appreposteria/src/ui/Delivery/Delivery_OrderInformationScreen.dart';
 import 'package:appreposteria/src/ui/Delivery/Delivery_OrdersScreen.dart';
 import 'package:appreposteria/src/ui/Delivery/Delivery_ProfileScreen.dart';
 import 'package:flutter/material.dart';
@@ -22,9 +21,6 @@ class _BottomBarDeliveryState extends State<BottomBarDelivery> {
     _pages = [
       {
         'page': DeliveryHomeScreen(),
-      },
-      {
-        'page': DeliveryOrderInformation(),
       },
       {
         'page': DeliveryOrdersScreen(),
@@ -55,7 +51,7 @@ class _BottomBarDeliveryState extends State<BottomBarDelivery> {
           height: kBottomNavigationBarHeight * 0.98,
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.kCategorypinkColor,
+              color: Colors.white,
               border: Border(
                 top: BorderSide(
                   color: Colors.grey,
@@ -65,19 +61,14 @@ class _BottomBarDeliveryState extends State<BottomBarDelivery> {
             ),
             child: BottomNavigationBar(
               onTap: _selectPage,
-              backgroundColor: Theme.of(context).primaryColor,
-              selectedItemColor: AppColors.kCategorypink2Color,
+              backgroundColor: AppColors.kWhiteColor,
+              selectedItemColor: AppColors.kCategorypinkColor,
               currentIndex: _selectedPageIndex,
               unselectedItemColor: Colors.grey.shade700,
               items: [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home),
                   label: 'Inicio',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Mdi.cart),
-                  label: 'Carrito',
-
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Mdi.emailCheckOutline),
@@ -88,7 +79,6 @@ class _BottomBarDeliveryState extends State<BottomBarDelivery> {
                     Icons.shopping_bag,
                   ),
                   label: 'Mis Pedidos',
-
                 ),
               ],
             ),

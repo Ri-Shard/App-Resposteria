@@ -42,7 +42,6 @@ class _UploadDeliveryScreenState extends State<UploadDeliveryScreen> {
     RequiredValidator(errorText: 'La Placa del vehiculo es Requerida'),
     MaxLengthValidator(7, errorText: 'Cantidad de caracteres excedidos'),
     MinLengthValidator(6, errorText: 'Pocos caracteres'),
-    PatternValidator(r'^([A-Z]{3}[-][0-9]{3})', errorText: 'Placa Invalida')
   ]);
 
   final numValidator = MultiValidator([
