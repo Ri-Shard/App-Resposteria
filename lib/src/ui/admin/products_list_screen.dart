@@ -71,7 +71,7 @@ class _ProductListState extends State<ProductList> {
       direction: DismissDirection.startToEnd,
       onDismissed: (direction) {
         setState(() {
-          producsController.deleteProduct(product.uid.toString());
+          producsController.deleteProducts(product.uid.toString());
         });
       },  
             background: Container(

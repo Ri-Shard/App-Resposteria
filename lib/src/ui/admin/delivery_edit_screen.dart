@@ -109,7 +109,7 @@ class EditDeliveryPage extends StatelessWidget {
             ),
             TextButton(onPressed: (){
                Get.offAll(()=>DomiciliariosPage());
-              deliveryController.deleteDelivery(delivery.id.toString())();
+              deliveryController.deleteD(delivery.id.toString());
             }, child: Text("Eliminar Cuenta", style: TextStyle(color: Colors.red),)),
 
                 ],
@@ -120,7 +120,7 @@ class EditDeliveryPage extends StatelessWidget {
   }
   updateToStorage() {
     if (_formKey.currentState?.validate() == true) {
-         deliveryController.updateDeliveryData(delivery.id.toString())();
+         deliveryController.updateD(delivery.id.toString())();
       }else{
       Get.snackbar("Error", "Digite los campos");
     }

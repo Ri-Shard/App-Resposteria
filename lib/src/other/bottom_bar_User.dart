@@ -14,10 +14,10 @@ class BottomBarUser extends StatefulWidget {
   @override
   _BottomBarUserState createState() => _BottomBarUserState();
 }
+  int selectedPageIndex = 0;
 
 class _BottomBarUserState extends State<BottomBarUser> {
  late List<Map<String, Widget>> _pages;
-  int _selectedPageIndex = 0;
 
   @override
   void initState() {
@@ -43,14 +43,14 @@ class _BottomBarUserState extends State<BottomBarUser> {
 
   void _selectPage(int index) {
     setState(() {
-      _selectedPageIndex = index;
+      selectedPageIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedPageIndex]['page'],
+      body: _pages[selectedPageIndex]['page'],
       bottomNavigationBar: BottomAppBar(
         // color: Colors.white,
         shape: CircularNotchedRectangle(),
@@ -72,7 +72,7 @@ class _BottomBarUserState extends State<BottomBarUser> {
               onTap: _selectPage,
               backgroundColor: Theme.of(context).primaryColor,
               selectedItemColor: AppColors.kCategorypink2Color,
-              currentIndex: _selectedPageIndex,
+              currentIndex: selectedPageIndex,
               unselectedItemColor: Colors.grey.shade700,
               items: [
                 BottomNavigationBarItem(
@@ -84,6 +84,7 @@ class _BottomBarUserState extends State<BottomBarUser> {
                   label: 'Carrito',
 
                 ),
+                
                 BottomNavigationBarItem(
                   activeIcon: null,
                   icon: Icon(null),
@@ -118,7 +119,7 @@ class _BottomBarUserState extends State<BottomBarUser> {
           elevation: 4,
           child: Icon(Icons.search),
           onPressed: () => setState(() {
-            _selectedPageIndex = 2;
+            selectedPageIndex = 2;
           }),
         ),
       ),

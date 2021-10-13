@@ -5,16 +5,16 @@ class AddressModel {
   static const CITY = "city";
   static const BARRIO = "barrio";
   static const NAME = "name";
-  static const DATE = "date";  
+  static const ID = "id";  
 
   String? city;
   String? barrio;
   String? name;
   String? address;
-  String? date;
+  String? id;
 
 
-AddressModel({this.address,this.name,this.city,this.barrio,this.date});
+AddressModel({this.address,this.name,this.city,this.barrio,this.id});
 
 
   AddressModel fromSnapshot(DocumentSnapshot snapshot){
@@ -23,7 +23,7 @@ AddressModel({this.address,this.name,this.city,this.barrio,this.date});
     order.city = snapshot[CITY];
     order.barrio = snapshot[BARRIO];
     order.address = snapshot[ADDRESS];
-    order.date = snapshot[DATE];
+    order.id = snapshot[ID];
     
     return order;
   }
@@ -33,7 +33,7 @@ AddressModel({this.address,this.name,this.city,this.barrio,this.date});
     city = data[CITY];
     name= data[NAME];
     address = data[ADDRESS];
-    date = data[DATE];
+    id = data[ID];
   }
   
   Map toJson() => {
@@ -41,7 +41,7 @@ AddressModel({this.address,this.name,this.city,this.barrio,this.date});
       "city" : city,
       "barrio" : barrio ,   
       "name" : name  ,  
-      "date" : date    
+      "id" : id    
   };
 
 }

@@ -1,3 +1,5 @@
+import 'package:appreposteria/src/model/cart_item_model.dart';
+import 'package:appreposteria/src/other/cart_item_widget.dart';
 import 'package:appreposteria/src/ui/admin/admin_home_screen.dart';
 import 'package:appreposteria/src/ui/auth/auth_screen.dart';
 import 'package:appreposteria/src/ui/auth/login_screen.dart';

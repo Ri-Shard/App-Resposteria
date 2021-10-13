@@ -209,7 +209,6 @@ class _UploadProductsState extends State<UploadProducts> {
         ),
         TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          keyboardType: TextInputType.numberWithOptions(),
           validator: nameValidator,
           controller: producsController.name,
           obscureText: false,

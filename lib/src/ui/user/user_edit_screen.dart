@@ -1,4 +1,5 @@
 import 'package:appreposteria/src/constants/controllers.dart';
+import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/other/bottom_bar_User.dart';
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:flutter/material.dart';
@@ -162,7 +163,7 @@ bool? q = false;
 
   updateToStorage() {
     if (_formKey.currentState?.validate() == true) {
-      authController.updateUserData();
+      authController.updateUserDat(auth.currentUser);
     }else{
       Get.snackbar("Error", "Digite los campos");
     }

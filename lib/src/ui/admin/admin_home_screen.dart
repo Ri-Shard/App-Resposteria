@@ -31,7 +31,7 @@ void initState() {
           actions: [
            IconButton(onPressed: (){
              Get.to(()=>ProductList());
-           }, icon: Icon(Mdi.accountDetailsOutline),color: Colors.black)   
+           }, icon: Icon(Mdi.listStatus),color: Colors.black)   
           ],
           title: Text("Reposteria App",  
                 style: TextStyle(

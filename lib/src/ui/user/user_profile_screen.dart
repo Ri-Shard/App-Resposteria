@@ -1,4 +1,5 @@
 import 'package:appreposteria/src/constants/controllers.dart';
+import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/other/bottom_bar_User.dart';
 import 'package:appreposteria/src/ui/user/user_edit_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -136,7 +137,7 @@ class ProfileUI2 extends StatelessWidget {
               height: 20,
             ),
             TextButton(onPressed: (){
-              authController.deleteUserAccount();
+              authController.deleteUserAccount(auth.currentUser);
             }, child: Text("Eliminar Cuenta", style: TextStyle(color: Colors.red),)),
 
             SizedBox(

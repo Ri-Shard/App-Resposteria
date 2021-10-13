@@ -13,10 +13,12 @@ class OrderController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    checkAddress();
+    checkOrder();
   }
 
-  addOrderToFirestore(String userUid) {
+  String addOrderToFirestore(String userUid) {
+    String message;
+    try {
     String dia = DateTime.now().day.toString();
     String mes = DateTime.now().month.toString();
     String year = DateTime.now().year.toString();
@@ -40,25 +42,34 @@ class OrderController extends GetxController {
           cartController.changeCartTotalPrice(authController.myuser).toString(),
       "cart": FieldValue.arrayUnion(authController.myuser.cartItemsToJson())
     });
+    message = "Orden Guardada con exito";
+    Get.snackbar("Enhorabuena", message);
+    return message;
+    } catch (e) {
+      message = "Se produjeron errores al guardar la orden";
+       Get.snackbar("Error", message);
+       return message;
+    }
   }
 
-  listenToOrder() => firebaseFirestore
-      .collection(usersCollection)
-      .snapshots();
+  listenToOrder() => firebaseFirestore.collection(usersCollection).snapshots();
 
-  List<OrderModel> checkAddress() {
-    orderlist.bindStream(getAddress());
+  List<OrderModel> checkOrder() {
+    orderlist.bindStream(getOrders());
+    return orderlist;
+  }
+  List<OrderModel> checkOrders() {
+    OrderModel order = new OrderModel();
+    orderlist.add(order);
     return orderlist;
   }
 
-  Stream<List<OrderModel>> getAddress() => firebaseFirestore
-      .collection(usersCollection)
-      .snapshots()
-      .map((event) =>
+  Stream<List<OrderModel>> getOrders() =>
+      firebaseFirestore.collection(usersCollection).snapshots().map((event) =>
           event.docs.map((e) => OrderModel.fromMap(e.data())).toList());
 
   updateDeliveryOrder(OrderModel order, String delivery, String deliveryname) {
-    deleteOrder(order);
+    deleteOrde(order);
     firebaseFirestore.collection(usersCollection).doc(order.dat).set({
       "uid": order.uid,
       "name": order.name,
@@ -74,25 +85,36 @@ class OrderController extends GetxController {
     });
   }
 
-  updateUserOrder(OrderModel order) {
-    deleteOrder(order);
+  String updateUserOrde(OrderModel order, String status) {
+    String message;
+    try {    
+    deleteOrde(order);
     firebaseFirestore.collection(usersCollection).doc(order.dat).set({
       "uid": order.uid,
       "name": order.name,
       "address": order.address,
       "date": order.date,
       "dat": order.dat,
-      "status": "RECIBIDO POR USUARIO",
+      "status": status,
       "delivery": order.delivery,
       "deliveryname": order.deliveryname,
       "clientrating": order.clientrating.toString(),
       "total": order.total,
       "cart": FieldValue.arrayUnion(order.cartItemsToJson())
+
     });
+    message = "Orden modificada con exito";
+    Get.snackbar("Enhorabuena", message);
+    return message;
+    } catch (e) {
+      message ="Se produjeron errores al modificar la orden";
+       Get.snackbar("Error", message);
+       return message;
+    }
   }
 
   updateOrder(OrderModel order) {
-    deleteOrder(order);
+    deleteOrde(order);
     firebaseFirestore.collection(usersCollection).doc(order.dat).set({
       "uid": order.uid,
       "name": order.name,
@@ -108,7 +130,53 @@ class OrderController extends GetxController {
     });
   }
 
-  deleteOrder(OrderModel order) {
+  String deleteOrde(OrderModel order) {
+    String message;
+    try {
     firebaseFirestore.collection(usersCollection).doc(order.dat).delete();
+    message = "Orden Borrada con exito";
+     Get.snackbar("Enhorabuena", message);
+     return message;
+    } catch (e) {
+      message = "Se produjeron errores al eliminar la orden";
+      Get.snackbar("Error", message);
+      return message;
+    }
+  }
+
+     String registerTest(){
+      bool flag = false;
+       if(flag == true){
+        print("Orden Guardada con exito");
+        return "Orden Guardada con exito";
+       }else{
+        print("Se produjeron errores al guardar la orden");
+       return "Se produjeron errores al guardar la orden";
+       }
+    }
+    Future<String> deleteOrder(String id) async {
+    String message;
+      bool e = false;
+      if (e == true) {
+      message = "Orden Borrada con exito";
+      print(message);
+      return message;
+      } else {
+      message= "Se produjeron errores al eliminar la orden";
+        print(message);
+        return message;
+      }
+  }
+    String updateUserOrder(OrderModel order, String status) {
+    String message;
+      bool exists = false;
+      if (exists == true) {
+        message = "Orden modificada con exito";
+        print(message);
+        return message;
+      } else {
+        message = "Se produjeron errores al modificar la orden";
+        return message;
+      }
   }
 }

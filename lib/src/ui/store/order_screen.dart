@@ -26,7 +26,7 @@ class _OrderScreenState extends State<OrderScreen> {
     super.initState();
     authController.listenToUser();
     orderController.listenToOrder();
-    long = orderController.checkAddress().length;
+    long = orderController.checkOrder().length;
   }
 
   @override
@@ -74,7 +74,7 @@ class _OrderScreenState extends State<OrderScreen> {
                         setState(() {
                           if (snapshot.data!.docs[_index].get("status") !=
                               "ENTREGADO") {
-                            orderController.deleteOrder(ordelmodel
+                            orderController.deleteOrde(ordelmodel
                                 .fromSnapshot(snapshot.data!.docs[_index]));
                           } else {
                             Get.snackbar("No puede eliminar",
@@ -210,7 +210,7 @@ class _OrderScreenState extends State<OrderScreen> {
                         ),
                         TextButton.icon(onPressed: () {
                           orderController.updateUserOrder(ordelmodel
-                                .fromSnapshot(snapshot.data!.docs[index]));}, icon: Icon(Icons.arrow_right_alt), label: Text("Evaluar Pedido")), 
+                                .fromSnapshot(snapshot.data!.docs[index]),"RECIBIDO POR USUARIO");}, icon: Icon(Icons.arrow_right_alt), label: Text("Evaluar Pedido")), 
                       ],
                     ))
               ],

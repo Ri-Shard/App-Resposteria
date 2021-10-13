@@ -165,7 +165,7 @@ void initState() {
       direction: DismissDirection.startToEnd,
       onDismissed: (direction) {
         setState(() {
-          addressController.deleteAddress(addressModel.date);
+          addressController.deleteAddres(addressModel.id);
           initState();
           _onRefresh();
         });

@@ -17,10 +17,14 @@ class CartController extends GetxController {
     super.onReady();
   }
 
-  void addProductToCart(ProductModel product) {
+  String addProductToCart(ProductModel product) {
+    String message;
     try {
-      if (_isItemAlreadyAdded(product)) {
-        Get.snackbar("Revisa tu carrito", "${product.name} ya se encuentra añadido");
+      bool itssaved = _isItemAlreadyAdded(product);
+      if (itssaved) {
+        message = "Revisa tu carrito ${product.name} ya se encuentra añadido";
+        Get.snackbar("Error", message);
+        return message;
       } else {
         String itemId = Uuid().toString();
         authController.updateCart({
@@ -38,42 +42,82 @@ class CartController extends GetxController {
             }
           ])
         });
-        Get.snackbar("Producto agregado", "${product.name} fue agregado a tu carrito");
+        message = "${product.name} fue agregado a tu carrito";
+        Get.snackbar("Enhorabuena", message);
+        return message;
       }
+    } catch (e) {
+      message = "Error, No se pudo agregar este producto";
+      Get.snackbar("Error", message);
+      return message;
+    }
+  }
+
+  void addcartItemModelToCart(CartItemModel product) {
+    try {
+      String itemId = Uuid().toString();
+      authController.updateCart({
+        "cart": FieldValue.arrayUnion([
+          {
+            "id": itemId,
+            "name": product.name,
+            "quantity": 1,
+            "price": product.price,
+            "image": product.image,
+            "productId": product.productId,
+            "cost": product.price
+          }
+        ])
+      });
     } catch (e) {
       Get.snackbar("Error", "No se pudo agregar este producto");
       debugPrint(e.toString());
     }
   }
 
-   removeCartItem(CartItemModel cartItem)  {
-    try { 
+  removeCartItem(CartItemModel cartItem) {
+    try {
       authController.updateCart({
-          "cart" : FieldValue.arrayRemove([cartItem.toJson()])
+        "cart": FieldValue.arrayRemove([cartItem.toJson()])
       });
-            authController.listenToUser();
+      authController.listenToUser();
     } catch (e) {
       Get.snackbar("Error", "No se pudo remover este producto");
     }
   }
-  remove(String productid) {
+
+  String remove(String productid) {
+    String message;
+    try {  
+    authController.listenToUser();
     List<CartItemModel>? tmpcart = authController.myuser.cart;
     var toRemove = [];
-
-    tmpcart!.forEach((cartitem) {
-      if(productid == cartitem.productId){
-        toRemove.add(cartitem);
-      }
+    if (tmpcart!.length == 1) {
+      clearCart();
+    } else {
+      tmpcart.forEach((cartitem) {
+        if (productid == cartitem.productId) {
+          toRemove.add(cartitem);
+        }
+      });
+    }
+    tmpcart.removeWhere((element) => toRemove.contains(element));
+    clearCart();
+    tmpcart.forEach((element) {
+      addcartItemModelToCart(element);
     });
-        tmpcart.removeWhere((element) => toRemove.contains(element));
-         authController.updateCart({
-        "cart": FieldValue.arrayUnion(tmpcart)
-      });
+        message = "Eliminado con exito";
+        Get.snackbar("Enhorabuena", message);
+        return message;
+    } catch (e) {
+     message = "No se pudo remover este producto";
+     Get.snackbar("Error", message);
+     return message;
+    }
   }
+
   clearCart() {
-        authController.updateCart({
-        "cart": []
-      });
+    authController.updateCart({"cart": []});
   }
 //guardar el carro menos el item que voy guardar, despues hacer un merge
 
@@ -81,43 +125,49 @@ class CartController extends GetxController {
     totalCartPrice = 0;
     if (userModel.cart!.isNotEmpty) {
       userModel.cart!.forEach((cartItem) {
-       totalCartPrice = (totalCartPrice + (cartItem.cost!));     
+        totalCartPrice = (totalCartPrice + (cartItem.cost!));
       });
-    return totalCartPrice;
+      return totalCartPrice;
     }
     return totalCartPrice;
   }
 
-  bool _isItemAlreadyAdded(ProductModel product) =>
-      authController.myuser.cart!
-          .where((item) => item.productId == product.uid)
-          .isNotEmpty;
+  bool _isItemAlreadyAdded(ProductModel product) => authController.myuser.cart!
+      .where((item) => item.productId == product.uid)
+      .isNotEmpty;
 
-  void decreaseQuantity(CartItemModel item){
-    if(item.quantity == 1){
+  void decreaseQuantity(CartItemModel item) {
+    if (item.quantity == 1) {
       remove(item.name.toString());
-    }else{
+    } else {
       remove(item.name.toString());
       item.quantity = (item.quantity - 1);
-          authController.updateCart({
+      authController.updateCart({
         "cart": FieldValue.arrayUnion([item.toJson()])
       });
     }
   }
-    void increaseQuantity(CartItemModel item){
-      if(item.quantity >= 1){
 
-      }else{}
-      remove(item.name.toString());     
-       item.quantity = (item.quantity + 1);
-      logger.i({"quantity": item.quantity});
-          authController.updateCart({
-        "cart": FieldValue.arrayUnion([item.toJson()])
-      });
+  void increaseQuantity(CartItemModel item) {
+    if (item.quantity >= 1) {
+    } else {}
+    remove(item.name.toString());
+    item.quantity = (item.quantity + 1);
+    logger.i({"quantity": item.quantity});
+    authController.updateCart({
+      "cart": FieldValue.arrayUnion([item.toJson()])
+    });
   }
+
+  
+       String registerTest(ProductModel product){
+      bool flag = false;
+       if(flag == true){
+        print("${product.name} fue agregado a tu carrito");
+        return "${product.name} fue agregado a tu carrito";
+       }else{
+        print("Revisa tu carrito ${product.name} ya se encuentra añadido");
+       return "Revisa tu carrito ${product.name} ya se encuentra añadido";
+       }
+    }
 }
-
-
-
-
-

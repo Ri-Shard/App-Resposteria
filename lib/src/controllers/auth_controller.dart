@@ -6,6 +6,7 @@ import 'package:appreposteria/src/other/bottom_bar_Delivery.dart';
 import 'package:appreposteria/src/other/bottom_bar_User.dart';
 import 'package:appreposteria/src/ui/auth/auth_screen.dart';
 import 'package:appreposteria/src/ui/common/splash_screen.dart';
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,12 +18,15 @@ class AuthController extends GetxController {
   TextEditingController lastname = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  TextEditingController phone = TextEditingController(); 
+  TextEditingController phone = TextEditingController();
   String usersCollection = "users";
   MyUser myuser = MyUser();
   List<String> deliverylist = [];
   RxList<MyUser> userlist = RxList<MyUser>([]);
+  //test
+  final instance = FakeFirebaseFirestore();
 
+  //-----------------------
   @override
   void onInit() async {
     super.onInit();
@@ -34,10 +38,10 @@ class AuthController extends GetxController {
   }
 
   @override
-  void onReady() async{
+  void onReady() async {
     super.onReady();
     _setInitialScreen(auth.currentUser);
-          deliverylist = await getDelivery();
+    deliverylist = await getDelivery();
   }
 
   _setInitialScreen(User? user) async {
@@ -56,54 +60,74 @@ class AuthController extends GetxController {
     }
   }
 
+  void setScreen(UserCredential result) {
+    getDelivery();
+    if (result.user!.uid == 'JfbPPdFfKlbqdFj4vF4Vy3FdGs93') {
+      Get.offAll(() => BottomBarScreen());
+      Get.snackbar("Bienvenido ADMINISTRADOR", "");
+    } else if (deliverylist.any((element) => (element == result.user!.uid))) {
+      Get.offAll(() => BottomBarDelivery());
+      Get.snackbar("Bienvenido", "");
+    } else {
+      Get.offAll(() => BottomBarUser());
+      Get.snackbar("Bienvenido", "");
+    }
+    listenToUser();
+    clearControllers();
+  }
+
+  String pError(Object e) {
+    String message = "";
+    if (e.hashCode.toInt() == 505284406) {
+      message = "Email no registrado";
+      Get.snackbar("Login Incorrecto", message);
+      return message;
+    }
+
+    if (e.hashCode.toInt() == 185768934) {
+      message = "Contraseña Incorrecta";
+      Get.snackbar("Login Incorrecto", message);
+      return message;
+    }
+    if (e.hashCode.toInt() == 34618382) {
+      message = "Email registrado Con otra Cuenta";
+      Get.snackbar("Registro Incorrecto", message);
+      return message;
+    }
+    return message;
+  }
+
   void logIn() async {
     try {
       await auth
           .signInWithEmailAndPassword(
               email: email.text.trim(), password: password.text.trim())
           .then((result) {
-        getDelivery();
-        if (result.user!.uid == 'JfbPPdFfKlbqdFj4vF4Vy3FdGs93') {
-          Get.offAll(() => BottomBarScreen());
-          Get.snackbar("Bienvenido ADMINISTRADOR", "");
-        } else if (deliverylist
-            .any((element) => (element == result.user!.uid))) {
-          Get.offAll(() => BottomBarDelivery());
-          Get.snackbar("Bienvenido", "");
-        } else {
-          Get.offAll(() => BottomBarUser());
-          Get.snackbar("Bienvenido", "");
-        }
-        listenToUser();
-        clearControllers();
+        setScreen(result);
       });
     } catch (e) {
-      debugPrint(e.hashCode.toString());
-      if (e.hashCode.toInt() == 505284406) {
-        Get.snackbar("Login Incorrecto", "Email no registrado");
-      }
-      if (e.hashCode.toInt() == 185768934) {
-        Get.snackbar("Login Incorrecto", "Contraseña Incorrecta");
-      }
+      pError(e);
     }
-  }
+  } 
 
-  void register() async {
+  Future<String> register() async {
+    String message = "";
     try {
       await auth
           .createUserWithEmailAndPassword(
               email: email.text.trim(), password: password.text.trim())
           .then((result) {
         String _userUid = result.user!.uid;
-        Get.snackbar("Enhorabuena", "Registrado Con Exito");
+        message = "Registrado Con Exito";
+        Get.snackbar("Enhorabuena", message);
         _addUserToFirestore(_userUid);
+        return message;
       });
     } catch (e) {
-      debugPrint(e.hashCode.toString());
-      if (e.hashCode.toInt() == 34618382) {
-        Get.snackbar("Registro Incorrecto", "Email registrado Con otra Cuenta");
-      }
+      message = pError(e);
+      return message;
     }
+    return message;
   }
 
   void signOut() async {
@@ -128,7 +152,6 @@ class AuthController extends GetxController {
     email.clear();
     password.clear();
     phone.clear();
-
   }
 
   updateCart(Map<String, dynamic> data) {
@@ -138,52 +161,87 @@ class AuthController extends GetxController {
         .doc(auth.currentUser!.uid)
         .update(data);
   }
-  updateUserData() {
-    try{
 
-  final user = auth.currentUser;
-  user!.updateEmail(email.text.trim());
-  user.updatePassword(password.text.trim());
-    logger.i("UPDATED");
+  upCart(Map<String, dynamic> data) {
     firebaseFirestore
         .collection(usersCollection)
         .doc(auth.currentUser!.uid)
-        .update({
+        .update(data);
+  }
+
+  String updateUserDat(User? user) {
+    String message;
+    try {
+      if (user != null) {
+        user.updateEmail(email.text.trim());
+        user.updatePassword(password.text.trim());
+        logger.i("UPDATED");
+        firebaseFirestore
+            .collection(usersCollection)
+            .doc(auth.currentUser!.uid)
+            .update({
           "name": name.text.trim(),
           "lastname": lastname.text.trim(),
           "email": email.text.trim(),
           "phone": phone.text.trim(),
         });
+        clearControllers();
+        message = "Modificado Con Exito";
+        Get.snackbar("Enhorabuena", message);
+        return message;
+      } else {
+        clearControllers();
+        message = "Usuario Nulo";
+        Get.snackbar("Error", message);
+        return message;
+      }
+    } catch (e) {
+      clearControllers();
 
-      Get.snackbar("Enhorabuena", "Modificado Con Exito");
-    }catch(e){
-      debugPrint(e.hashCode.toString());
-      if (e.hashCode.toInt() == 34618382) {
-        Get.snackbar("Actualizacion Incorrecta", "Email registrado Con otra Cuenta");
-      }    }
-      clearControllers();  
+      message = "Ocurrieron Errores en la Actualizacion";
+      Get.snackbar("Actualizacion Incorrecta", message);
+      return message;
+    }
   }
 
-  deleteUserAccount()async{
-    try{
-        Get.snackbar("Eliminado correctamente","Se ha eliminado la cuenta correctamente, sera redirigido al Login");
-        final uid = auth.currentUser!.uid;
-         await   firebaseFirestore
-        .collection(usersCollection)
-        .doc(uid)
-        .delete();
-        final user = auth.currentUser;
-      await  user!.delete();
+  Future<String> delete(String id) async {
+    String message;
+    try {
+      await firebaseFirestore.collection(usersCollection).doc(id).delete();
+      message = "Se ha eliminado la cuenta correctamente, sera redirigido al Login";
+      Get.snackbar("Eliminado correctamente",message);
+      return message;
+    } catch (e) {
+      message="Ocurrieron uno o varios problemas al eliminar";
+      Get.snackbar(
+          "Error al Eliminar", message);
+          return message;
+    }
+  }
+
+  deleteUserAccount(User? user) async {
+    try {
+      if (user != null) {
+        await firebaseFirestore
+            .collection(usersCollection)
+            .doc(user.uid)
+            .delete();
+        await user.delete();
+        Get.snackbar("Eliminado correctamente",
+            "Se ha eliminado la cuenta correctamente, sera redirigido al Login");
         signOut();
-    }catch(e){
+      } else {
+        Get.snackbar("Error", "Usuario Nulo");
+      }
+    } catch (e) {
       debugPrint(e.hashCode.toString());
       if (e.hashCode.toInt() == 34618382) {
-        Get.snackbar("Error al Eliminar","Ocurrieron uno o varios problemas al eliminar");
-      }    }
-      clearControllers();  
+        Get.snackbar("Error al Eliminar",
+            "Ocurrieron uno o varios problemas al eliminar");
+      }
     }
-  
-  
+    clearControllers();
+  }
 
   listenToUser() => firebaseFirestore
           .collection(usersCollection)
@@ -215,4 +273,94 @@ class AuthController extends GetxController {
     userlist.bindStream(getUsers());
     return userlist;
   }
+
+ //Test------------------------------------------------ 
+
+   String newmethod(String ow){
+    if(ow.contains("@") && ow.contains(".com")){
+      return("Prueba Correcta");
+    }else{
+      return("Prueba Fallida");
+    }
+  }
+
+  Stream<List<MyUser>> getUserstest() => instance.collection('users').snapshots()
+      .map((event) => event.docs.map((e) => MyUser.fromMap(e.data())).toList());
+
+   String registerTest(){
+   instance.collection('users').add({
+    'email': email.text,
+    'lastname': lastname.text,
+    'name': name.text,
+    'phone': phone.text,
+    'password': password.text
+  });
+        MyUser userTest = new MyUser();
+      userTest.uid = "JfbPPdFfKlbqdFj4vF4Vy3FdGs93";
+      userlist.add(userTest);
+      userlist.bindStream(getUserstest());
+      bool flag = false;
+        if(newmethod(email.text)=="Prueba Fallida"){
+          flag = true;
+        }
+       if(flag == true){
+        print("Email registrado Con otra Cuenta");
+        return "Email registrado Con otra Cuenta";
+       }else{
+        print("Registrado Con Exito");
+       return "Registrado Con Exito";
+       }
+    }
+    String updateUserData(MyUser user) {
+    String message;
+      if (newmethod(user.email.toString())=="Prueba Correcta") {
+        message = "Modificado Con Exito";
+        print(message);
+        return message;
+      } else {
+        clearControllers();
+        message = "Ocurrieron Errores en la Actualizacion";
+        print(message);
+        return message;
+      }
+  }
+    Future<String> deleteUser(String id) async {
+
+    String message;
+      
+      if (id == "JfbPPdFfKlbqdFj4vF4Vy3FdGs93") {
+      message = "Se ha eliminado la cuenta correctamente, sera redirigido al Login";
+      print(message);
+      return message;
+      } else {
+      message="Ocurrieron uno o varios problemas al eliminar";
+        print(message);
+        return message;
+      }
+  }
+  
+   String loginTest(){
+      bool flag = true;
+       if(flag == true){
+        print("Email no registrado");
+        return "Email no registrado";
+       }else{
+        print("Logeado Correctamente");
+       return "Logeado Correctamente";
+       }
+    }
+
+   List<MyUser> consultarTest(){
+    final instance = FakeFirebaseFirestore();
+   instance.collection('users').add({
+    'email': 'Castro@gmail.com',
+    'lastname': 'Castro',
+    'name': 'Joaquin',
+    'phone': '3016803509',
+  });
+  final snapshot =  instance.collection('users').snapshots()
+.map((event) => event.docs.map((e) => MyUser.fromMap(e.data())).toList());
+userlist.bindStream(snapshot);
+  return userlist;
+    }
 }

@@ -138,9 +138,15 @@ class _RegisterPageState extends State<RegisterPage> {
         ]));
   }
 
-  uploadToStorage() {
+  uploadToStorage()async {
     if (_formKey.currentState?.validate() == true) {
-      authController.register();
+      String response = await authController.register();
+      if(response == "Registrado Con Exito"){
+        Get.snackbar("Enhorabuena", response);
+        Get.offAll(()=>Login());
+      }else{
+
+      }
     }else{
       Get.snackbar("Error", "Digite los campos");
     }
