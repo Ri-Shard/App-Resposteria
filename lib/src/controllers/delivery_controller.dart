@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/model/delivery_model.dart';
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,9 +18,10 @@ class DeliveryController extends GetxController {
   TextEditingController phone = TextEditingController();
   DeliveryModel delivery = DeliveryModel();
   String collection = "delivery";
-//test
-  RxList<DeliveryModel> deliverysTest = RxList<DeliveryModel>([]);
 
+//test------------------------
+  final instanceTest = FakeFirebaseFirestore();
+  RxList<DeliveryModel> deliverysTest = RxList<DeliveryModel>([]);
 
   @override
   onReady() {
@@ -32,18 +34,6 @@ class DeliveryController extends GetxController {
   List<DeliveryModel> checkDelivery() {
     deliverys.bindStream(getAllDeliverys());
     return deliverys;
-  }
-  List<DeliveryModel> checkDeliverys() {
-    DeliveryModel delivery = DeliveryModel();
-    delivery.email= "pedro@gmail.com";
-    delivery.name = "Pedro";
-    delivery.placa = "ASD123";
-    delivery.vehiculo= "Boxer";
-    delivery.cedula ="49789542";
-    delivery.phone = "3018964512";
-    delivery.estado = "ACTIVO";
-    deliverysTest.add(delivery);
-    return deliverysTest;
   }
 
   listenToUser() => firebaseFirestore
@@ -66,10 +56,9 @@ class DeliveryController extends GetxController {
           .toList());
 
   String addDeliveryToFirestore(String uid) {
-
     String message;
     try {
-          String message;
+      String message;
       firebaseFirestore.collection(collection).doc(uid).set({
         "name": name.text.trim(),
         "placa": placa.text.replaceAll('-', '').trim(),
@@ -143,12 +132,15 @@ class DeliveryController extends GetxController {
       return message;
     }
   }
-  delete(String iddelivery){
+
+  delete(String iddelivery) {
     deleteDelivery(iddelivery);
   }
-updateD(String iddelivery){
-updateDelivery(iddelivery);
-}
+
+  updateD(String iddelivery) {
+    updateDelivery(iddelivery);
+  }
+
   bool searchDelivery(String id) {
     if (authController.deliverylist.contains(id)) {
       return true;
@@ -187,41 +179,101 @@ updateDelivery(iddelivery);
       return message;
     }
   }
-  
-   String registerTest(){
-      bool flag = true;
-       if(flag == true){
-        print("Se ha registrado correctamenta el Domiciliario");
-        return "Se ha registrado correctamenta el Domiciliario";
-       }else{
-        print("Problemas en el Registro");
-       return "Problemas en el Registro";
-       }
-    }
 
-      String updateDeliveryData(String iddelivery) {
-    String message;
-      bool exists = false;
-      if (exists == true) {
-        message = "Modificado Con Exito";
-        print(message);
-        return message;
-      } else {
-        message = "Domiciliario No existe";
-        return message;
-      }
+  //Test--------------------------------------
+  String newmethod(String ow) {
+    if (ow.contains("@") && ow.contains(".com")) {
+      return ("Prueba Correcta");
+    } else {
+      return ("Prueba Fallida");
+    }
   }
-      Future<String> deleteDelivery(String id) async {
+
+  Stream<List<DeliveryModel>> getDeliverystest() =>
+      instanceTest.collection(collection).snapshots().map((event) =>
+          event.docs.map((e) => DeliveryModel.fromMap(e.data())).toList());
+
+  String registerTest() {
+    instanceTest.collection(collection).add({
+      'email': email.text,
+      'name': name.text,
+      'phone': phone.text,
+      'estado': "ACTIVO",
+      'cedula': cedula.text,
+      'placa': placa.text,
+      'vehiculo': vehiculo.text,
+    });
+    DeliveryModel deliveryTest = new DeliveryModel();
+    deliveryTest.cedula = cedula.text.trim();
+    deliveryTest.email = email.text.trim();
+    deliveryTest.name = name.text.trim();
+    deliveryTest.estado = "ACTIVO";
+    deliveryTest.placa = placa.text.trim();
+    deliveryTest.vehiculo = vehiculo.text.trim();
+    deliveryTest.phone = phone.text.trim();
+
+    deliverysTest.add(deliveryTest);
+    deliverysTest.bindStream(getDeliverystest());
+
+    bool flag = false;
+    if (newmethod(email.text) == "Prueba Fallida") {
+      flag = true;
+    }
+    if (flag == true) {
+      print("Problemas en el Registro");
+      return "Problemas en el Registro";
+    } else {
+      print("Se ha registrado correctamenta el Domiciliario");
+      return "Se ha registrado correctamenta el Domiciliario";
+    }
+  }
+
+  List<DeliveryModel> checkDeliverys() {
+    DeliveryModel delivery = DeliveryModel();
+    delivery.email = "pedro@gmail.com";
+    delivery.name = "Pedro";
+    delivery.placa = "ASD123";
+    delivery.vehiculo = "Boxer";
+    delivery.cedula = "49789542";
+    delivery.phone = "3018964512";
+    delivery.estado = "ACTIVO";
+    deliverysTest.add(delivery);
+    return deliverysTest;
+  }
+
+  String updateDeliveryData(String iddelivery) {
     String message;
-      bool e = false;
-      if (e == true) {
+    if (iddelivery == "49789542") {
+      instanceTest.collection(collection).doc(iddelivery).update({
+        'email': email.text,
+        'name': name.text,
+        'phone': phone.text,
+        'estado': "ACTIVO",
+        'cedula': cedula.text,
+        'placa': placa.text,
+        'vehiculo': vehiculo.text,
+      });
+      message = "Modificado Con Exito";
+      print(message);
+      return message;
+    } else {
+      message = "Domiciliario No existe";
+      return message;
+    }
+  }
+
+  Future<String> deleteDelivery(String id) async {
+    String message;
+
+    if (id == "49789542") {
+      instanceTest.collection(collection).doc(id).delete();
       message = "Eliminado Con Exito";
       print(message);
       return message;
-      } else {
-      message= "Domiciliario no Existe";
-        print(message);
-        return message;
-      }
+    } else {
+      message = "Domiciliario no Existe";
+      print(message);
+      return message;
+    }
   }
 }

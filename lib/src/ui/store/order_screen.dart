@@ -20,7 +20,6 @@ class _OrderScreenState extends State<OrderScreen> {
   OrderModel ordelmodel = OrderModel();
   bool mostrar = false;
   int? long;
-  double _rating = 0.0;
   @override
   void initState() {
     super.initState();
@@ -205,7 +204,6 @@ class _OrderScreenState extends State<OrderScreen> {
                             }
                           },                          
                           onRatingUpdate: (rating) {
-                                _rating = rating;
                        },
                         ),
                         TextButton.icon(onPressed: () {

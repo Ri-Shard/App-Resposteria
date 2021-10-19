@@ -45,7 +45,7 @@ void main() {
       test('Eliminar Producto', () async{
     ProducsController producsController = new ProducsController();
     String response = "";
-      String idproduct = "9Y43QpQBmXUq9";
+      String idproduct = "9Y3z5vMlz43QpQBmXUq9";
       response =  producsController.deleteProduct(idproduct);
        expect(response, "Eliminado Con Exito");
   }); 

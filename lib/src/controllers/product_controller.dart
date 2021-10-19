@@ -14,10 +14,9 @@ class ProducsController extends GetxController {
   TextEditingController price = TextEditingController();
   TextEditingController uid = TextEditingController();
   late String image;
-    //test
+  //test
   final instanceTest = FakeFirebaseFirestore();
   RxList<ProductModel> productsTest = RxList<ProductModel>([]);
-
   //-----------------------
   String collection = "products";
 
@@ -30,11 +29,6 @@ class ProducsController extends GetxController {
   List<ProductModel> checkProduct() {
     products.bindStream(getAllProducts());
     return products;
-  }
-
-  List<ProductModel> checkProducts() {
-    productsTest.add(ProductModel("uid", "description", "image", "ingredients", "name", 2000));
-    return productsTest;
   }
 
   Stream<List<ProductModel>> getAllProducts() =>
@@ -67,11 +61,13 @@ class ProducsController extends GetxController {
 
   bool searchProduct(String id) {
     bool flag = false;
-  products.forEach((element) {if(element.uid == id){
-    flag = true;
-    }});
- return flag;
-}   
+    products.forEach((element) {
+      if (element.uid == id) {
+        flag = true;
+      }
+    });
+    return flag;
+  }
 
   _clearControllers() {
     name.clear();
@@ -109,8 +105,8 @@ class ProducsController extends GetxController {
           "uid": productid
         });
         _clearControllers();
-        message =  "Modificado Con Exito";
-        Get.snackbar("Enhorabuena",message);
+        message = "Modificado Con Exito";
+        Get.snackbar("Enhorabuena", message);
         return message;
       } else {
         _clearControllers();
@@ -120,54 +116,60 @@ class ProducsController extends GetxController {
       }
     } catch (e) {
       _clearControllers();
-        message = "Se presentaron errores";
-        Get.snackbar("Actualizacion Incorrecta", message);
-        return message;
-    }    
-  }
-     String registerTest(){
-    instanceTest.collection('products').add({
-    'uid': uid.text,
-    'name': name.text,
-    'description': description.text,
-    'ingredients': ingredients.text,
-    'price': price.text,
-    'image': image
-  });
-       if( uid.text != "9Y3z5vMlz43QpQBmXUq9"){
-        print("Producto guardado con exito");
-        return "Producto guardado con exito";
-       }else{
-        print("Se produjeron Errores en la Creacion del producto");
-       return "Se produjeron Errores en la Creacion del producto";
-       }
-
-
-
+      message = "Se presentaron errores";
+      Get.snackbar("Actualizacion Incorrecta", message);
+      return message;
     }
-   String updateProductData(String productid) {
-    String message;
-      bool exists = true;
-      if (exists == true) {
+  }
+
+  //Test-----------------------------------------------------------
+  String registerTest() {
+    instanceTest.collection('products').add({
+      'uid': uid.text,
+      'name': name.text,
+      'description': description.text,
+      'ingredients': ingredients.text,
+      'price': price.text,
+      'image': image
+    });
+    if (uid.text != "9Y3z5vMlz43QpQBmXUq9") {
+      print("Producto guardado con exito");
+      return "Producto guardado con exito";
+    } else {
+      print("Se produjeron Errores en la Creacion del producto");
+      return "Se produjeron Errores en la Creacion del producto";
+    }
+  }
+
+  List<ProductModel> checkProducts() {
+    productsTest.add(ProductModel(
+        "uid", "description", "image", "ingredients", "name", 2000));
+    return productsTest;
+  }
+
+  String updateProductData(String productid) {
+        String message;
+      if (productid=="9Y3z5vMlz43QpQBmXUq9") {
         message = "Modificado Con Exito";
         print(message);
         return message;
       } else {
         message = "Producto No existe";
-        return message;
-      }
-  }
-    String deleteProduct(String id) {
-    String message;
-      bool e = false;
-      if (e == true) {
-      message = "Eliminado Con Exito";
-      print(message);
-      return message;
-      } else {
-      message= "Producto no Existe";
         print(message);
         return message;
       }
+  }
+
+  String deleteProduct(String id) {
+    String message;
+    if (id=="9Y3z5vMlz43QpQBmXUq9") {
+      message = "Eliminado Con Exito";
+      print(message);
+      return message;
+    } else {
+      message = "Producto no Existe";
+      print(message);
+      return message;
+    }
   }
 }

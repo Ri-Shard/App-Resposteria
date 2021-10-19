@@ -34,7 +34,7 @@ void main() {
     domiciliario.name = "Pedro";
     domiciliario.placa = "ASD123";
     domiciliario.vehiculo= "Boxer";
-    domiciliario.cedula ="497895";
+    domiciliario.cedula ="49789542";
     domiciliario.phone = "3018964512";
     domiciliario.estado = "ACTIVO";
       response = deliveryController.updateDeliveryData(domiciliario.cedula.toString());
@@ -45,7 +45,7 @@ void main() {
       test('Eliminar Domiciliario', () async{
     DeliveryController deliveryController = new DeliveryController();
     String response = "";
-      String cedula = "497895";
+      String cedula = "49789542";
       response = await deliveryController.deleteDelivery(cedula);
        expect(response, "Eliminado Con Exito");
   });

@@ -1,4 +1,5 @@
 import 'package:appreposteria/src/constants/app_constants.dart';
+import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/model/user_model.dart';
 import 'package:appreposteria/src/other/bottom_bar_Admin.dart';
@@ -314,6 +315,14 @@ class AuthController extends GetxController {
     String updateUserData(MyUser user) {
     String message;
       if (newmethod(user.email.toString())=="Prueba Correcta") {
+        
+   instance.collection('users').doc(user.uid).update({
+    'email': email.text,
+    'lastname': lastname.text,
+    'name': name.text,
+    'phone': phone.text,
+    'password': password.text
+  });
         message = "Modificado Con Exito";
         print(message);
         return message;
@@ -329,6 +338,7 @@ class AuthController extends GetxController {
     String message;
       
       if (id == "JfbPPdFfKlbqdFj4vF4Vy3FdGs93") {
+        instance.collection(usersCollection).doc(id).delete();
       message = "Se ha eliminado la cuenta correctamente, sera redirigido al Login";
       print(message);
       return message;
@@ -340,8 +350,7 @@ class AuthController extends GetxController {
   }
   
    String loginTest(){
-      bool flag = true;
-       if(flag == true){
+       if(!_validateLogin()){
         print("Email no registrado");
         return "Email no registrado";
        }else{
@@ -362,5 +371,15 @@ class AuthController extends GetxController {
 .map((event) => event.docs.map((e) => MyUser.fromMap(e.data())).toList());
 userlist.bindStream(snapshot);
   return userlist;
+    }
+
+    bool _validateLogin(){
+      String mail = "pepe@gmail.com";
+      String pass = "1111111";
+      if(email.text.toString() == mail && password.text.toString()== pass){
+        return true;
+      }else{
+        return false;
+      }
     }
 }

@@ -1,9 +1,7 @@
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/model/cart_item_model.dart';
-import 'package:appreposteria/src/other/bottom_bar_User.dart';
 import 'package:appreposteria/src/other/custom_text.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:mdi/mdi.dart';
 
 class CartItemWidget extends StatefulWidget {
