@@ -41,7 +41,6 @@ OrderModel({this.clientrating,this.deliveryname,this.delivery,this.address,this.
     order.delivery = snapshot[DELIVERY];
     order.deliveryname = snapshot[DELIVERYNAME];
     order.clientrating = snapshot[CLIENTRATING];
-    order.cart = _convertCartItems(snapshot[CART] ?? []);
     
     return order;
   }
@@ -50,7 +49,7 @@ OrderModel({this.clientrating,this.deliveryname,this.delivery,this.address,this.
     CartItemModel cartmodel = CartItemModel(quantity: 1);
     if(cartFomDb.length > 0){
       cartFomDb.forEach((element) {
-      _result.add(cartmodel.fromMap(element));
+      _result.add(cartmodel.fromMa(element));
     });
     }
     return _result;
@@ -67,7 +66,6 @@ OrderModel({this.clientrating,this.deliveryname,this.delivery,this.address,this.
     delivery = data[DELIVERY];
     clientrating = data[CLIENTRATING];
     deliveryname = data[DELIVERYNAME];
-    cart = cartItemsToJson().cast<CartItemModel>();
   }
 
   List cartItemsToJson() => cart!.map((item) => item.toJson()).toList();

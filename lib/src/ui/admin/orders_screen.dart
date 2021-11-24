@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mdi/mdi.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class OrdersScreen extends StatefulWidget {
   @override
@@ -19,10 +20,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
   late double height, width;
   OrderModel ordermodel = OrderModel();
   String status = "EN PROCESO";
+  int? long;
+
   @override
   void initState() {
     super.initState();
     authController.listenToUser();
+    orderController.listenToOrder();
+    long = orderController.checkOrder().length;
   }
 
   @override
@@ -101,14 +106,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               return ListView.builder(
                   itemCount: length(snapshot),
                   itemBuilder: (BuildContext context, int index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Get.to(() => GoToDeliveryPage());
-                        orderController.ordermodel =
-                            ordermodel.fromSnapshot(snapshot.data!.docs[index]);
-                      },
-                      child: _if(index, snapshot, status),
-                    );
+                    return _if(index, snapshot, status);
                   });
             }),
       );
@@ -118,65 +116,125 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Widget _if(int index, AsyncSnapshot<QuerySnapshot> snapshot, String status) {
     if (snapshot.data!.docs.length != 0) {
       if (snapshot.data!.docs[index].get("status") == status) {
-        return Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: AppColors.kCategorypinkColor),
-              child: new Column(
-                children: <Widget>[
-                  Text(snapshot.data!.docs[index].get("date"),
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  Text(
-                    snapshot.data!.docs[index].get("status"),
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    snapshot.data!.docs[index].get("address"),
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    snapshot.data!.docs[index].get("deliveryname"),
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Column(
-                    children: ordermodel
-                        .fromSnapshot(snapshot.data!.docs[index])
-                        .cart!
-                        .map((cartItem) => SingleOrderWidget(
-                              cartItem: cartItem,
-                            ))
-                        .toList(),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text("Total: \$" + snapshot.data!.docs[index].get("total"),
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  SizedBox(
-                    height: 20,
-                  ),
-                ],
+        return GestureDetector(
+          onTap: () {
+            orderController.checkCart(snapshot.data!.docs[index].get("dat"));
+            showMaterialModalBottomSheet(
+              context: context,
+              builder: (context) => Container(
+                height: 350,
+                child: Column(
+                  children: [
+                    Container(
+                      height: 50,
+                      alignment: Alignment.topCenter,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Carrito",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            width: 100,
+                          ),
+                          Text(
+                            "Total: " +
+                                "\$${snapshot.data!.docs[index].get("total")}",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.end,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Column(
+                      children: orderController.cartlistOrder
+                          .map((cartItem) => SingleOrderWidget(
+                                cartItem: cartItem,
+                              ))
+                          .toList(),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          orderController.ordermodel = ordermodel
+                              .fromSnapshot(snapshot.data!.docs[index]);
+                          Get.to(() => GoToDeliveryPage());
+                        },
+                        child: Text(
+                          "Enviar al domiciliario",
+                          style: TextStyle(color: Colors.red),
+                        )),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-          ],
+            );
+            orderController.cartlistOrder.clear();
+          },
+          child: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: AppColors.kCategorypinkColor),
+                child: new Column(
+                  children: <Widget>[
+                    Text(snapshot.data!.docs[index].get("date"),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold)),
+                    Text(
+                      snapshot.data!.docs[index].get("status"),
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      snapshot.data!.docs[index].get("address"),
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      snapshot.data!.docs[index].get("deliveryname"),
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 2,
+                      width: 300,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text("Total: \$" + snapshot.data!.docs[index].get("total"),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold)),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
         );
       }
- return _noOrders();    } else {
+      return _noOrders();
+    } else {
       return _noOrders();
     }
   }
 
- Widget _noOrders() {
+  Widget _noOrders() {
     return Column(children: [
       Image(image: AssetImage("images/Empty_Orders.png")),
       SizedBox(height: 20),
@@ -184,7 +242,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
       SizedBox(height: 20),
     ]);
-
   }
 
   int length(AsyncSnapshot<QuerySnapshot> snapshot) {

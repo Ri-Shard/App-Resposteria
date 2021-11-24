@@ -27,7 +27,6 @@ class DeliveryController extends GetxController {
   onReady() {
     super.onReady();
     listenToUser();
-    checkDeliverys();
     checkDelivery();
   }
 
@@ -141,12 +140,13 @@ class DeliveryController extends GetxController {
     updateDelivery(iddelivery);
   }
 
-  bool searchDelivery(String id) {
-    if (authController.deliverylist.contains(id)) {
-      return true;
+  searchDelivery(String id) {
+deliverys.forEach((element) {
+      if (element.id == id) {
+      delivery = element;
     } else {
-      return false;
     }
+});
   }
 
   String updateDelivery(String iddelivery) {

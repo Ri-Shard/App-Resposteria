@@ -1,5 +1,7 @@
+
 import 'package:appreposteria/src/constants/app_constants.dart';
 import 'package:appreposteria/src/constants/controllers.dart';
+import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/model/cart_item_model.dart';
 import 'package:appreposteria/src/model/item_model.dart';
 import 'package:appreposteria/src/model/user_model.dart';
@@ -10,164 +12,145 @@ import 'package:uuid/uuid.dart';
 
 class CartController extends GetxController {
   static CartController instance = Get.find();
-  int totalCartPrice = 0;
+  FirebaseFirestore firebaseFirestorethis = FirebaseFirestore.instance;
+  RxList<CartItemModel> cartlist = RxList<CartItemModel>([]);
 
+  int totalCartPrice = 0;
+  @override
+  void onInit() async {
+    super.onInit();
+      checkCart();
+    }
   @override
   void onReady() {
-    super.onReady();
+    checkCart();
+        super.onReady();
   }
 
-  String addProductToCart(ProductModel product) {
-    String message;
+  Stream<List<CartItemModel>> getCart() => firebaseFirestore
+      .collection("users")
+      .doc(auth.currentUser!.uid)
+      .collection("cart")
+      .snapshots()
+      .map((event) => event.docs.map((e) => CartItemModel.fromMap(e.data())).toList());
+
+  List<CartItemModel> checkCart() {
+    cartlist.bindStream(getCart());
+    return cartlist;
+  }
+
+  void addProductToCart(ProductModel product) {
     try {
-      bool itssaved = _isItemAlreadyAdded(product);
-      if (itssaved) {
-        message = "Revisa tu carrito ${product.name} ya se encuentra añadido";
-        Get.snackbar("Error", message);
-        return message;
+      if (_isItemAlreadyAdded(product)) {
+        Get.snackbar("Revisa tu carrito", "${product.name} ya se encuentra añadido");
       } else {
-        String itemId = Uuid().toString();
-        authController.updateCart({
-          "cart": FieldValue.arrayUnion([
-            {
-              "id": itemId,
-              "productId": product.uid,
-              "name": product.name,
-              "description": product.description,
-              "ingredients": product.ingredients,
-              "quantity": 1,
-              "price": product.price,
-              "image": product.image,
-              "cost": product.price
-            }
-          ])
-        });
-        message = "${product.name} fue agregado a tu carrito";
-        Get.snackbar("Enhorabuena", message);
-        return message;
+        firebaseFirestorethis
+        .collection("users")
+        .doc(auth.currentUser!.uid)
+        .collection("cart")
+        .doc(product.uid)
+        .set(product.toMap(product));
+        Get.snackbar("Producto agregado", "${product.name} fue agregado a tu carrito");
       }
-    } catch (e) {
-      message = "Error, No se pudo agregar este producto";
-      Get.snackbar("Error", message);
-      return message;
-    }
-  }
-
-  void addcartItemModelToCart(CartItemModel product) {
-    try {
-      String itemId = Uuid().toString();
-      authController.updateCart({
-        "cart": FieldValue.arrayUnion([
-          {
-            "id": itemId,
-            "name": product.name,
-            "quantity": 1,
-            "price": product.price,
-            "image": product.image,
-            "productId": product.productId,
-            "cost": product.price
-          }
-        ])
-      });
     } catch (e) {
       Get.snackbar("Error", "No se pudo agregar este producto");
       debugPrint(e.toString());
     }
+    checkCart();
   }
 
-  removeCartItem(CartItemModel cartItem) {
+   removeCartItem(String id) async {
     try {
-      authController.updateCart({
-        "cart": FieldValue.arrayRemove([cartItem.toJson()])
-      });
-      authController.listenToUser();
+      await firebaseFirestorethis.collection("users").doc(auth.currentUser!.uid).collection("cart").doc(id).delete();
+      Get.snackbar("Eliminado correctamente", "Se ha eliminado el producto");
     } catch (e) {
       Get.snackbar("Error", "No se pudo remover este producto");
     }
   }
-
-  String remove(String productid) {
-    String message;
-    try {  
-    authController.listenToUser();
-    List<CartItemModel>? tmpcart = authController.myuser.cart;
-    var toRemove = [];
-    if (tmpcart!.length == 1) {
-      clearCart();
-    } else {
-      tmpcart.forEach((cartitem) {
-        if (productid == cartitem.productId) {
-          toRemove.add(cartitem);
-        }
-      });
-    }
-    tmpcart.removeWhere((element) => toRemove.contains(element));
-    clearCart();
-    tmpcart.forEach((element) {
-      addcartItemModelToCart(element);
-    });
-        message = "Eliminado con exito";
-        Get.snackbar("Enhorabuena", message);
-        return message;
-    } catch (e) {
-     message = "No se pudo remover este producto";
-     Get.snackbar("Error", message);
-     return message;
-    }
-  }
-
   clearCart() {
-    authController.updateCart({"cart": []});
+    cartlist.forEach((element)  {
+          firebaseFirestorethis.collection("users").doc(auth.currentUser!.uid).collection("cart").doc(element.productId).delete();
+                Get.snackbar("Vaciado correctamente", "Se ha vaciado el carrito");
+    });
   }
-//guardar el carro menos el item que voy guardar, despues hacer un merge
 
-  int changeCartTotalPrice(MyUser userModel) {
+  int cartTotalPrice(){
     totalCartPrice = 0;
-    if (userModel.cart!.isNotEmpty) {
-      userModel.cart!.forEach((cartItem) {
-        totalCartPrice = (totalCartPrice + (cartItem.cost!));
-      });
-      return totalCartPrice;
-    }
+    cartlist.forEach((element){
+      totalCartPrice = totalCartPrice + element.cost!.toInt();
+    });
+    
     return totalCartPrice;
   }
 
-  bool _isItemAlreadyAdded(ProductModel product) => authController.myuser.cart!
-      .where((item) => item.productId == product.uid)
-      .isNotEmpty;
+  bool _isItemAlreadyAdded(ProductModel product) {
+    bool response = false;
+    response = cartlist.any((element) => element.productId == product.uid);
+    return response;
+    }
 
-  void decreaseQuantity(CartItemModel item) {
-    if (item.quantity == 1) {
-      remove(item.name.toString());
-    } else {
-      remove(item.name.toString());
-      item.quantity = (item.quantity - 1);
-      authController.updateCart({
-        "cart": FieldValue.arrayUnion([item.toJson()])
-      });
+  String decreaseQuantity(CartItemModel item){
+    if(item.quantity == 1){
+      removeCartItem(item.productId.toString());
+      return "";
+    }else{
+      int quantity = item.quantity! - 1;
+        firebaseFirestorethis
+        .collection("users")
+        .doc(auth.currentUser!.uid)
+        .collection("cart")
+        .doc(item.productId)
+        .update({
+          "quantity": quantity
+        });
+        calculatedCost(item);
+        return quantity.toString();
     }
   }
-
-  void increaseQuantity(CartItemModel item) {
-    if (item.quantity >= 1) {
-    } else {}
-    remove(item.name.toString());
-    item.quantity = (item.quantity + 1);
-    logger.i({"quantity": item.quantity});
-    authController.updateCart({
-      "cart": FieldValue.arrayUnion([item.toJson()])
-    });
-  }
-
-  
-       String registerTest(ProductModel product){
-      bool flag = false;
-       if(flag == true){
-        print("${product.name} fue agregado a tu carrito");
-        return "${product.name} fue agregado a tu carrito";
-       }else{
-        print("Revisa tu carrito ${product.name} ya se encuentra añadido");
-       return "Revisa tu carrito ${product.name} ya se encuentra añadido";
-       }
+  String calculatedCost (CartItemModel item){
+    int? cost = item.price;
+    if(item.quantity == 1){
+              firebaseFirestorethis
+        .collection("users")
+        .doc(auth.currentUser!.uid)
+        .collection("cart")
+        .doc(item.productId)
+        .update({
+          "cost": cost
+        });
+         return cost.toString();
+    }else{
+          int? cost = item.price! * item.quantity!;
+        firebaseFirestorethis
+        .collection("users")
+        .doc(auth.currentUser!.uid)
+        .collection("cart")
+        .doc(item.productId)
+        .update({
+          "cost": cost
+        });
+        cartTotalPrice();
+        return cost.toString();
     }
+  }
+    void increaseQuantity(CartItemModel item){
+    if(item.quantity! > 10){
+      Get.snackbar("Error", "Demasiados productos");
+    }else{
+        firebaseFirestorethis
+        .collection("users")
+        .doc(auth.currentUser!.uid)
+        .collection("cart")
+        .doc(item.productId)
+        .update({
+          "quantity": item.quantity! + 1
+        });
+        calculatedCost(item);
+    }
+  }
 }
+
+
+
+
+

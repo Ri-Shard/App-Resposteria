@@ -16,12 +16,14 @@ class CartItemWidget extends StatefulWidget {
 class _CartItemWidgetState extends State<CartItemWidget> {
   @override
   Widget build(BuildContext context) {
+  String cost = cartController.calculatedCost(widget.cartItem).toString();
     return Dismissible(
       key: UniqueKey(),
       direction: DismissDirection.startToEnd,
       onDismissed: (direction) {
         setState(() {
-          cartController.remove(widget.cartItem.productId.toString());
+          cartController.removeCartItem(widget.cartItem.productId.toString());
+          cartController.checkCart();
           });
       }, 
     
@@ -85,6 +87,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                           onPressed: () {
                           setState(() {
                            cartController.increaseQuantity(widget.cartItem);
+                            cost = cartController.calculatedCost(widget.cartItem).toString();
                           });
                           }),
                     ],
@@ -95,7 +98,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
             padding:
             const EdgeInsets.all(14),
             child: CustomText(
-              text: "\$${widget.cartItem.cost}",                          
+              text: cost,                          
               size: 22,
               weight: FontWeight.bold,
             ),

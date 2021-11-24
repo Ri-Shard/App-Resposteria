@@ -1,4 +1,5 @@
 import 'package:appreposteria/src/constants/controllers.dart';
+import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/model/order_model.dart';
 import 'package:appreposteria/src/other/bottom_bar_Delivery.dart';
 import 'package:appreposteria/src/other/colors.dart';
@@ -20,6 +21,7 @@ class _DeliveryOrderInformationState extends State<DeliveryOrderInformation> {
 
   @override
   Widget build(BuildContext context) {
+            orderController.checkCart(orderController.ordermodel.dat.toString());
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -70,7 +72,7 @@ class _DeliveryOrderInformationState extends State<DeliveryOrderInformation> {
                   height: 20,
                 ),
                 Column(
-                  children: order.cart!
+                  children: orderController.cartlistOrder
                       .map((cartItem) => SingleOrderWidget(
                             cartItem: cartItem,
                           ))
@@ -120,12 +122,16 @@ class _DeliveryOrderInformationState extends State<DeliveryOrderInformation> {
                   headerAnimationLoop: true,
                   title: '¿Seguro que deseas marcar el pedido como entregado?',
                   btnOkOnPress: () {
+                    deliveryController.listenToUser();
+                    deliveryController.searchDelivery(auth.currentUser!.uid);
                     orderController.updateDeliveryOrder(
                         order, deliveryController.delivery.id.toString(),deliveryController.delivery.name.toString());
                         ordermodel = new OrderModel();                      
                     Get.snackbar(
                         "Enhorabuena", "El pedido a sido entregado con exito");
                        Get.offAll(() => BottomBarDelivery());
+                    
+
                   },
                   btnOkColor: AppColors.kCategorypinkColor,
                   btnCancelColor: AppColors.kCategorypinkColor,

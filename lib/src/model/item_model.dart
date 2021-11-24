@@ -24,5 +24,17 @@ class ProductModel{
     ingredients = data[INGREDIENTS];
     price = int.parse(data[PRICE]);
   }
+      Map<String, dynamic> toMap( product){
+    return {
+      "image" : product.image,
+      "name" : product.name,
+      "quantity" : 1,
+      "cost" :  product.price,
+      "price" : product.price,
+      "productId" : product.uid , 
+      "description":product.description,
+      "ingredients":product.ingredients
+    };
+  }
 
 }

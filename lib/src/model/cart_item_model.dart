@@ -1,3 +1,5 @@
+import 'package:appreposteria/src/model/item_model.dart';
+
 class CartItemModel {
   static const ID = "id";
   static const IMAGE = "image";
@@ -11,16 +13,25 @@ class CartItemModel {
   String? id;
   String? image;
   String? name;
-  int quantity;
+  int? quantity;
   int? cost;
    String? productId;
    int? price;
 
 
 
-  CartItemModel({this.productId, this.id, this.image, this.name, required this.quantity, this.cost});
+  CartItemModel({this.productId, this.id, this.image, this.name, this.quantity, this.cost});
 
- CartItemModel fromMap(Map<String, dynamic> data){
+ CartItemModel.fromMap(Map<String, dynamic> data){
+    id = data[ID];
+    image = data[IMAGE];
+    name = data[NAME];
+    quantity = data[QUANTITY];
+    cost = data[COST].toInt();
+    productId = data[PRODUCT_ID];
+    price = data[PRICE].toInt();
+  }
+ CartItemModel fromMa(Map<String, dynamic> data){
     CartItemModel cart = CartItemModel(quantity: 1);
     cart.id = data[ID];
     cart.image = data[IMAGE];
@@ -38,9 +49,19 @@ class CartItemModel {
       "image" : image,
       "name" : name,
       "quantity" : quantity,
-      "cost" : price! * quantity,
+      "cost" :price! * quantity!,
       "price" : price,
       "productId" : productId    
   };
 
+      Map<String, dynamic> toMap(CartItemModel product){
+    return {
+      "image" : product.image,
+      "name" : product.name,
+      "quantity" : product.quantity,
+      "cost" :  product.cost,
+      "price" : product.price,
+      "productId" : product.productId , 
+    };
+  }
 }

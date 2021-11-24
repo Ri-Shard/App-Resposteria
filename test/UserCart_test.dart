@@ -13,7 +13,7 @@ void main() {
         "Leches Oreo y Cosas varias",
          "cheesecake de oreo",
           2000); 
-      response = cartController.registerTest(product);
+     // response = cartController.registerTest(product);
        expect(response, "${product.name} fue agregado a tu carrito");
   });
 }

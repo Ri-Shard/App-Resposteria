@@ -38,7 +38,7 @@ void main() async {
       user.phone = "3147094650";
       user.name = "123456dei";
 
-      response = authController.updateUserData(user);
+      response = authController.updateUserDatatest(user);
        expect(response, "Modificado Con Exito");
   });
     test('Eliminar Usuario', () async{

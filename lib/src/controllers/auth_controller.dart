@@ -7,6 +7,7 @@ import 'package:appreposteria/src/other/bottom_bar_Delivery.dart';
 import 'package:appreposteria/src/other/bottom_bar_User.dart';
 import 'package:appreposteria/src/ui/auth/auth_screen.dart';
 import 'package:appreposteria/src/ui/common/splash_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,8 @@ class AuthController extends GetxController {
   MyUser myuser = MyUser();
   List<String> deliverylist = [];
   RxList<MyUser> userlist = RxList<MyUser>([]);
+  FirebaseFirestore firebaseFirestoreAuth = FirebaseFirestore.instance;
+
   //test
   final instance = FakeFirebaseFirestore();
 
@@ -143,7 +146,6 @@ class AuthController extends GetxController {
       "uid": userUid,
       "email": email.text.trim(),
       "phone": phone.text.trim(),
-      "cart": []
     });
   }
 
@@ -154,22 +156,6 @@ class AuthController extends GetxController {
     password.clear();
     phone.clear();
   }
-
-  updateCart(Map<String, dynamic> data) {
-    logger.i("UPDATED");
-    firebaseFirestore
-        .collection(usersCollection)
-        .doc(auth.currentUser!.uid)
-        .update(data);
-  }
-
-  upCart(Map<String, dynamic> data) {
-    firebaseFirestore
-        .collection(usersCollection)
-        .doc(auth.currentUser!.uid)
-        .update(data);
-  }
-
   String updateUserDat(User? user) {
     String message;
     try {
@@ -257,10 +243,10 @@ class AuthController extends GetxController {
       .snapshots()
       .map((event) => event.docs.map((e) => MyUser.fromMap(e.data())).toList());
 
-  Future<List<String>> getDelivery() async {
+  List<String> getDelivery()  {
     List<String> aux = [];
     try {
-      await firebaseFirestore.collection("delivery").get().then(((event) {
+       firebaseFirestore.collection("delivery").get().then(((event) {
         event.docs.forEach((element) {
           aux.add(element.id);
         });
@@ -312,7 +298,7 @@ class AuthController extends GetxController {
        return "Registrado Con Exito";
        }
     }
-    String updateUserData(MyUser user) {
+    String updateUserDatatest(MyUser user) {
     String message;
       if (newmethod(user.email.toString())=="Prueba Correcta") {
         

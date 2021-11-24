@@ -16,10 +16,14 @@ class ShoppingCartWidget extends StatefulWidget {
 
 class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
     late double height, width;
-
+@override
+void initState() { 
+  super.initState();
+  cartController.checkCart();
+}
+String cartPrice =   cartController.cartTotalPrice().toString();
   @override
   Widget build(BuildContext context) {
-
      return Scaffold(
        appBar: buildAppBar(context),
        body: 
@@ -31,7 +35,7 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
             SizedBox(
               height: 5,
             ),
-            authController.myuser.cart!.length == 0 ?
+            cartController.checkCart().length == 0 ?
             Container(                             
                 child: Column(
                   children: [
@@ -43,8 +47,9 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
             )
             : 
             Column(    
-                children:            
-                    authController.myuser.cart!
+                children:    
+        
+                    cartController.cartlist
                     .map((cartItem) => CartItemWidget(cartItem: cartItem,))
                     .toList(),
               ),
@@ -68,7 +73,7 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                 style: TextStyle(color: Colors.black),
               ),
               Text(
-                "${authController.myuser.cart!.length} items",
+                "${cartController.cartlist.length} items",
                 style: Theme.of(context).textTheme.caption,
               ), 
             ]
@@ -76,10 +81,10 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
             SizedBox(
               width: 40,
             ),
-            Text("Total: "+"\$${cartController.changeCartTotalPrice(authController.myuser)}",
+            Text("Total: "+"\$$cartPrice",
             style: TextStyle(color: Colors.black),
             textAlign: TextAlign.end,),
-            IconButton(onPressed: (){  setState(() {cartController.clearCart();});},
+            IconButton(onPressed: (){  setState(() {cartController.clearCart(); cartController.checkCart();});},
             icon: Icon(Mdi.trashCan, color: Colors.black,))       
         ],
       ),
@@ -95,7 +100,7 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
               padding: EdgeInsets.only(top:0, left: 10,right: 10,bottom: 10),
               child: CustomButton(            
                   text: "Proceder a Pedir", onTap: () {
-                    if (authController.myuser.cart!.length == 0) {
+                    if (cartController.cartlist.length == 0) {
                                                                 AwesomeDialog(
                         context: context,
                         dialogType: DialogType.ERROR,

@@ -18,7 +18,7 @@ class AddressScreen extends StatefulWidget {
 }
 
 class _AddressScreenState extends State<AddressScreen> with SingleTickerProviderStateMixin{
-      List<CartItemModel>? cartlist = authController.myuser.cart!;
+      List<CartItemModel>? cartlist = cartController.cartlist;
       TabController? _tabController;
        int? currentIndex;
        int? value;
@@ -48,10 +48,10 @@ class _AddressScreenState extends State<AddressScreen> with SingleTickerProvider
   ]);
 
 
-@override
+@override 
 void initState() { 
   super.initState();
-  long = addressController.checkAddress().length;
+  long = addressController.checkAddres().length;
    _tabController = TabController(length: 2, vsync: this); 
 }
 

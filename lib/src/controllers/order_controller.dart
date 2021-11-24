@@ -1,5 +1,6 @@
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/constants/firebase.dart';
+import 'package:appreposteria/src/model/cart_item_model.dart';
 import 'package:appreposteria/src/model/order_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,9 @@ class OrderController extends GetxController {
   String usersCollection = "orders";
   OrderModel ordermodel = OrderModel();
   RxList<OrderModel> orderlist = RxList<OrderModel>([]);
+  RxList<OrderModel> orderlistTest = RxList<OrderModel>([]);
+    RxList<CartItemModel> cartlistOrder = RxList<CartItemModel>([]);
+
   @override
   void onReady() {
     super.onReady();
@@ -39,9 +43,19 @@ class OrderController extends GetxController {
       "clientrating": 0.toString(),
       "status": "EN PROCESO",
       "total":
-          cartController.changeCartTotalPrice(authController.myuser).toString(),
-      "cart": FieldValue.arrayUnion(authController.myuser.cartItemsToJson())
+          cartController.cartTotalPrice().toString(),
     });
+    cartController.cartlist.forEach((element) {
+      firebaseFirestore  
+        .collection(usersCollection)
+        .doc(nowe)
+        .collection("cart")
+        .doc(element.productId)
+        .set(element.toMap(element));
+    });
+        
+        
+            
     message = "Orden Guardada con exito";
     Get.snackbar("Enhorabuena", message);
     return message;
@@ -60,16 +74,29 @@ class OrderController extends GetxController {
   }
   List<OrderModel> checkOrders() {
     OrderModel order = new OrderModel();
-    orderlist.add(order);
-    return orderlist;
+    orderlistTest.add(order);
+    return orderlistTest;
   }
 
   Stream<List<OrderModel>> getOrders() =>
       firebaseFirestore.collection(usersCollection).snapshots().map((event) =>
           event.docs.map((e) => OrderModel.fromMap(e.data())).toList());
 
+  Stream<List<CartItemModel>> getCart(String id) => firebaseFirestore
+      .collection(usersCollection)
+      .doc(id)
+      .collection("cart")
+      .snapshots()
+      .map((event) => event.docs.map((e) => CartItemModel.fromMap(e.data())).toList());
+
+  Future <List<CartItemModel>> checkCart(String id) async{
+    cartlistOrder.bindStream(getCart(id));
+    return cartlistOrder;
+  }
+
+
   updateDeliveryOrder(OrderModel order, String delivery, String deliveryname) {
-    deleteOrde(order);
+    deleteOrde(order.dat.toString());
     firebaseFirestore.collection(usersCollection).doc(order.dat).set({
       "uid": order.uid,
       "name": order.name,
@@ -81,14 +108,21 @@ class OrderController extends GetxController {
       "deliveryname": deliveryname,
       "total": order.total,
       "clientrating": 0.toString(),
-      "cart": FieldValue.arrayUnion(order.cartItemsToJson())
+    });
+    cartController.cartlist.forEach((element) {
+      firebaseFirestore  
+        .collection(usersCollection)
+        .doc(order.dat)
+        .collection("cart")
+        .doc(element.productId)
+        .set(element.toMap(element));
     });
   }
 
   String updateUserOrde(OrderModel order, String status) {
     String message;
     try {    
-    deleteOrde(order);
+    deleteOrde(order.dat.toString());
     firebaseFirestore.collection(usersCollection).doc(order.dat).set({
       "uid": order.uid,
       "name": order.name,
@@ -100,8 +134,14 @@ class OrderController extends GetxController {
       "deliveryname": order.deliveryname,
       "clientrating": order.clientrating.toString(),
       "total": order.total,
-      "cart": FieldValue.arrayUnion(order.cartItemsToJson())
-
+    });
+        cartController.cartlist.forEach((element) {
+      firebaseFirestore  
+        .collection(usersCollection)
+        .doc(order.dat)
+        .collection("cart")
+        .doc(element.productId)
+        .set(element.toMap(element));
     });
     message = "Orden modificada con exito";
     Get.snackbar("Enhorabuena", message);
@@ -114,7 +154,7 @@ class OrderController extends GetxController {
   }
 
   updateOrder(OrderModel order) {
-    deleteOrde(order);
+    deleteOrde(order.dat.toString());
     firebaseFirestore.collection(usersCollection).doc(order.dat).set({
       "uid": order.uid,
       "name": order.name,
@@ -126,14 +166,21 @@ class OrderController extends GetxController {
       "clientrating": 0.toString(),
       "status": "PEDIDO LISTO",
       "total": order.total,
-      "cart": FieldValue.arrayUnion(order.cartItemsToJson())
+    });
+        cartController.cartlist.forEach((element) {
+      firebaseFirestore  
+        .collection(usersCollection)
+        .doc(order.dat)
+        .collection("cart")
+        .doc(element.productId)
+        .set(element.toMap(element));
     });
   }
 
-  String deleteOrde(OrderModel order) {
+  String deleteOrde(String id) {
     String message;
     try {
-    firebaseFirestore.collection(usersCollection).doc(order.dat).delete();
+    firebaseFirestore.collection(usersCollection).doc(id).delete();
     message = "Orden Borrada con exito";
      Get.snackbar("Enhorabuena", message);
      return message;

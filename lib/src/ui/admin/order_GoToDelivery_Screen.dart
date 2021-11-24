@@ -19,6 +19,7 @@ class _GoToDeliveryPageState extends State<GoToDeliveryPage> {
 
   @override
   Widget build(BuildContext context) {
+        orderController.checkCart(orderController.ordermodel.dat.toString());
     return Scaffold(
       appBar: AppBar(elevation: 0, backgroundColor: Colors.white, leading: IconButton(
             onPressed: () {
@@ -73,7 +74,7 @@ class _GoToDeliveryPageState extends State<GoToDeliveryPage> {
                           SizedBox(height: 20,),                
                           Column(    
                           children:            
-                          order.cart!
+                          orderController.cartlistOrder
                             .map((cartItem) => SingleOrderWidget(cartItem: cartItem,))
                               .toList(),
                         ),

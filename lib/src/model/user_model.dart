@@ -34,19 +34,6 @@ class MyUser{
     user.email = snapshot[EMAIL];
     user.uid = snapshot[UID];
     user.phone = snapshot[PHONE];
-    user.cart = _convertCartItems(snapshot[CART] ?? []);
     return user;
   }
-  List<CartItemModel> _convertCartItems(List cartFomDb){
-    List<CartItemModel> _result = [];
-    CartItemModel cartmodel = CartItemModel(quantity: 1);
-    if(cartFomDb.length > 0){
-      cartFomDb.forEach((element) {
-      _result.add(cartmodel.fromMap(element));
-    });
-    }
-    return _result;
-  }
-
-  List cartItemsToJson() => cart!.map((item) => item.toJson()).toList();
 }
