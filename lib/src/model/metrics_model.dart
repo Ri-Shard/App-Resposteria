@@ -7,15 +7,17 @@ class MetricsModel {
   static const CLIENTEMASCOMPRA = "clientemascompra";
   static const GANANCIASEMANA = "gananciasemana";
   static const DOMIMASPEDIDOS = "domimaspedidos";  
+  static const CANTIDADPRODUCTOSVENDIDOS = "cantidadproductosvendidos";  
 
   String? totalvendido;
   String? productomasvendido;
   String? clientemascompra;
   String? gananciasemana;
   String? domimaspedidos;
+  String? cantidadproductosvendidos;
 
 
-MetricsModel({this.totalvendido,this.clientemascompra,this.domimaspedidos,this.gananciasemana,this.productomasvendido });
+MetricsModel({this.cantidadproductosvendidos,this.totalvendido,this.clientemascompra,this.domimaspedidos,this.gananciasemana,this.productomasvendido });
 
 
   MetricsModel fromSnapshot(DocumentSnapshot snapshot){
@@ -25,6 +27,7 @@ MetricsModel({this.totalvendido,this.clientemascompra,this.domimaspedidos,this.g
     metrics.clientemascompra = snapshot[CLIENTEMASCOMPRA];
     metrics.gananciasemana = snapshot[GANANCIASEMANA];
     metrics.domimaspedidos = snapshot[DOMIMASPEDIDOS];
+    metrics.cantidadproductosvendidos = snapshot[CANTIDADPRODUCTOSVENDIDOS];
     
     return metrics;
   }
@@ -35,6 +38,7 @@ MetricsModel({this.totalvendido,this.clientemascompra,this.domimaspedidos,this.g
     clientemascompra= data[CLIENTEMASCOMPRA];
     gananciasemana = data[GANANCIASEMANA];
     domimaspedidos = data[DOMIMASPEDIDOS];
+    cantidadproductosvendidos = data[CANTIDADPRODUCTOSVENDIDOS];
   }
   
   Map toJson() => {
@@ -43,7 +47,8 @@ MetricsModel({this.totalvendido,this.clientemascompra,this.domimaspedidos,this.g
 "productomasvendido":productomasvendido,
 "clientemascompra":clientemascompra,
 "gananciasemana":gananciasemana,
-"domimaspedidos":domimaspedidos
+"domimaspedidos":domimaspedidos,
+"cantidadproductosvendidos":cantidadproductosvendidos
   };
 
 }

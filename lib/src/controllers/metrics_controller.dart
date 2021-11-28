@@ -2,7 +2,10 @@ import 'dart:collection';
 
 import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/constants/firebase.dart';
+import 'package:appreposteria/src/model/cart_item_model.dart';
+import 'package:appreposteria/src/model/delivery_model.dart';
 import 'package:appreposteria/src/model/metrics_model.dart';
+import 'package:appreposteria/src/model/user_model.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -43,7 +46,8 @@ class MetricsController extends GetxController {
     }
   }
 
-  void calcularGanancias() {
+  String calcularGanancias() {
+    ganancias = 0;
     orderController.orderlist.forEach((element) {
       double myDouble = 0;
       if (element.status == "ENTREGADO") {
@@ -51,13 +55,13 @@ class MetricsController extends GetxController {
         ganancias = ganancias + myDouble;
       }
     });
-    print(ganancias.toString());
-    ganancias = 0;
+    return ganancias.toString();
   }
 
-  void calcularGananciasLast7days() {
+  String calcularGananciasLast7days() {
     String dateorder = "";
     double myDouble = 0;
+    ganancias = 0;
     orderController.orderlist.forEach((element) {
       if (element.status == "ENTREGADO") {
         dateorder = element.datetime.toString();
@@ -69,8 +73,7 @@ class MetricsController extends GetxController {
         }
       }
     });
-    print(ganancias.toString());
-    ganancias = 0;
+    return ganancias.toString();
   }
 
   Map clienteMasCompra() {
@@ -100,16 +103,77 @@ class MetricsController extends GetxController {
       }
       aux.clear();
     }
-    print(contador);
     //sort map
-var sortedKeys = contador.keys.toList(growable: false)
-  ..sort((k2, k1) => contador[k1]['cont']
-      .compareTo(contador[k2]['cont']));
-LinkedHashMap sortedMap = LinkedHashMap.fromIterable(sortedKeys,
-    key: (k) => k, value: (k) => contador[k]);
-      print(sortedMap.values.first['id']);
-  return sortedMap.values.first;
+    var sortedKeys = contador.keys.toList(growable: false)
+      ..sort((k2, k1) => contador[k1]['cont'].compareTo(contador[k2]['cont']));
+    LinkedHashMap sortedMap = LinkedHashMap.fromIterable(sortedKeys,
+        key: (k) => k, value: (k) => contador[k]);
+    return sortedMap.values.first;
   }
+  Map domiMasVende() {
+    int cont = 0;
+    List<int> aux = [];
+    List<String> deliverylistUID = [];
+    deliveryController.deliverys.forEach((element) {
+      deliverylistUID.add(element.id.toString());
+    });
+    int long = deliverylistUID.length;
+
+    Map contador = {};
+    for (var i = 0; i < long; i++) {
+      cont = 0;
+      for (var j = i; j < long; j++) {
+        if (!contador.keys.contains(deliverylistUID[i])) {
+          if (deliverylistUID[i] == deliverylistUID[j]) {
+            aux.add(j);
+          }
+        }
+      }
+      if (!contador.keys.contains(deliverylistUID[i])) {
+        contador[deliverylistUID[aux.first]] = {
+          "id": deliverylistUID[aux.first],
+          "cont": aux.length
+        };
+      }
+      aux.clear();
+    }
+    //sort map
+    var sortedKeys = contador.keys.toList(growable: false)
+      ..sort((k2, k1) => contador[k1]['cont'].compareTo(contador[k2]['cont']));
+    LinkedHashMap sortedMap = LinkedHashMap.fromIterable(sortedKeys,
+        key: (k) => k, value: (k) => contador[k]);
+    return sortedMap.values.first;
+  }
+
+DeliveryModel domiMasvendeNom(){
+  DeliveryModel user = DeliveryModel();
+    deliveryController.deliverys.forEach((element) {
+      if(element.id == domiMasVende()['id']){
+        user = element;
+      }
+    });
+   return user;
 }
 
+MyUser clientemascompraNom(){
+MyUser user = MyUser();
+    authController.userlist.forEach((element) {
+      if(element.uid == clienteMasCompra()['id']){
+        user = element;
+      }
+    });
+   return user;
+}
 
+  void cantProductosVendidos() {
+    int total = 0;
+    List<String> cant = [];
+    orderController.orderlist.forEach((element) {
+      if (element.status == "ENTREGADO") {
+      orderController.checkCart(element.dat.toString());
+      print(orderController.cartlistOrder.map((e) => e.quantity.toString()).toString());
+      }
+      orderController.cartlistOrder.clear();
+    });
+  }
+}
