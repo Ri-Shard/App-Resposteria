@@ -1,4 +1,3 @@
-import 'package:appreposteria/src/model/item_model.dart';
 
 class CartItemModel {
   static const ID = "id";

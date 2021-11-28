@@ -1,14 +1,10 @@
 
-import 'package:appreposteria/src/constants/app_constants.dart';
-import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/model/cart_item_model.dart';
 import 'package:appreposteria/src/model/item_model.dart';
-import 'package:appreposteria/src/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:uuid/uuid.dart';
 
 class CartController extends GetxController {
   static CartController instance = Get.find();

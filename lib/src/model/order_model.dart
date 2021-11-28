@@ -13,11 +13,14 @@ class OrderModel {
   static const DELIVERY  = "delivery";  
   static const DELIVERYNAME  = "deliveryname";  
   static const CLIENTRATING  = "clientrating";  
+  static const DATETIME = "datetime";  
+
 
   String? address;
   String? uid;
   String? name;
   String? date;
+  String? datetime;
   String? dat;
   String? status;
   String? total;
@@ -26,7 +29,7 @@ class OrderModel {
   String? clientrating;
   List<CartItemModel>? cart; 
 
-OrderModel({this.clientrating,this.deliveryname,this.delivery,this.address,this.name,this.date,this.uid,this.cart,this.status,this.total,this.dat});
+OrderModel({this.clientrating,this.datetime,this.deliveryname,this.delivery,this.address,this.name,this.date,this.uid,this.cart,this.status,this.total,this.dat});
 
  
   OrderModel fromSnapshot(DocumentSnapshot snapshot){
@@ -41,9 +44,11 @@ OrderModel({this.clientrating,this.deliveryname,this.delivery,this.address,this.
     order.delivery = snapshot[DELIVERY];
     order.deliveryname = snapshot[DELIVERYNAME];
     order.clientrating = snapshot[CLIENTRATING];
+    order.datetime = snapshot[DATETIME];
     
     return order;
   }
+/*
   List<CartItemModel> _convertCartItems(List cartFomDb){
     List<CartItemModel> _result = [];
     CartItemModel cartmodel = CartItemModel(quantity: 1);
@@ -54,6 +59,7 @@ OrderModel({this.clientrating,this.deliveryname,this.delivery,this.address,this.
     }
     return _result;
   }
+ */
 
   OrderModel.fromMap(Map<String, dynamic> data){
     uid = data[UID];
@@ -66,6 +72,7 @@ OrderModel({this.clientrating,this.deliveryname,this.delivery,this.address,this.
     delivery = data[DELIVERY];
     clientrating = data[CLIENTRATING];
     deliveryname = data[DELIVERYNAME];
+    datetime = data[DATETIME];
   }
 
   List cartItemsToJson() => cart!.map((item) => item.toJson()).toList();

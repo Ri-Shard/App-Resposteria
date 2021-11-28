@@ -53,7 +53,7 @@ class _RegisterPageState extends State<RegisterPage> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0,
-          brightness: Brightness.light,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
           backgroundColor: Colors.white,
           leading: IconButton(
             onPressed: () {

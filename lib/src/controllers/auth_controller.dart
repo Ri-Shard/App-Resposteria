@@ -1,5 +1,4 @@
 import 'package:appreposteria/src/constants/app_constants.dart';
-import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/model/user_model.dart';
 import 'package:appreposteria/src/other/bottom_bar_Admin.dart';
@@ -37,7 +36,7 @@ class AuthController extends GetxController {
     if (auth.currentUser != null) {
       listenToUser();
       checkUsers();
-      deliverylist = await getDelivery();
+      deliverylist =  getDelivery();
     }
   }
 
@@ -45,11 +44,11 @@ class AuthController extends GetxController {
   void onReady() async {
     super.onReady();
     _setInitialScreen(auth.currentUser);
-    deliverylist = await getDelivery();
+    deliverylist =  getDelivery();
   }
 
   _setInitialScreen(User? user) async {
-    deliverylist = await getDelivery();
+    deliverylist =  getDelivery();
     if (user == null) {
       await Future.delayed(const Duration(seconds: 2));
       Get.offAll(() => SplashScreen());

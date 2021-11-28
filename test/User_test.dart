@@ -4,10 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'dart:core';
 
 
-void main() async {
 
-    test('Guardar Usuario', () async{
-    AuthController authController = new AuthController();
+void main() async {
+    test('Guardar Usuario', () async{ 
+  AuthController authController = new AuthController();
     String response = "";
       authController.name.text = "Deison";
       authController.lastname.text = "Navarro";
