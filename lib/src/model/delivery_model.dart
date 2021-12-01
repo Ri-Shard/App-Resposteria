@@ -34,6 +34,7 @@ class DeliveryModel   {
   }
 
     DeliveryModel fromSnapshot(DocumentSnapshot snapshot){
+ 
     DeliveryModel user = DeliveryModel();
     user.name = snapshot[NAME];
     user.email = snapshot[EMAIL];

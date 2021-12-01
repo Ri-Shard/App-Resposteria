@@ -1,4 +1,5 @@
 import 'package:appreposteria/src/constants/app_constants.dart';
+import 'package:appreposteria/src/constants/controllers.dart';
 import 'package:appreposteria/src/constants/firebase.dart';
 import 'package:appreposteria/src/model/user_model.dart';
 import 'package:appreposteria/src/other/bottom_bar_Admin.dart';
@@ -37,6 +38,7 @@ class AuthController extends GetxController {
       listenToUser();
       checkUsers();
       deliverylist =  getDelivery();
+      deliveryController.onReady() ;
     }
   }
 
