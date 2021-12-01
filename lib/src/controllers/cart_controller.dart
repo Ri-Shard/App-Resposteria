@@ -10,7 +10,7 @@ class CartController extends GetxController {
   static CartController instance = Get.find();
   FirebaseFirestore firebaseFirestorethis = FirebaseFirestore.instance;
   RxList<CartItemModel> cartlist = RxList<CartItemModel>([]);
-
+ 
   int totalCartPrice = 0;
   @override
   void onInit() async {
