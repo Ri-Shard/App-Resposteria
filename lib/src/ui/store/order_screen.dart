@@ -274,7 +274,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                 ),
                                 TextButton.icon(
                                     onPressed: () {
-                                      orderController.updateUserOrder(
+                                      orderController.updateUserOrde(
                                           ordelmodel.fromSnapshot(
                                               snapshot.data!.docs[index]),
                                           "RECIBIDO POR USUARIO");

@@ -21,7 +21,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   OrderModel ordermodel = OrderModel();
   String status = "EN PROCESO";
   int? long;
-
+List<OrderModel>lista =[];
   @override
   void initState() {
     super.initState();
@@ -116,6 +116,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Widget _if(int index, AsyncSnapshot<QuerySnapshot> snapshot, String status) {
     if (snapshot.data!.docs.length != 0) {
       if (snapshot.data!.docs[index].get("status") == status) {
+        
         return GestureDetector(
           onTap: () {
             orderController.checkCart(snapshot.data!.docs[index].get("dat"));
@@ -228,7 +229,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           ),
         );
       }
-      return _noOrders();
+      return Container();
     } else {
       return _noOrders();
     }

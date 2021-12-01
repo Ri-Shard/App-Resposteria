@@ -17,6 +17,13 @@ class MetricsController extends GetxController {
   MetricsModel metricsmodel = MetricsModel();
   double ganancias = 0;
 
+@override
+  void onInit() {
+    super.onInit();
+    orderController.onInit();
+    orderController.onReady();
+    deliveryController.onReady();
+  }
   @override
   void onReady() {
     super.onReady();
@@ -50,7 +57,7 @@ class MetricsController extends GetxController {
     ganancias = 0;
     orderController.orderlist.forEach((element) {
       double myDouble = 0;
-      if (element.status == "ENTREGADO") {
+      if (element.status == "ENTREGADO"||element.status == "RECIBIDO POR USUARIO") {
         myDouble = double.parse(element.total.toString());
         ganancias = ganancias + myDouble;
       }
@@ -63,7 +70,7 @@ class MetricsController extends GetxController {
     double myDouble = 0;
     ganancias = 0;
     orderController.orderlist.forEach((element) {
-      if (element.status == "ENTREGADO") {
+      if (element.status == "ENTREGADO"||element.status == "RECIBIDO POR USUARIO") {
         dateorder = element.datetime.toString();
         var parsedDate = DateTime.parse(dateorder);
         Duration _diastotales = DateTime.now().difference(parsedDate);
@@ -169,7 +176,7 @@ MyUser user = MyUser();
     int total = 0;
     List<String> cant = [];
     orderController.orderlist.forEach((element) {
-      if (element.status == "ENTREGADO") {
+      if (element.status == "ENTREGADO"||element.status == "RECIBIDO POR USUARIO") {
       orderController.checkCart(element.dat.toString());
       print(orderController.cartlistOrder.map((e) => e.quantity.toString()).toString());
       }

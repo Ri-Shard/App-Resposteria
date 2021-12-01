@@ -1,15 +1,21 @@
 import 'package:appreposteria/src/constants/controllers.dart';
-import 'package:appreposteria/src/other/cart_item_widget.dart';
+import 'package:appreposteria/src/constants/firebase.dart';
+import 'package:appreposteria/src/model/cart_item_model.dart';
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/other/custom_buttom.dart';
+import 'package:appreposteria/src/other/custom_text.dart';
 import 'package:appreposteria/src/ui/store/address_screen.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mdi/mdi.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 
+
 class ShoppingCartWidget extends StatefulWidget {
+    
   @override
   _ShoppingCartWidgetState createState() => _ShoppingCartWidgetState();
 }
@@ -21,46 +27,21 @@ void initState() {
   super.initState();
   cartController.checkCart();
 }
-String cartPrice =   cartController.cartTotalPrice().toString();
+int cartPrice = 0;
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
-       appBar: buildAppBar(context),
-       body: 
-        ListView(
-          children: [
-            SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            cartController.checkCart().length == 0 ?
-            Container(                             
-                child: Column(
-                  children: [
-                    Image(image: AssetImage("images/empty_cart.png")),
-                    Text("Carrito Vacio",
-                        style: TextStyle(fontWeight : FontWeight.bold,fontSize: 25 )),]
-                ),
-                
-            )
-            : 
-            Column(    
-                children:    
-        
-                    cartController.cartlist
-                    .map((cartItem) => CartItemWidget(cartItem: cartItem,))
-                    .toList(),
-              ),
-                    ],
-        ),
-       bottomNavigationBar: _bottom(),
-     );
-  }
-
-    AppBar buildAppBar(BuildContext context) {
-    return AppBar(
+     return       StreamBuilder (
+         stream: firebaseFirestore.collection("users").doc(auth.currentUser!.uid).collection("cart").snapshots(),
+         builder: (context, AsyncSnapshot<QuerySnapshot?> snapshot) {
+           if(snapshot.data !=null){
+            int auxi = 0;
+             for (var item in snapshot.data!.docs) {
+               auxi += int.parse(item.get("cost").toString());
+             }
+             cartPrice=auxi;
+           }
+           return snapshot.data == null? Text("sada"):Scaffold(
+       appBar: AppBar(
       leading: Icon(Mdi.cart, color: Colors.black, size: 30,),
       backgroundColor: Colors.white,
       elevation: 0,
@@ -81,18 +62,75 @@ String cartPrice =   cartController.cartTotalPrice().toString();
             SizedBox(
               width: 40,
             ),
-            Text("Total: "+"\$$cartPrice",
-            style: TextStyle(color: Colors.black),
-            textAlign: TextAlign.end,),
-            IconButton(onPressed: (){  setState(() {cartController.clearCart(); cartController.checkCart();});},
+
+                 Text("Total: "+"\$"+ cartPrice.toString(),
+                style: TextStyle(color: Colors.black),
+                textAlign: TextAlign.end,),
+            
+            IconButton(onPressed: (){ cartController.clearCart(); cartController.checkCart();},
             icon: Icon(Mdi.trashCan, color: Colors.black,))       
         ],
       ),
-    );
+    ),
+       body: 
+ListView.builder(
+             itemCount: snapshot.data!.docs.length,
+             itemBuilder: (_,index){
+             return ListTile(
+               leading: Container(width:80 ,height:80 ,color: Colors.pink,
+               child: Image.network(snapshot.data!.docs[index].get("image"),fit:BoxFit.cover,),),
+               title: Text(snapshot.data!.docs[index].get("name")),
+               subtitle: Row(
+                 children: [
+                       IconButton(
+                          icon: Icon(
+                              Icons.chevron_left),
+                          onPressed: () {
+                          CartItemModel aux = CartItemModel(productId: snapshot.data!.docs[index].get("productId"),cost:snapshot.data!.docs[index].get("cost"),image: snapshot.data!.docs[index].get("image"),name: snapshot.data!.docs[index].get("name"),quantity: snapshot.data!.docs[index].get("quantity"),price:snapshot.data!.docs[index].get("price"));
+                          cartController.decreaseQuantity(aux);
+           //               cartPrice = cartController.cartTotalPrice().toString();
+
+                          }),
+                      Padding(
+                        padding:
+                        const EdgeInsets.all(
+                            8.0),
+                        child: CustomText(
+                          text: snapshot.data!.docs[index].get("quantity").toString()
+                        ),
+                      ),
+                      IconButton(
+                          icon: Icon(Icons
+                              .chevron_right),
+                          onPressed: () {
+                          CartItemModel aux = CartItemModel(productId: snapshot.data!.docs[index].get("productId"),cost:snapshot.data!.docs[index].get("cost"),image: snapshot.data!.docs[index].get("image"),name: snapshot.data!.docs[index].get("name"),quantity: snapshot.data!.docs[index].get("quantity"),price: snapshot.data!.docs[index].get("price"));
+                          cartController.increaseQuantity(aux);  
+                          //cartPrice = cartController.cartTotalPrice().toString();                        
+                          }),
+                 ],
+               ),
+               trailing: Text(snapshot.data!.docs[index].get("cost").toString(),style: TextStyle(fontWeight:FontWeight.bold ),),
+             );
+           }),
+           
+       bottomNavigationBar: _bottom(),
+           );
+           }
+     );
   }
 
 
 
+/*
+            Container(                             
+                child: Column(
+                  children: [
+                    Image(image: AssetImage("images/empty_cart.png")),
+                    Text("Carrito Vacio",
+                        style: TextStyle(fontWeight : FontWeight.bold,fontSize: 25 )),]
+                ),
+                
+            ) */
   Widget _bottom(){
        return Container(
          width: 1,

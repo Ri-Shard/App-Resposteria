@@ -97,51 +97,27 @@ class CartController extends GetxController {
         .collection("cart")
         .doc(item.productId)
         .update({
-          "quantity": quantity
-        });
-        calculatedCost(item);
+          "quantity": quantity,
+          "cost": item.price!*quantity        
+          });
         return quantity.toString();
     }
   }
-  String calculatedCost (CartItemModel item){
-    int? cost = item.price;
-    if(item.quantity == 1){
-              firebaseFirestorethis
-        .collection("users")
-        .doc(auth.currentUser!.uid)
-        .collection("cart")
-        .doc(item.productId)
-        .update({
-          "cost": cost
-        });
-         return cost.toString();
-    }else{
-          int? cost = item.price! * item.quantity!;
-        firebaseFirestorethis
-        .collection("users")
-        .doc(auth.currentUser!.uid)
-        .collection("cart")
-        .doc(item.productId)
-        .update({
-          "cost": cost
-        });
-        cartTotalPrice();
-        return cost.toString();
-    }
-  }
+
     void increaseQuantity(CartItemModel item){
     if(item.quantity! > 10){
       Get.snackbar("Error", "Demasiados productos");
     }else{
+      int aux = item.quantity! + 1;
         firebaseFirestorethis
         .collection("users")
         .doc(auth.currentUser!.uid)
         .collection("cart")
         .doc(item.productId)
         .update({
-          "quantity": item.quantity! + 1
+          "quantity": aux,
+          "cost": item.price!*aux
         });
-        calculatedCost(item);
     }
   }
 }

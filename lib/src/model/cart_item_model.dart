@@ -19,7 +19,7 @@ class CartItemModel {
 
 
 
-  CartItemModel({this.productId, this.id, this.image, this.name, this.quantity, this.cost});
+  CartItemModel({this.productId, this.id, this.image, this.name, this.quantity, this.cost,this.price});
 
  CartItemModel.fromMap(Map<String, dynamic> data){
     id = data[ID];
