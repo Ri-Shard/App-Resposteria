@@ -5,6 +5,7 @@ import 'package:appreposteria/src/other/bottom_bar_Admin.dart';
 import 'package:appreposteria/src/other/colors.dart';
 import 'package:appreposteria/src/other/single_orders_widget.dart';
 import 'package:appreposteria/src/ui/admin/order_GoToDelivery_Screen.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -51,6 +52,7 @@ List<OrderModel>lista =[];
           ),
           title: Row(
             children: [
+
               Column(children: [
                 Text(
                   "Pedidos",
@@ -176,6 +178,32 @@ List<OrderModel>lista =[];
                         )),
                   ],
                 ),
+=======
+              Text(
+                "Pedidos",
+                style: TextStyle(color: Colors.black),
+              ),
+            ]
+          ),      
+        ],
+      ),
+         ),
+      body: 
+      StreamBuilder(
+      stream: firebaseFirestore
+      .collection("pedidos")
+      .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) return CircularProgressIndicator();
+        return ListView.builder(
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (BuildContext context, int index) {
+            return new Card(
+              child: new Column(
+                children: <Widget>[             
+                SizedBox(height: 20,),                
+              SizedBox(height: 20,),
+                ],
               ),
             );
             orderController.cartlistOrder.clear();
